@@ -528,7 +528,6 @@
             overflow: hidden;
         }
 
-        /* REAL PRODUCT IMAGE STYLE */
         .product-image img {
             width: 100%;
             height: 100%;
@@ -574,6 +573,38 @@
             color: #888;
             font-size: 0.9rem;
             margin-bottom: 15px;
+        }
+
+        /* WEIGHT SELECTION STYLES */
+        .weight-options {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .weight-btn {
+            padding: 6px 12px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--deep-brown);
+            transition: all 0.3s;
+        }
+
+        .weight-btn:hover {
+            border-color: var(--primary-gold);
+            background: var(--warm-cream);
+        }
+
+        .weight-btn.active {
+            border-color: var(--spice-red);
+            background: var(--spice-red);
+            color: white;
         }
 
         .product-price {
@@ -812,7 +843,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            white-space: nowrap; /* Single line only */
+            white-space: nowrap;
         }
 
         @keyframes slideUp {
@@ -873,7 +904,6 @@
                 padding: 15px 25px;
             }
             
-            /* FIXED: Delivery notice mobile styles */
             .delivery-notice {
                 padding: 10px 20px;
                 font-size: 0.85rem;
@@ -1078,7 +1108,7 @@
         </div>
     </section>
 
-    <!-- Masala & Karam Products -->
+    <!-- Masala & Karam Products - 100g, 250g, 500g, 1Kg -->
     <section class="products-section" id="masala">
         <div class="products-header">
             <h3><i class="fas fa-mortar-pestle"></i> Masala & Karam Powders</h3>
@@ -1087,28 +1117,34 @@
             </button>
         </div>
         
-        <!-- MENU CARD IMAGE -->
         <div class="menu-card-image">
             <img src="masala.png" alt="Masala & Karam Menu">
         </div>
         
         <div class="products-grid">
-            <div class="product-card">
+            <!-- KURA KARAM -->
+            <div class="product-card" data-product="Kura Karam" data-base-price="549">
                 <div class="product-image">
                     <i class="fas fa-pepper-hot"></i>
                 </div>
                 <div class="product-info">
                     <h4>Kura Karam</h4>
                     <p>Traditional curry powder</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 100)">100g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹549 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Kura%20Karam%20(₹549/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Kura Karam', 549)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
             </div>
             
-            <div class="product-card">
+            <!-- GARAM MASALA -->
+            <div class="product-card" data-product="Garam Masala" data-base-price="799">
                 <div class="product-image">
                     <i class="fas fa-pepper-hot"></i>
                     <span class="product-badge">Popular</span>
@@ -1116,84 +1152,119 @@
                 <div class="product-info">
                     <h4>Garam Masala</h4>
                     <p>Aromatic blend of spices</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 100)">100g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹799 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Garam%20Masala%20(₹799/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Garam Masala', 799)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
             </div>
             
-            <div class="product-card">
+            <!-- SAMBAR POWDER -->
+            <div class="product-card" data-product="Sambar Powder" data-base-price="499">
                 <div class="product-image">
                     <i class="fas fa-pepper-hot"></i>
                 </div>
                 <div class="product-info">
                     <h4>Sambar Powder</h4>
                     <p>Perfect for sambar</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 100)">100g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹499 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Sambar%20Powder%20(₹499/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Sambar Powder', 499)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
             </div>
             
-            <div class="product-card">
+            <!-- TURMERIC POWDER -->
+            <div class="product-card" data-product="Turmeric Powder" data-base-price="499">
                 <div class="product-image">
                     <i class="fas fa-pepper-hot"></i>
                 </div>
                 <div class="product-info">
                     <h4>Turmeric Powder</h4>
                     <p>Pure turmeric powder</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 100)">100g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹499 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Turmeric%20Powder%20(₹499/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Turmeric Powder', 499)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
             </div>
             
-            <div class="product-card">
+            <!-- PACHI KARAM -->
+            <div class="product-card" data-product="Pachi Karam" data-base-price="599">
                 <div class="product-image">
                     <i class="fas fa-pepper-hot"></i>
                 </div>
                 <div class="product-info">
                     <h4>Pachi Karam</h4>
                     <p>Fresh chili powder</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 100)">100g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹599 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Pachi%20Karam%20(₹599/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Pachi Karam', 599)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
             </div>
             
-            <div class="product-card">
+            <!-- MUNAGAKU KARAM -->
+            <div class="product-card" data-product="Munagaku Karam" data-base-price="639">
                 <div class="product-image">
                     <i class="fas fa-pepper-hot"></i>
                 </div>
                 <div class="product-info">
                     <h4>Munagaku Karam</h4>
                     <p>Drumstick leaf powder</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 100)">100g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹639 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Munagaku%20Karam%20(₹639/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Munagaku Karam', 639)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
             </div>
             
-            <div class="product-card">
+            <!-- KARIVEPAKU KARAM -->
+            <div class="product-card" data-product="Karivepaku Karam" data-base-price="599">
                 <div class="product-image">
                     <i class="fas fa-pepper-hot"></i>
                 </div>
                 <div class="product-info">
                     <h4>Karivepaku Karam</h4>
                     <p>Curry leaf powder</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 100)">100g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹599 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Karivepaku%20Karam%20(₹599/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Karivepaku Karam', 599)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
@@ -1201,7 +1272,7 @@
         </div>
     </section>
 
-    <!-- Veg Pickles Products -->
+    <!-- Veg Pickles Products - 250g, 500g, 1Kg -->
     <section class="products-section" id="vegpickles">
         <div class="products-header">
             <h3><i class="fas fa-carrot"></i> Veg Pickles</h3>
@@ -1210,43 +1281,53 @@
             </button>
         </div>
         
-        <!-- MENU CARD IMAGE -->
         <div class="menu-card-image">
             <img src="veg-pickles.png" alt="Veg Pickles Menu">
         </div>
         
         <div class="products-grid">
-            <div class="product-card">
+            <!-- TOMATO PICKLE -->
+            <div class="product-card" data-product="Tomato Pickle" data-base-price="499">
                 <div class="product-image">
                     <i class="fas fa-jar"></i>
                 </div>
                 <div class="product-info">
                     <h4>Tomato Pickle</h4>
                     <p>Tangy tomato pickle</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹499 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Tomato%20Pickle%20(₹499/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Tomato Pickle', 499)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
             </div>
             
-            <div class="product-card">
+            <!-- USIRIKAY PICKLE -->
+            <div class="product-card" data-product="Usirikay Pickle" data-base-price="499">
                 <div class="product-image">
                     <i class="fas fa-jar"></i>
                 </div>
                 <div class="product-info">
                     <h4>Usirikay Pickle</h4>
                     <p>Amla pickle</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹499 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Usirikay%20Pickle%20(₹499/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Usirikay Pickle', 499)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
             </div>
             
-            <div class="product-card">
+            <!-- GONGURA PICKLE -->
+            <div class="product-card" data-product="Gongura Pickle" data-base-price="499">
                 <div class="product-image">
                     <i class="fas fa-jar"></i>
                     <span class="product-badge">Best Seller</span>
@@ -1254,39 +1335,53 @@
                 <div class="product-info">
                     <h4>Gongura Pickle</h4>
                     <p>Authentic gongura</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹499 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Gongura%20Pickle%20(₹499/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Gongura Pickle', 499)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
             </div>
             
-            <div class="product-card">
+            <!-- AVAKAYA PICKLE -->
+            <div class="product-card" data-product="Avakaya Pickle" data-base-price="499">
                 <div class="product-image">
                     <i class="fas fa-jar"></i>
                 </div>
                 <div class="product-info">
                     <h4>Avakaya Pickle</h4>
                     <p>Traditional mango pickle</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹499 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Avakaya%20Pickle%20(₹499/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Avakaya Pickle', 499)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
             </div>
             
-            <div class="product-card">
+            <!-- USIRIKAY THOKKU -->
+            <div class="product-card" data-product="Usirikay Thokku" data-base-price="499">
                 <div class="product-image">
                     <i class="fas fa-jar"></i>
                 </div>
                 <div class="product-info">
                     <h4>Usirikay Thokku</h4>
                     <p>Amla thokku</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹499 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Usirikay%20Thokku%20(₹499/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Usirikay Thokku', 499)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
@@ -1294,7 +1389,7 @@
         </div>
     </section>
 
-    <!-- Non-Veg Pickles Products -->
+    <!-- Non-Veg Pickles Products - 250g, 500g, 1Kg -->
     <section class="products-section" id="nonvegpickles">
         <div class="products-header">
             <h3><i class="fas fa-drumstick-bite"></i> Non-Veg Pickles</h3>
@@ -1303,28 +1398,33 @@
             </button>
         </div>
         
-        <!-- MENU CARD IMAGE -->
         <div class="menu-card-image">
             <img src="nonveg-pickles.png" alt="Non-Veg Pickles Menu">
         </div>
         
         <div class="products-grid">
-            <div class="product-card">
+            <!-- CHICKEN BONE -->
+            <div class="product-card" data-product="Chicken Bone Pickle" data-base-price="1199">
                 <div class="product-image">
                     <i class="fas fa-drumstick-bite"></i>
                 </div>
                 <div class="product-info">
                     <h4>Chicken Bone Pickle</h4>
                     <p>Traditional chicken pickle</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹1199 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Chicken%20Bone%20Pickle%20(₹1199/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Chicken Bone Pickle', 1199)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
             </div>
             
-            <div class="product-card">
+            <!-- CHICKEN BONELESS -->
+            <div class="product-card" data-product="Chicken Boneless Pickle" data-base-price="1399">
                 <div class="product-image">
                     <i class="fas fa-drumstick-bite"></i>
                     <span class="product-badge">Popular</span>
@@ -1332,15 +1432,20 @@
                 <div class="product-info">
                     <h4>Chicken Boneless Pickle</h4>
                     <p>Premium boneless pickle</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹1399 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Chicken%20Boneless%20Pickle%20(₹1399/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Chicken Boneless Pickle', 1399)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
             </div>
             
-            <div class="product-card">
+            <!-- PRAWNS PICKLE -->
+            <div class="product-card" data-product="Prawns Pickle" data-base-price="1999">
                 <div class="product-image">
                     <i class="fas fa-fish"></i>
                     <span class="product-badge">Premium</span>
@@ -1348,9 +1453,13 @@
                 <div class="product-info">
                     <h4>Prawns Pickle</h4>
                     <p>Authentic prawns pickle</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹1999 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Prawns%20Pickle%20(₹1999/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Prawns Pickle', 1999)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
@@ -1358,7 +1467,7 @@
         </div>
     </section>
 
-    <!-- Sweets Products -->
+    <!-- Sweets Products - 250g, 500g, 1Kg -->
     <section class="products-section" id="sweets">
         <div class="products-header">
             <h3><i class="fas fa-cookie"></i> Sweets</h3>
@@ -1367,28 +1476,33 @@
             </button>
         </div>
         
-        <!-- MENU CARD IMAGE -->
         <div class="menu-card-image">
             <img src="sweets.png" alt="Sweets Menu">
         </div>
         
         <div class="products-grid">
-            <div class="product-card">
+            <!-- SUNNUNDALU -->
+            <div class="product-card" data-product="Sunnundalu Sugar" data-base-price="799">
                 <div class="product-image">
                     <i class="fas fa-cookie"></i>
                 </div>
                 <div class="product-info">
                     <h4>Sunnundalu Sugar</h4>
                     <p>Traditional urad dal laddu</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹799 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Sunnundalu%20Sugar%20(₹799/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Sunnundalu Sugar', 799)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
             </div>
             
-            <div class="product-card">
+            <!-- NUVVULA LADDU -->
+            <div class="product-card" data-product="Nuvvula Laddu" data-base-price="599">
                 <div class="product-image">
                     <i class="fas fa-cookie"></i>
                     <span class="product-badge">Popular</span>
@@ -1396,24 +1510,33 @@
                 <div class="product-info">
                     <h4>Nuvvula Laddu</h4>
                     <p>Sesame seeds laddu</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹599 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Nuvvula%20Laddu%20(₹599/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Nuvvula Laddu', 599)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
             </div>
             
-            <div class="product-card">
+            <!-- RAVVA LADDU -->
+            <div class="product-card" data-product="Ravva Laddu" data-base-price="599">
                 <div class="product-image">
                     <i class="fas fa-cookie"></i>
                 </div>
                 <div class="product-info">
                     <h4>Ravva Laddu</h4>
                     <p>Semolina laddu</p>
+                    <div class="weight-options">
+                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
+                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
+                        <button class="weight-btn active" onclick="selectWeight(this, 1000)">1Kg</button>
+                    </div>
                     <div class="product-price">₹599 <span>/ Kg</span></div>
-                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20Ravva%20Laddu%20(₹599/kg)" 
-                       class="order-btn" target="_blank">
+                    <a href="#" class="order-btn" onclick="orderProduct(this, 'Ravva Laddu', 599)">
                         <i class="fab fa-whatsapp"></i> Order Now
                     </a>
                 </div>
@@ -1491,7 +1614,7 @@
         </div>
     </footer>
 
-    <!-- Delivery Notice - FIXED -->
+    <!-- Delivery Notice -->
     <div class="delivery-notice">
         <i class="fas fa-truck"></i>
         Delivery Charges Extra
@@ -1544,6 +1667,51 @@
         function closeMobileMenu() {
             document.getElementById('mobileOverlay').classList.remove('active');
             document.body.style.overflow = 'auto';
+        }
+
+        // WEIGHT SELECTION FUNCTION
+        function selectWeight(btn, weight) {
+            // Get parent card
+            const card = btn.closest('.product-card');
+            
+            // Remove active from all buttons in this card
+            const allBtns = card.querySelectorAll('.weight-btn');
+            allBtns.forEach(b => b.classList.remove('active'));
+            
+            // Add active to clicked button
+            btn.classList.add('active');
+            
+            // Update price display
+            const basePrice = parseInt(card.getAttribute('data-base-price'));
+            const priceDisplay = card.querySelector('.product-price');
+            const calculatedPrice = Math.round((basePrice * weight) / 1000);
+            
+            let weightText = weight >= 1000 ? '1Kg' : weight + 'g';
+            priceDisplay.innerHTML = `₹${calculatedPrice} <span>/ ${weightText}</span>`;
+        }
+
+        // ORDER FUNCTION WITH WEIGHT
+        function orderProduct(btn, productName, basePrice) {
+            const card = btn.closest('.product-card');
+            const activeBtn = card.querySelector('.weight-btn.active');
+            const weight = activeBtn ? activeBtn.textContent : '1Kg';
+            
+            // Calculate price
+            let weightInGrams = 1000;
+            if (weight === '100g') weightInGrams = 100;
+            else if (weight === '250g') weightInGrams = 250;
+            else if (weight === '500g') weightInGrams = 500;
+            
+            const finalPrice = Math.round((basePrice * weightInGrams) / 1000);
+            
+            // Create WhatsApp message
+            const message = `Hi! I want to order ${productName} - ${weight} (₹${finalPrice})`;
+            const encodedMessage = encodeURIComponent(message);
+            
+            // Open WhatsApp
+            window.open(`https://wa.me/919381311511?text=${encodedMessage}`, '_blank');
+            
+            return false; // Prevent default link behavior
         }
 
         // Smooth scroll for anchor links
