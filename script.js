@@ -131,3 +131,24 @@ document.querySelectorAll('.category-card').forEach((el, index) => {
     el.style.transition = `all 0.6s ease ${index * 0.1}s`;
     observer.observe(el);
 });
+
+// DELIVERY NOTICE - Hide when reaching Follow Us section
+const deliveryNotice = document.querySelector('.delivery-notice');
+const followUsSection = document.querySelector('.social-section');
+const footerSection = document.querySelector('footer');
+
+if (deliveryNotice && followUsSection) {
+    window.addEventListener('scroll', function() {
+        const followUsTop = followUsSection.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+
+        // Hide notice when Follow Us section is visible (within 100px from bottom)
+        if (followUsTop < windowHeight - 100) {
+            deliveryNotice.style.opacity = '0';
+            deliveryNotice.style.pointerEvents = 'none';
+        } else {
+            deliveryNotice.style.opacity = '1';
+            deliveryNotice.style.pointerEvents = 'auto';
+        }
+    });
+}

@@ -916,6 +916,7 @@ footer {
     align-items: center;
     gap: 10px;
     white-space: nowrap;
+    transition: opacity 0.4s ease;
 }
 
 @keyframes slideUp {
