@@ -751,25 +751,16 @@ nav.scrolled {
     }
 
     .cart-items {
-        padding-bottom: 200px; /* Space for sticky footer */
+        padding: 20px;
     }
 
     .cart-footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: var(--warm-cream);
-        border-top: 2px solid #eee;
-        padding: 15px 20px 25px;
-        z-index: 2000;
-        box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+        padding: 15px 20px;
     }
 
     .cart-order-btn {
         padding: 14px;
         font-size: 1rem;
-        margin-bottom: 10px;
     }
 }
 
