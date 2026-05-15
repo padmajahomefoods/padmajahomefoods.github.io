@@ -175,8 +175,14 @@ function addToCart(btn, productName, basePrice) {
     const tickSound = document.getElementById('tickSound');
     if (tickSound) {
         tickSound.currentTime = 0;
-        tickSound.volume = 0.3;
-        tickSound.play().catch(e => {}); // Ignore autoplay errors
+        tickSound.volume = 0.4;
+        const playPromise = tickSound.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                // Auto-play was prevented, try again after user interaction
+                console.log('Sound play prevented:', error);
+            });
+        }
     }
 
     // Show added animation - green glow on button
