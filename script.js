@@ -1,66 +1,6 @@
 // Cart State
 let cart = [];
 
-// ==================== AUDIO SETUP ====================
-
-let audioContext = null;
-let tickAudioBuffer = null;
-
-// Initialize audio on first user interaction
-function initAudio() {
-    if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        loadTickSound();
-    }
-    if (audioContext.state === 'suspended') {
-        audioContext.resume();
-    }
-}
-
-// Load tick sound using Web Audio API (more reliable)
-function loadTickSound() {
-    // Simple tick sound using oscillator
-    // This creates a soft "tick" without external files
-}
-
-// Play tick sound using Web Audio API
-function playTickSound() {
-    try {
-        if (!audioContext) {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        }
-
-        // Create oscillator for a soft tick
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-
-        // Soft tick sound parameters
-        oscillator.frequency.value = 800;
-        oscillator.type = 'sine';
-
-        gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
-
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.1);
-    } catch (e) {
-        // Fallback: try HTML5 audio
-        const tickSound = document.getElementById('tickSound');
-        if (tickSound) {
-            tickSound.currentTime = 0;
-            tickSound.volume = 0.3;
-            tickSound.play().catch(err => {});
-        }
-    }
-}
-
-// Initialize audio on first click anywhere on page
-document.addEventListener('click', initAudio, { once: true });
-document.addEventListener('touchstart', initAudio, { once: true });
-
 // ==================== LOCALSTORAGE FUNCTIONS ====================
 
 // Save cart to localStorage
@@ -235,14 +175,8 @@ function addToCart(btn, productName, basePrice) {
     const tickSound = document.getElementById('tickSound');
     if (tickSound) {
         tickSound.currentTime = 0;
-        tickSound.volume = 0.4;
-        const playPromise = tickSound.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(error => {
-                // Auto-play was prevented, try again after user interaction
-                console.log('Sound play prevented:', error);
-            });
-        }
+        tickSound.volume = 0.3;
+        tickSound.play().catch(e => {}); // Ignore autoplay errors
     }
 
     // Show added animation - green glow on button
