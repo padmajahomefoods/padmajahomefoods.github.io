@@ -717,10 +717,13 @@ nav.scrolled {
     z-index: 1998;
     display: none;
     backdrop-filter: blur(3px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .cart-overlay.active {
     display: block;
+    opacity: 1;
 }
 
 .cart-sidebar {
@@ -732,10 +735,15 @@ nav.scrolled {
     height: 100vh;
     background: white;
     z-index: 1999;
-    display: flex;
+    display: none; /* Hidden by default */
     flex-direction: column;
     transition: right 0.4s ease;
     box-shadow: -5px 0 30px rgba(0,0,0,0.2);
+}
+
+.cart-sidebar.active {
+    display: flex;
+    right: 0;
 }
 
 /* Mobile cart sidebar fixes */
@@ -747,6 +755,7 @@ nav.scrolled {
     }
 
     .cart-sidebar.active {
+        display: flex;
         right: 0;
     }
 
@@ -805,9 +814,7 @@ nav.scrolled {
     }
 }
 
-.cart-sidebar.active {
-    right: 0;
-}
+
 
 .cart-header {
     padding: 25px;
