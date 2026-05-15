@@ -1,6 +1,90 @@
 // Cart State
 let cart = [];
 
+// ==================== AUDIO SETUP ====================
+
+let audioContext = null;
+let tickAudioBuffer = null;
+
+// Initialize audio on first user interaction
+function initAudio() {
+    if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        loadTickSound();
+    }
+    if (audioContext.state === 'suspended') {
+        audioContext.resume();
+    }
+}
+
+// Load tick sound using Web Audio API (more reliable)
+function loadTickSound() {
+    // Simple tick sound using oscillator
+    // This creates a soft "tick" without external files
+}
+
+// Play tick sound using Web Audio API
+function playTickSound() {
+    try {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        // Create oscillator for a soft tick
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        // Soft tick sound parameters
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+
+        gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.1);
+    } catch (e) {
+        // Fallback: try HTML5 audio
+        const tickSound = document.getElementById('tickSound');
+        if (tickSound) {
+            tickSound.currentTime = 0;
+            tickSound.volume = 0.3;
+            tickSound.play().catch(err => {});
+        }
+    }
+}
+
+// Initialize audio on first click anywhere on page
+document.addEventListener('click', initAudio, { once: true });
+document.addEventListener('touchstart', initAudio, { once: true });
+
+// ==================== LOCALSTORAGE FUNCTIONS ====================
+
+// Save cart to localStorage
+function saveCart() {
+    localStorage.setItem('padmaja_cart', JSON.stringify(cart));
+}
+
+// Load cart from localStorage
+function loadCart() {
+    const saved = localStorage.getItem('padmaja_cart');
+    if (saved) {
+        try {
+            cart = JSON.parse(saved);
+        } catch (e) {
+            cart = [];
+        }
+    }
+}
+
+// Clear cart from localStorage
+function clearSavedCart() {
+    localStorage.removeItem('padmaja_cart');
+}
+
 // Navbar scroll effect
 window.addEventListener('scroll', function() {
     const navbar = document.getElementById('navbar');
@@ -145,6 +229,21 @@ function addToCart(btn, productName, basePrice) {
     }
 
     updateCartUI();
+    saveCart(); // Save to localStorage
+
+    // Play tick sound
+    const tickSound = document.getElementById('tickSound');
+    if (tickSound) {
+        tickSound.currentTime = 0;
+        tickSound.volume = 0.4;
+        const playPromise = tickSound.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                // Auto-play was prevented, try again after user interaction
+                console.log('Sound play prevented:', error);
+            });
+        }
+    }
 
     // Show added animation - green glow on button
     const originalText = btn.innerHTML;
@@ -196,9 +295,9 @@ function updateCartUI() {
     if (cart.length === 0) {
         cartItems.innerHTML = `
             <div class="cart-empty">
-                <i class="fas fa-shopping-basket"></i>
-                <p>Your cart is empty</p>
-                <span>Add some delicious items!</span>
+                <div class="cart-empty-icon">🌶️</div>
+                <h4>Your spice box is empty</h4>
+                <p>Add authentic Guntur flavors</p>
             </div>
         `;
         return;
@@ -235,12 +334,14 @@ function updateQuantity(index, change) {
     }
 
     updateCartUI();
+    saveCart(); // Save to localStorage
 }
 
 // Remove from Cart
 function removeFromCart(index) {
     cart.splice(index, 1);
     updateCartUI();
+    saveCart(); // Save to localStorage
 }
 
 // Toggle Cart
@@ -268,14 +369,15 @@ function placeOrder() {
         return;
     }
 
-    let message = 'Hello Padmaja Home Foods,\n\nI want to order:\n\n';
+    let message = 'Hello Padmaja Home Foods 👋\n\nI want to order:\n\n';
 
-    cart.forEach(item => {
-        message += `- ${item.name} ${item.weight} x${item.quantity} - ₹${item.price * item.quantity}\n`;
+    cart.forEach((item, index) => {
+        const emoji = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'][index] || `${index + 1}.`;
+        message += `${emoji} ${item.name} - ${item.weight} × ${item.quantity} = ₹${item.price * item.quantity}\n`;
     });
 
     const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    message += `\nTotal: ₹${totalPrice}`;
+    message += `\nTotal: ₹${totalPrice}\n\nName:\nAddress:\nPincode:`;
 
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/919381311511?text=${encodedMessage}`, '_blank');
@@ -283,6 +385,7 @@ function placeOrder() {
     // Clear cart after order
     cart = [];
     updateCartUI();
+    clearSavedCart(); // Clear from localStorage
     toggleCart();
 }
 
@@ -328,3 +431,110 @@ if (deliveryNotice && followUsSection) {
         }
     });
 }
+
+// ==================== SEARCH FUNCTIONALITY ====================
+
+// Product database for search
+const allProducts = [
+    { name: 'Kura Karam', category: 'Masala & Karam', price: 549, weights: ['100g', '250g', '500g', '1Kg'] },
+    { name: 'Garam Masala', category: 'Masala & Karam', price: 799, weights: ['100g', '250g', '500g', '1Kg'] },
+    { name: 'Sambar Powder', category: 'Masala & Karam', price: 499, weights: ['100g', '250g', '500g', '1Kg'] },
+    { name: 'Turmeric Powder', category: 'Masala & Karam', price: 499, weights: ['100g', '250g', '500g', '1Kg'] },
+    { name: 'Pachi Karam', category: 'Masala & Karam', price: 599, weights: ['100g', '250g', '500g', '1Kg'] },
+    { name: 'Munagaku Karam', category: 'Masala & Karam', price: 639, weights: ['100g', '250g', '500g', '1Kg'] },
+    { name: 'Karivepaku Karam', category: 'Masala & Karam', price: 599, weights: ['100g', '250g', '500g', '1Kg'] },
+    { name: 'Tomato Pickle', category: 'Veg Pickles', price: 499, weights: ['250g', '500g', '1Kg'] },
+    { name: 'Usirikay Pickle', category: 'Veg Pickles', price: 499, weights: ['250g', '500g', '1Kg'] },
+    { name: 'Gongura Pickle', category: 'Veg Pickles', price: 499, weights: ['250g', '500g', '1Kg'] },
+    { name: 'Avakaya Pickle', category: 'Veg Pickles', price: 499, weights: ['250g', '500g', '1Kg'] },
+    { name: 'Usirikay Thokku', category: 'Veg Pickles', price: 499, weights: ['250g', '500g', '1Kg'] },
+    { name: 'Chicken Bone Pickle', category: 'Non-Veg Pickles', price: 1199, weights: ['250g', '500g', '1Kg'] },
+    { name: 'Chicken Boneless Pickle', category: 'Non-Veg Pickles', price: 1399, weights: ['250g', '500g', '1Kg'] },
+    { name: 'Prawns Pickle', category: 'Non-Veg Pickles', price: 1999, weights: ['250g', '500g', '1Kg'] },
+    { name: 'Sunnundalu Sugar', category: 'Sweets', price: 799, weights: ['250g', '500g', '1Kg'] },
+    { name: 'Nuvvula Laddu', category: 'Sweets', price: 599, weights: ['250g', '500g', '1Kg'] },
+    { name: 'Ravva Laddu', category: 'Sweets', price: 599, weights: ['250g', '500g', '1Kg'] }
+];
+
+function searchProducts() {
+    const input = document.getElementById('productSearch');
+    const results = document.getElementById('searchResults');
+    const clearBtn = document.getElementById('searchClear');
+    const query = input.value.trim().toLowerCase();
+
+    if (query.length === 0) {
+        results.innerHTML = '';
+        results.classList.remove('active');
+        clearBtn.classList.remove('active');
+        return;
+    }
+
+    clearBtn.classList.add('active');
+
+    const matches = allProducts.filter(p => 
+        p.name.toLowerCase().includes(query) || 
+        p.category.toLowerCase().includes(query)
+    );
+
+    if (matches.length === 0) {
+        results.innerHTML = '<div class="search-no-results">No products found 😔</div>';
+        results.classList.add('active');
+        return;
+    }
+
+    results.innerHTML = matches.map(p => {
+        const categoryMap = {
+            'Masala & Karam': 'masala',
+            'Veg Pickles': 'vegpickles',
+            'Non-Veg Pickles': 'nonvegpickles',
+            'Sweets': 'sweets'
+        };
+        const catId = categoryMap[p.category];
+        return `
+            <div class="search-result-item" onclick="goToProduct('${catId}', '${p.name}')">
+                <div class="search-result-name">${p.name}</div>
+                <div class="search-result-category">${p.category}</div>
+            </div>
+        `;
+    }).join('');
+
+    results.classList.add('active');
+}
+
+function clearSearch() {
+    const input = document.getElementById('productSearch');
+    const results = document.getElementById('searchResults');
+    const clearBtn = document.getElementById('searchClear');
+
+    input.value = '';
+    results.innerHTML = '';
+    results.classList.remove('active');
+    clearBtn.classList.remove('active');
+    input.focus();
+}
+
+function goToProduct(categoryId, productName) {
+    // Clear search
+    clearSearch();
+
+    // Navigate to category
+    showCategory(categoryId);
+
+    // Scroll to product after a short delay
+    setTimeout(() => {
+        const cards = document.querySelectorAll(`#${categoryId} .product-card`);
+        cards.forEach(card => {
+            if (card.getAttribute('data-product') === productName) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                card.style.animation = 'highlightProduct 1s ease';
+                setTimeout(() => {
+                    card.style.animation = '';
+                }, 1000);
+            }
+        });
+    }, 600);
+}
+
+// Load cart from localStorage on page load
+loadCart();
+updateCartUI();
