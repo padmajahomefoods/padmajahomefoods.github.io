@@ -2,25 +2,27 @@
 let cart = [];
 
 // ==================== LOCALSTORAGE FUNCTIONS ====================
-
-// Save cart to localStorage
 function saveCart() {
-    localStorage.setItem('padmaja_cart', JSON.stringify(cart));
+    const data = { version: 1, items: cart };
+    localStorage.setItem('padmaja_cart', JSON.stringify(data));
 }
 
-// Load cart from localStorage
 function loadCart() {
     const saved = localStorage.getItem('padmaja_cart');
     if (saved) {
         try {
-            cart = JSON.parse(saved);
+            const data = JSON.parse(saved);
+            if (data.version === 1) {
+                cart = data.items || [];
+            } else {
+                cart = [];
+            }
         } catch (e) {
             cart = [];
         }
     }
 }
 
-// Clear cart from localStorage
 function clearSavedCart() {
     localStorage.removeItem('padmaja_cart');
 }
@@ -35,59 +37,6 @@ window.addEventListener('scroll', function() {
     }
 });
 
-// Universal navigation function
-function navigateTo(targetId) {
-    // If inside a product section, close it first
-    const allProducts = document.querySelectorAll('.products-section');
-    const isInProductSection = Array.from(allProducts).some(section => {
-        return section.classList.contains('active');
-    });
-
-    if (isInProductSection && (targetId === 'home' || targetId === 'categories')) {
-        // Hide all product sections
-        allProducts.forEach(section => {
-            section.classList.remove('active');
-        });
-        // Show categories
-        document.getElementById('categories').style.display = 'block';
-    }
-
-    // Scroll to target
-    const target = document.getElementById(targetId);
-    if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    return false;
-}
-
-// Show category products
-function showCategory(categoryId) {
-    document.getElementById('categories').style.display = 'none';
-
-    const allProducts = document.querySelectorAll('.products-section');
-    allProducts.forEach(section => {
-        section.classList.remove('active');
-    });
-
-    const selected = document.getElementById(categoryId);
-    if (selected) {
-        selected.classList.add('active');
-        selected.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-}
-
-// Show categories again
-function showCategories() {
-    const allProducts = document.querySelectorAll('.products-section');
-    allProducts.forEach(section => {
-        section.classList.remove('active');
-    });
-
-    document.getElementById('categories').style.display = 'block';
-    document.getElementById('categories').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
 // Mobile menu
 function openMobileMenu() {
     document.getElementById('mobileOverlay').classList.add('active');
@@ -99,47 +48,25 @@ function closeMobileMenu() {
     document.body.style.overflow = 'auto';
 }
 
-// WEIGHT SELECTION FUNCTION
-function selectWeight(btn, weight) {
-    const card = btn.closest('.product-card');
+// ==================== CART SIDEBAR ====================
+function toggleCart(forceOpen = null) {
+    const cartSidebar = document.getElementById('cartSidebar');
+    const cartOverlay = document.getElementById('cartOverlay');
 
-    const allBtns = card.querySelectorAll('.weight-btn');
-    allBtns.forEach(b => b.classList.remove('active'));
+    const isOpen = cartSidebar.classList.contains('active');
 
-    btn.classList.add('active');
-
-    const basePrice = parseInt(card.getAttribute('data-base-price'));
-    const priceDisplay = card.querySelector('.product-price');
-    const calculatedPrice = Math.round((basePrice * weight) / 1000);
-
-    let weightText = weight >= 1000 ? '1Kg' : weight + 'g';
-    priceDisplay.innerHTML = `₹${calculatedPrice} <span>/ ${weightText}</span>`;
-}
-
-// ORDER FUNCTION WITH WEIGHT
-function orderProduct(btn, productName, basePrice) {
-    const card = btn.closest('.product-card');
-    const activeBtn = card.querySelector('.weight-btn.active');
-    const weight = activeBtn ? activeBtn.textContent : '1Kg';
-
-    let weightInGrams = 1000;
-    if (weight === '100g') weightInGrams = 100;
-    else if (weight === '250g') weightInGrams = 250;
-    else if (weight === '500g') weightInGrams = 500;
-
-    const finalPrice = Math.round((basePrice * weightInGrams) / 1000);
-
-    const message = `Hi! I want to order ${productName} - ${weight} (₹${finalPrice})`;
-    const encodedMessage = encodeURIComponent(message);
-
-    window.open(`https://wa.me/919381311511?text=${encodedMessage}`, '_blank');
-
-    return false;
+    if (forceOpen === true || !isOpen) {
+        cartSidebar.classList.add('active');
+        cartOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    } else {
+        cartSidebar.classList.remove('active');
+        cartOverlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
 }
 
 // ==================== CART FUNCTIONALITY ====================
-
-// Add to Cart
 function addToCart(btn, productName, basePrice) {
     const card = btn.closest('.product-card');
     const activeBtn = card.querySelector('.weight-btn.active');
@@ -152,10 +79,14 @@ function addToCart(btn, productName, basePrice) {
 
     const finalPrice = Math.round((basePrice * weightInGrams) / 1000);
 
-    // Check if item already exists in cart
+    // Check if item already exists
     const existingItem = cart.find(item => item.name === productName && item.weight === weight);
 
     if (existingItem) {
+        if (existingItem.quantity >= 10) {
+            alert('Maximum 10 items allowed per product');
+            return;
+        }
         existingItem.quantity += 1;
     } else {
         cart.push({
@@ -169,35 +100,39 @@ function addToCart(btn, productName, basePrice) {
     }
 
     updateCartUI();
-    saveCart(); // Save to localStorage
+    saveCart();
 
-    // Play tick sound
-    const tickSound = document.getElementById('tickSound');
-    if (tickSound) {
-        tickSound.currentTime = 0;
-        tickSound.volume = 0.4;
-        const playPromise = tickSound.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(error => {
-                // Auto-play was prevented, try again after user interaction
-                console.log('Sound play prevented:', error);
-            });
-        }
-    }
+    // Play tick sound using Web Audio API
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+        oscillator.start(audioCtx.currentTime);
+        oscillator.stop(audioCtx.currentTime + 0.1);
+    } catch (e) {}
 
-    // Show added animation - green glow on button
+    // Show added animation
     const originalText = btn.innerHTML;
-    const originalBg = btn.style.background;
     btn.innerHTML = '<i class="fas fa-check"></i> Added!';
     btn.classList.add('added-glow');
 
-    // Bounce cart icon
+    // Bounce cart icon and re-trigger badge animation
     const cartIcon = document.querySelector('.cart-icon');
+    const badge = document.getElementById('cartBadge');
     if (cartIcon) {
         cartIcon.classList.add('cart-bounce');
-        setTimeout(() => {
-            cartIcon.classList.remove('cart-bounce');
-        }, 600);
+        setTimeout(() => cartIcon.classList.remove('cart-bounce'), 600);
+    }
+    if (badge) {
+        badge.style.animation = 'none';
+        badge.offsetHeight; // trigger reflow
+        badge.style.animation = 'bounce 0.5s ease';
     }
 
     setTimeout(() => {
@@ -206,7 +141,6 @@ function addToCart(btn, productName, basePrice) {
     }, 1000);
 }
 
-// Update Cart UI
 function updateCartUI() {
     const cartItems = document.getElementById('cartItems');
     const cartBadge = document.getElementById('cartBadge');
@@ -217,21 +151,22 @@ function updateCartUI() {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-    // Update badges
-    cartBadge.textContent = totalItems;
-    stickyCartCount.textContent = totalItems;
-    cartTotal.textContent = `₹${totalPrice}`;
-    stickyCartTotal.textContent = `₹${totalPrice}`;
+    if (cartBadge) cartBadge.textContent = totalItems;
+    if (stickyCartCount) stickyCartCount.textContent = totalItems;
+    if (cartTotal) cartTotal.textContent = '₹' + totalPrice;
+    if (stickyCartTotal) stickyCartTotal.textContent = '₹' + totalPrice;
 
-    // Show/hide sticky cart button
     const stickyCartBtn = document.getElementById('stickyCartBtn');
-    if (totalItems > 0) {
-        stickyCartBtn.classList.add('active');
-    } else {
-        stickyCartBtn.classList.remove('active');
+    if (stickyCartBtn) {
+        if (totalItems > 0) {
+            stickyCartBtn.classList.add('active');
+        } else {
+            stickyCartBtn.classList.remove('active');
+        }
     }
 
-    // Render cart items
+    if (!cartItems) return;
+
     if (cart.length === 0) {
         cartItems.innerHTML = `
             <div class="cart-empty">
@@ -265,7 +200,6 @@ function updateCartUI() {
     `).join('');
 }
 
-// Update Quantity
 function updateQuantity(index, change) {
     cart[index].quantity += change;
 
@@ -274,35 +208,15 @@ function updateQuantity(index, change) {
     }
 
     updateCartUI();
-    saveCart(); // Save to localStorage
+    saveCart();
 }
 
-// Remove from Cart
 function removeFromCart(index) {
     cart.splice(index, 1);
     updateCartUI();
-    saveCart(); // Save to localStorage
+    saveCart();
 }
 
-// Toggle Cart
-function toggleCart(forceOpen = null) {
-    const cartSidebar = document.getElementById('cartSidebar');
-    const cartOverlay = document.getElementById('cartOverlay');
-
-    const isOpen = cartSidebar.classList.contains('active');
-
-    if (forceOpen === true || !isOpen) {
-        cartSidebar.classList.add('active');
-        cartOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    } else {
-        cartSidebar.classList.remove('active');
-        cartOverlay.classList.remove('active');
-        document.body.style.overflow = 'auto';
-    }
-}
-
-// Place Order on WhatsApp
 function placeOrder() {
     if (cart.length === 0) {
         alert('Your cart is empty! Add some items first.');
@@ -322,59 +236,74 @@ function placeOrder() {
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/919381311511?text=${encodedMessage}`, '_blank');
 
-    // Clear cart after order
     cart = [];
     updateCartUI();
-    clearSavedCart(); // Clear from localStorage
+    clearSavedCart();
     toggleCart();
 }
 
-// Add animation on scroll
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
+// ==================== WEIGHT SELECTION ====================
+function selectWeight(btn, weight) {
+    const card = btn.closest('.product-card');
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
+    const allBtns = card.querySelectorAll('.weight-btn');
+    allBtns.forEach(b => b.classList.remove('active'));
 
-document.querySelectorAll('.category-card').forEach((el, index) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = `all 0.6s ease ${index * 0.1}s`;
-    observer.observe(el);
-});
+    btn.classList.add('active');
 
-// DELIVERY NOTICE - Hide when reaching Follow Us section
-const deliveryNotice = document.querySelector('.delivery-notice');
-const followUsSection = document.querySelector('.social-section');
-const footerSection = document.querySelector('footer');
+    const basePrice = parseInt(card.getAttribute('data-base-price'));
+    const priceDisplay = card.querySelector('.product-price');
+    const calculatedPrice = Math.round((basePrice * weight) / 1000);
 
-if (deliveryNotice && followUsSection) {
-    window.addEventListener('scroll', function() {
-        const followUsTop = followUsSection.getBoundingClientRect().top;
-        const windowHeight = window.innerHeight;
+    let weightText = weight >= 1000 ? '1Kg' : weight + 'g';
+    priceDisplay.innerHTML = `₹${calculatedPrice} <span>/ ${weightText}</span>`;
+}
 
-        // Hide notice when Follow Us section is visible (within 100px from bottom)
-        if (followUsTop < windowHeight - 100) {
-            deliveryNotice.style.opacity = '0';
-            deliveryNotice.style.pointerEvents = 'none';
-        } else {
-            deliveryNotice.style.opacity = '1';
-            deliveryNotice.style.pointerEvents = 'auto';
-        }
-    });
+// ==================== ORDER FUNCTION ====================
+function orderProduct(btn, productName, basePrice) {
+    const card = btn.closest('.product-card');
+    const activeBtn = card.querySelector('.weight-btn.active');
+    const weight = activeBtn ? activeBtn.textContent : '1Kg';
+
+    let weightInGrams = 1000;
+    if (weight === '100g') weightInGrams = 100;
+    else if (weight === '250g') weightInGrams = 250;
+    else if (weight === '500g') weightInGrams = 500;
+
+    const finalPrice = Math.round((basePrice * weightInGrams) / 1000);
+
+    const message = `Hi! I want to order ${productName} - ${weight} (₹${finalPrice})`;
+    const encodedMessage = encodeURIComponent(message);
+
+    window.open(`https://wa.me/919381311511?text=${encodedMessage}`, '_blank');
+
+    return false;
+}
+
+// ==================== CATEGORY FILTER (Shop Page) ====================
+function filterCategory(category) {
+    const allSections = document.querySelectorAll('.products-section');
+    const allBtns = document.querySelectorAll('.filter-btn');
+
+    allBtns.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+
+    if (category === 'all') {
+        allSections.forEach(section => {
+            section.classList.add('active');
+        });
+    } else {
+        allSections.forEach(section => {
+            if (section.getAttribute('data-category') === category) {
+                section.classList.add('active');
+            } else {
+                section.classList.remove('active');
+            }
+        });
+    }
 }
 
 // ==================== SEARCH FUNCTIONALITY ====================
-
-// Product database for search
 const allProducts = [
     { name: 'Kura Karam', category: 'Masala & Karam', price: 549, weights: ['100g', '250g', '500g', '1Kg'] },
     { name: 'Garam Masala', category: 'Masala & Karam', price: 799, weights: ['100g', '250g', '500g', '1Kg'] },
@@ -454,13 +383,26 @@ function clearSearch() {
 }
 
 function goToProduct(categoryId, productName) {
-    // Clear search
     clearSearch();
 
-    // Navigate to category
-    showCategory(categoryId);
+    // Hide all sections first
+    document.querySelectorAll('.products-section').forEach(s => s.classList.remove('active'));
 
-    // Scroll to product after a short delay
+    // Show target section
+    const targetSection = document.getElementById(categoryId);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    }
+
+    // Update filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.textContent.toLowerCase().includes(categoryId.replace('vegpickles', 'veg').replace('nonvegpickles', 'non-veg'))) {
+            btn.classList.add('active');
+        }
+    });
+
+    // Scroll to product
     setTimeout(() => {
         const cards = document.querySelectorAll(`#${categoryId} .product-card`);
         cards.forEach(card => {
@@ -472,9 +414,63 @@ function goToProduct(categoryId, productName) {
                 }, 1000);
             }
         });
-    }, 600);
+    }, 300);
 }
 
-// Load cart from localStorage on page load
+// ==================== SCROLL ANIMATIONS ====================
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+            observer.unobserve(entry.target);
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.category-card, .offer-card, .review-card, .feature').forEach((el, index) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = `all 0.6s ease ${index * 0.1}s`;
+    observer.observe(el);
+});
+
+// ==================== DELIVERY NOTICE HIDE ====================
+const deliveryNotice = document.querySelector('.delivery-notice');
+const socialSection = document.querySelector('.social-section');
+
+if (deliveryNotice && socialSection) {
+    window.addEventListener('scroll', function() {
+        const socialTop = socialSection.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+
+        if (socialTop < windowHeight - 100) {
+            deliveryNotice.style.opacity = '0';
+            deliveryNotice.style.pointerEvents = 'none';
+        } else {
+            deliveryNotice.style.opacity = '1';
+            deliveryNotice.style.pointerEvents = 'auto';
+        }
+    });
+}
+
+// ==================== INIT ====================
 loadCart();
 updateCartUI();
+
+// Check for URL hash on shop page
+if (window.location.hash) {
+    const hash = window.location.hash.substring(1);
+    const section = document.getElementById(hash);
+    if (section) {
+        setTimeout(() => {
+            section.classList.add('active');
+            section.scrollIntoView({ behavior: 'smooth' });
+        }, 500);
+    }
+}

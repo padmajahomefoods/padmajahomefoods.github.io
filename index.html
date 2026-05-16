@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Padmaja Home Foods | Authentic Guntur Spices & Pickles</title>
+    <meta name="description" content="Authentic homemade Guntur spices, pickles, and sweets. Hand-crafted with traditional recipes, delivered across India. Order now on WhatsApp!">
+    <meta name="keywords" content="Guntur pickles, Andhra spices, homemade masala, chicken pickle, prawns pickle, Indian sweets, sunnundalu, gongura, avakaya">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Padmaja Home Foods | Authentic Guntur Spices & Pickles">
+    <meta property="og:description" content="Hand-crafted pickles, masalas, and sweets from Guntur. Made with love, delivered to your doorstep.">
+    <meta property="og:image" content="https://padmajahomefoods.github.io/logo.png">
+    <meta property="og:url" content="https://padmajahomefoods.github.io">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Padmaja Home Foods">
+    <meta name="twitter:description" content="Authentic Guntur spices & pickles delivered across India">
+
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -13,31 +28,25 @@
     <!-- Navigation -->
     <nav id="navbar">
         <div class="nav-container">
-            <div class="logo-section">
-                <img src="logo.png" alt="Padmaja Home Foods">
+            <a href="index.html" class="logo-section">
+                <img src="logo.png" alt="Padmaja Home Foods" onerror="this.style.display='none'">
                 <div class="brand-text">
                     <h1>Padmaja Home Foods</h1>
                     <span>Authentic Guntur Taste</span>
                 </div>
-            </div>
+            </a>
 
             <ul class="nav-links">
-                <li><a href="#home" onclick="navigateTo('home')">Home</a></li>
-                <li><a href="#categories" onclick="navigateTo('categories')">Categories</a></li>
-                <li><a href="#features" onclick="navigateTo('features')">Why Us</a></li>
-                <li><a href="#contact" onclick="navigateTo('contact')">Contact</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop/">Shop</a></li>
+                <li><a href="#offers">Offers</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+                <li><a href="#contact">Contact</a></li>
                 <li>
-                    <a href="https://wa.me/919381311511?text=Hi%20Padmaja%20Home%20Foods!%20I%20want%20to%20place%20an%20order." 
-                       class="whatsapp-btn-nav" target="_blank">
+                    <a href="https://wa.me/919381311511?text=Hi%20Padmaja%20Home%20Foods!" class="whatsapp-btn-nav" target="_blank">
                         <i class="fab fa-whatsapp"></i>
                         Order Now
                     </a>
-                </li>
-                <li>
-                    <div class="cart-icon" onclick="toggleCart()">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-badge" id="cartBadge">0</span>
-                    </div>
                 </li>
             </ul>
 
@@ -48,46 +57,21 @@
     </nav>
 
     <!-- Mobile Menu -->
-    <div class="mobile-overlay" id="mobileOverlay">
+    <div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileMenu()">
         <i class="fas fa-times close-mobile" onclick="closeMobileMenu()"></i>
         <div class="mobile-nav">
             <ul>
-                <li><a href="#home" onclick="navigateTo('home'); closeMobileMenu();">Home</a></li>
-                <li><a href="#categories" onclick="navigateTo('categories'); closeMobileMenu();">Categories</a></li>
-                <li><a href="#features" onclick="navigateTo('features'); closeMobileMenu();">Why Choose Us</a></li>
-                <li><a href="#contact" onclick="navigateTo('contact'); closeMobileMenu();">Contact</a></li>
+                <li><a href="index.html" onclick="closeMobileMenu()">Home</a></li>
+                <li><a href="shop/" onclick="closeMobileMenu()">Shop</a></li>
+                <li><a href="#offers" onclick="closeMobileMenu()">Offers</a></li>
+                <li><a href="#reviews" onclick="closeMobileMenu()">Reviews</a></li>
+                <li><a href="#contact" onclick="closeMobileMenu()">Contact</a></li>
                 <li>
-                    <a href="https://wa.me/919381311511?text=Hi%20Padmaja%20Home%20Foods!%20I%20want%20to%20place%20an%20order." 
-                       style="background: #25D366; color: white;" target="_blank">
+                    <a href="https://wa.me/919381311511?text=Hi%20Padmaja%20Home%20Foods!" style="background: #25D366; color: white;" target="_blank">
                         <i class="fab fa-whatsapp"></i> Order on WhatsApp
                     </a>
                 </li>
             </ul>
-        </div>
-    </div>
-
-    <!-- Cart Sidebar -->
-    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
-    <div class="cart-sidebar" id="cartSidebar">
-        <div class="cart-header">
-            <h3><i class="fas fa-shopping-cart"></i> Your Cart</h3>
-            <i class="fas fa-times cart-close" onclick="toggleCart()"></i>
-        </div>
-        <div class="cart-items" id="cartItems">
-            <!-- Cart items will be inserted here -->
-        </div>
-        <div class="cart-footer">
-            <div class="cart-delivery-note">
-                <i class="fas fa-info-circle"></i>
-                <span>Delivery charges extra. Estimated shipping: 2-5 business days</span>
-            </div>
-            <div class="cart-total">
-                <span>Total:</span>
-                <span id="cartTotal">₹0</span>
-            </div>
-            <a href="#" class="cart-order-btn" onclick="placeOrder()">
-                <i class="fab fa-whatsapp"></i> Place Order on WhatsApp
-            </a>
         </div>
     </div>
 
@@ -109,582 +93,132 @@
                 </h2>
                 <p>
                     Experience the rich flavors of Andhra Pradesh with our hand-crafted pickles, 
-                    aromatic masalas, and traditional sweets. Made with love, packed with tradition, 
-                    delivered to your doorstep.
+                    aromatic masalas, and traditional sweets. Made with love, packed with tradition.
                 </p>
                 <div class="hero-buttons">
-                    <a href="#categories" class="btn-primary" onclick="navigateTo('categories')">
-                        Explore Menu <i class="fas fa-arrow-right"></i>
+                    <a href="shop/" class="btn-primary">
+                        Shop Now <i class="fas fa-shopping-bag"></i>
                     </a>
-                    <a href="https://wa.me/919381311511?text=Hi%20Padmaja%20Home%20Foods!%20I%20want%20to%20place%20an%20order." 
+                    <a href="https://wa.me/919381311511?text=Hi%20Padmaja%20Home%20Foods!" 
                        class="btn-secondary" target="_blank">
                         <i class="fab fa-whatsapp"></i> Chat on WhatsApp
                     </a>
                 </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">5000+</span>
+                        <span class="stat-label">Happy Customers</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">20+</span>
+                        <span class="stat-label">Products</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">Pan India</span>
+                        <span class="stat-label">Delivery</span>
+                    </div>
+                </div>
             </div>
             <div class="hero-image">
-                <img src="logo.png" alt="Padmaja Home Foods Traditional Cart">
+                <img src="logo.png" alt="Padmaja Home Foods" onerror="this.style.display='none'">
             </div>
         </div>
     </section>
 
-    <!-- Categories Section -->
-    <section class="categories" id="categories">
+    <!-- Quick Category Preview -->
+    <section class="categories-preview">
         <div class="section-header">
             <h3>Our Specialties</h3>
-            <p>Click on any category to explore our delicious range of homemade products</p>
+            <p>Authentic homemade products crafted with traditional Guntur recipes</p>
         </div>
-
-        <!-- Search Bar -->
-        <div class="search-container">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="productSearch" placeholder="Search pickles, masalas, sweets..." onkeyup="searchProducts()">
-                <button class="search-clear" id="searchClear" onclick="clearSearch()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="search-results" id="searchResults"></div>
-        </div>
-
         <div class="category-grid">
-            <div class="category-card" onclick="showCategory('masala')">
+            <a href="shop/#masala" class="category-card">
                 <div class="category-icon">
                     <i class="fas fa-mortar-pestle"></i>
                 </div>
                 <h4>Masala & Karam</h4>
-                <p>Authentic spice powders</p>
-            </div>
+                <p>7 Authentic spice powders</p>
+                <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+            </a>
 
-            <div class="category-card" onclick="showCategory('vegpickles')">
+            <a href="shop/#vegpickles" class="category-card">
                 <div class="category-icon">
                     <i class="fas fa-carrot"></i>
                 </div>
                 <h4>Veg Pickles</h4>
-                <p>Traditional vegetable pickles</p>
-            </div>
+                <p>5 Traditional vegetable pickles</p>
+                <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+            </a>
 
-            <div class="category-card" onclick="showCategory('nonvegpickles')">
+            <a href="shop/#nonvegpickles" class="category-card">
                 <div class="category-icon">
                     <i class="fas fa-drumstick-bite"></i>
                 </div>
                 <h4>Non-Veg Pickles</h4>
                 <p>Chicken & Prawn pickles</p>
-            </div>
+                <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+            </a>
 
-            <div class="category-card" onclick="showCategory('sweets')">
+            <a href="shop/#sweets" class="category-card">
                 <div class="category-icon">
                     <i class="fas fa-cookie"></i>
                 </div>
                 <h4>Sweets</h4>
                 <p>Traditional Andhra sweets</p>
-            </div>
+                <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+            </a>
         </div>
     </section>
 
-    <!-- Masala & Karam Products -->
-    <section class="products-section" id="masala">
-        <div class="products-header">
-            <h3><i class="fas fa-mortar-pestle"></i> Masala & Karam Powders</h3>
-            <button class="back-btn" onclick="showCategories()">
-                <i class="fas fa-arrow-left"></i> Back to Categories
-            </button>
+    <!-- Offers Section -->
+    <section class="offers-section" id="offers">
+        <div class="section-header">
+            <h3><i class="fas fa-tag"></i> Special Offers</h3>
+            <p>Grab these limited-time deals on our best-selling products</p>
         </div>
-
-        <div class="menu-card-image">
-            <img src="masala.png" alt="Masala & Karam Menu">
-        </div>
-
-        <div class="products-grid">
-            <div class="product-card" data-product="Kura Karam" data-base-price="549">
-                <div class="product-image">
-                    <img src="images/kura-karam.jpg" alt="Kura Karam">
-                </div>
-                <div class="product-info">
-                    <h4>Kura Karam</h4>
-                    <p>Traditional curry powder</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 100)">100g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
+        <div class="offers-grid">
+            <div class="offer-card featured">
+                <div class="offer-badge">BEST DEAL</div>
+                <div class="offer-content">
+                    <h4>Combo Pack</h4>
+                    <p>Any 2 Pickles + 1 Masala</p>
+                    <div class="offer-price">
+                        <span class="old-price">₹450</span>
+                        <span class="new-price">₹399</span>
                     </div>
-                    <div class="product-price">₹55 <span>/ 100g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Kura Karam', 549)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Kura Karam', 549)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
+                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20the%20Combo%20Pack%20(2%20Pickles%20+%201%20Masala)%20for%20₹399" class="offer-btn" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Order Combo
+                    </a>
                 </div>
             </div>
 
-            <div class="product-card" data-product="Garam Masala" data-base-price="799">
-                <div class="product-image">
-                    <img src="images/garam-masala.jpg" alt="Garam Masala">
-                    <span class="product-badge">Popular</span>
-                </div>
-                <div class="product-info">
-                    <h4>Garam Masala</h4>
-                    <p>Aromatic blend of spices</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 100)">100g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
+            <div class="offer-card">
+                <div class="offer-badge">POPULAR</div>
+                <div class="offer-content">
+                    <h4>Family Pack</h4>
+                    <p>1Kg Gongura + 500g Chicken Pickle</p>
+                    <div class="offer-price">
+                        <span class="old-price">₹375</span>
+                        <span class="new-price">₹349</span>
                     </div>
-                    <div class="product-price">₹80 <span>/ 100g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Garam Masala', 799)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Garam Masala', 799)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
+                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20the%20Family%20Pack%20for%20₹349" class="offer-btn" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Order Now
+                    </a>
                 </div>
             </div>
 
-            <div class="product-card" data-product="Sambar Powder" data-base-price="499">
-                <div class="product-image">
-                    <img src="images/sambar-powder.jpg" alt="Sambar Powder">
-                </div>
-                <div class="product-info">
-                    <h4>Sambar Powder</h4>
-                    <p>Perfect for sambar</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 100)">100g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
+            <div class="offer-card">
+                <div class="offer-badge">NEW</div>
+                <div class="offer-content">
+                    <h4>Festive Special</h4>
+                    <p>3 Sweets Combo (Sunnundalu + Nuvvula + Ravva)</p>
+                    <div class="offer-price">
+                        <span class="old-price">₹500</span>
+                        <span class="new-price">₹449</span>
                     </div>
-                    <div class="product-price">₹50 <span>/ 100g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Sambar Powder', 499)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Sambar Powder', 499)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-product="Turmeric Powder" data-base-price="499">
-                <div class="product-image">
-                    <img src="images/turmeric-powder.jpg" alt="Turmeric Powder">
-                </div>
-                <div class="product-info">
-                    <h4>Turmeric Powder</h4>
-                    <p>Pure turmeric powder</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 100)">100g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
-                    </div>
-                    <div class="product-price">₹50 <span>/ 100g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Turmeric Powder', 499)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Turmeric Powder', 499)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-product="Pachi Karam" data-base-price="599">
-                <div class="product-image">
-                    <img src="images/pachi-karam.jpg" alt="Pachi Karam">
-                </div>
-                <div class="product-info">
-                    <h4>Pachi Karam</h4>
-                    <p>Fresh chili powder</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 100)">100g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
-                    </div>
-                    <div class="product-price">₹60 <span>/ 100g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Pachi Karam', 599)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Pachi Karam', 599)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-product="Munagaku Karam" data-base-price="639">
-                <div class="product-image">
-                    <img src="images/munagaku-karam.jpg" alt="Munagaku Karam">
-                </div>
-                <div class="product-info">
-                    <h4>Munagaku Karam</h4>
-                    <p>Drumstick leaf powder</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 100)">100g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
-                    </div>
-                    <div class="product-price">₹64 <span>/ 100g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Munagaku Karam', 639)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Munagaku Karam', 639)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-product="Karivepaku Karam" data-base-price="599">
-                <div class="product-image">
-                    <img src="images/karivepaku-karam.jpg" alt="Karivepaku Karam">
-                </div>
-                <div class="product-info">
-                    <h4>Karivepaku Karam</h4>
-                    <p>Curry leaf powder</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 100)">100g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
-                    </div>
-                    <div class="product-price">₹60 <span>/ 100g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Karivepaku Karam', 599)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Karivepaku Karam', 599)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Veg Pickles Products -->
-    <section class="products-section" id="vegpickles">
-        <div class="products-header">
-            <h3><i class="fas fa-carrot"></i> Veg Pickles</h3>
-            <button class="back-btn" onclick="showCategories()">
-                <i class="fas fa-arrow-left"></i> Back to Categories
-            </button>
-        </div>
-
-        <div class="menu-card-image">
-            <img src="veg-pickles.png" alt="Veg Pickles Menu">
-        </div>
-
-        <div class="products-grid">
-            <div class="product-card" data-product="Tomato Pickle" data-base-price="499">
-                <div class="product-image">
-                    <img src="images/tomato-pickle.jpg" alt="Tomato Pickle">
-                </div>
-                <div class="product-info">
-                    <h4>Tomato Pickle</h4>
-                    <p>Tangy tomato pickle</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
-                    </div>
-                    <div class="product-price">₹125 <span>/ 250g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Tomato Pickle', 499)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Tomato Pickle', 499)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-product="Usirikay Pickle" data-base-price="499">
-                <div class="product-image">
-                    <img src="images/usirikay-pickle.jpg" alt="Usirikay Pickle">
-                </div>
-                <div class="product-info">
-                    <h4>Usirikay Pickle</h4>
-                    <p>Amla pickle</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
-                    </div>
-                    <div class="product-price">₹125 <span>/ 250g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Usirikay Pickle', 499)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Usirikay Pickle', 499)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-product="Gongura Pickle" data-base-price="499">
-                <div class="product-image">
-                    <img src="images/gongura-pickle.jpg" alt="Gongura Pickle">
-                    <span class="product-badge">Best Seller</span>
-                </div>
-                <div class="product-info">
-                    <h4>Gongura Pickle</h4>
-                    <p>Authentic gongura</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
-                    </div>
-                    <div class="product-price">₹125 <span>/ 250g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Gongura Pickle', 499)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Gongura Pickle', 499)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-product="Avakaya Pickle" data-base-price="499">
-                <div class="product-image">
-                    <img src="images/avakaya-pickle.jpg" alt="Avakaya Pickle">
-                </div>
-                <div class="product-info">
-                    <h4>Avakaya Pickle</h4>
-                    <p>Traditional mango pickle</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
-                    </div>
-                    <div class="product-price">₹125 <span>/ 250g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Avakaya Pickle', 499)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Avakaya Pickle', 499)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-product="Usirikay Thokku" data-base-price="499">
-                <div class="product-image">
-                    <img src="images/usirikay-thokku.jpg" alt="Usirikay Thokku">
-                </div>
-                <div class="product-info">
-                    <h4>Usirikay Thokku</h4>
-                    <p>Amla thokku</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
-                    </div>
-                    <div class="product-price">₹125 <span>/ 250g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Usirikay Thokku', 499)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Usirikay Thokku', 499)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Non-Veg Pickles Products -->
-    <section class="products-section" id="nonvegpickles">
-        <div class="products-header">
-            <h3><i class="fas fa-drumstick-bite"></i> Non-Veg Pickles</h3>
-            <button class="back-btn" onclick="showCategories()">
-                <i class="fas fa-arrow-left"></i> Back to Categories
-            </button>
-        </div>
-
-        <div class="menu-card-image">
-            <img src="nonveg-pickles.png" alt="Non-Veg Pickles Menu">
-        </div>
-
-        <div class="products-grid">
-            <div class="product-card" data-product="Chicken Bone Pickle" data-base-price="1199">
-                <div class="product-image">
-                    <img src="images/chicken-bone-pickle.jpg" alt="Chicken Bone Pickle">
-                </div>
-                <div class="product-info">
-                    <h4>Chicken Bone Pickle</h4>
-                    <p>Traditional chicken pickle</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
-                    </div>
-                    <div class="product-price">₹300 <span>/ 250g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Chicken Bone Pickle', 1199)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Chicken Bone Pickle', 1199)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-product="Chicken Boneless Pickle" data-base-price="1399">
-                <div class="product-image">
-                    <img src="images/chicken-boneless-pickle.jpg" alt="Chicken Boneless Pickle">
-                    <span class="product-badge">Popular</span>
-                </div>
-                <div class="product-info">
-                    <h4>Chicken Boneless Pickle</h4>
-                    <p>Premium boneless pickle</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
-                    </div>
-                    <div class="product-price">₹350 <span>/ 250g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Chicken Boneless Pickle', 1399)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Chicken Boneless Pickle', 1399)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-product="Prawns Pickle" data-base-price="1999">
-                <div class="product-image">
-                    <img src="images/prawns-pickle.jpg" alt="Prawns Pickle">
-                    <span class="product-badge">Premium</span>
-                </div>
-                <div class="product-info">
-                    <h4>Prawns Pickle</h4>
-                    <p>Authentic prawns pickle</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
-                    </div>
-                    <div class="product-price">₹500 <span>/ 250g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Prawns Pickle', 1999)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Prawns Pickle', 1999)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sweets Products -->
-    <section class="products-section" id="sweets">
-        <div class="products-header">
-            <h3><i class="fas fa-cookie"></i> Sweets</h3>
-            <button class="back-btn" onclick="showCategories()">
-                <i class="fas fa-arrow-left"></i> Back to Categories
-            </button>
-        </div>
-
-        <div class="menu-card-image">
-            <img src="sweets.png" alt="Sweets Menu">
-        </div>
-
-        <div class="products-grid">
-            <div class="product-card" data-product="Sunnundalu Sugar" data-base-price="799">
-                <div class="product-image">
-                    <img src="images/sunnundalu.jpg" alt="Sunnundalu">
-                </div>
-                <div class="product-info">
-                    <h4>Sunnundalu Sugar</h4>
-                    <p>Traditional urad dal laddu</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
-                    </div>
-                    <div class="product-price">₹200 <span>/ 250g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Sunnundalu Sugar', 799)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Sunnundalu Sugar', 799)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-product="Nuvvula Laddu" data-base-price="599">
-                <div class="product-image">
-                    <img src="images/nuvvula-laddu.jpg" alt="Nuvvula Laddu">
-                    <span class="product-badge">Popular</span>
-                </div>
-                <div class="product-info">
-                    <h4>Nuvvula Laddu</h4>
-                    <p>Sesame seeds laddu</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
-                    </div>
-                    <div class="product-price">₹150 <span>/ 250g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Nuvvula Laddu', 599)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Nuvvula Laddu', 599)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-product="Ravva Laddu" data-base-price="599">
-                <div class="product-image">
-                    <img src="images/ravva-laddu.jpg" alt="Ravva Laddu">
-                </div>
-                <div class="product-info">
-                    <h4>Ravva Laddu</h4>
-                    <p>Semolina laddu</p>
-                    <div class="weight-options">
-                        <button class="weight-btn active" onclick="selectWeight(this, 250)">250g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 500)">500g</button>
-                        <button class="weight-btn" onclick="selectWeight(this, 1000)">1Kg</button>
-                    </div>
-                    <div class="product-price">₹150 <span>/ 250g</span></div>
-                    <div class="product-actions">
-                        <a href="#" class="order-btn" onclick="orderProduct(this, 'Ravva Laddu', 599)">
-                            <i class="fab fa-whatsapp"></i> Order Now
-                        </a>
-                        <button class="add-cart-btn" onclick="addToCart(this, 'Ravva Laddu', 599)">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
+                    <a href="https://wa.me/919381311511?text=Hi!%20I%20want%20to%20order%20the%20Festive%20Special%20for%20₹449" class="offer-btn" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Order Now
+                    </a>
                 </div>
             </div>
         </div>
@@ -727,6 +261,139 @@
         </div>
     </section>
 
+    <!-- Reviews Section -->
+    <section class="reviews-section" id="reviews">
+        <div class="section-header">
+            <h3><i class="fas fa-star"></i> Customer Reviews</h3>
+            <p>See what our customers say about our authentic Guntur flavors</p>
+        </div>
+        <div class="reviews-grid">
+            <div class="review-card">
+                <div class="review-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="review-text">"Gongura pickle is exactly like my grandmother's! The aroma, the taste — everything is perfect. Ordered 3 times already."</p>
+                <div class="review-author">
+                    <div class="review-avatar">S</div>
+                    <div>
+                        <h5>Suresh K.</h5>
+                        <span>Hyderabad</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <div class="review-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="review-text">"Chicken boneless pickle is the best I've ever had outside Guntur. Spicy, tangy, and authentic. My family loves it!"</p>
+                <div class="review-author">
+                    <div class="review-avatar">P</div>
+                    <div>
+                        <h5>Priya M.</h5>
+                        <span>Bangalore</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <div class="review-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <p class="review-text">"Sunnundalu reminded me of my childhood in Andhra. Fresh, tasty, and perfectly sweet. Fast delivery too!"</p>
+                <div class="review-author">
+                    <div class="review-avatar">R</div>
+                    <div>
+                        <h5>Ravi T.</h5>
+                        <span>Chennai</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <div class="review-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="review-text">"Ordered Kura Karam and Karivepaku Karam. Both are fresh and aromatic. Packaging was excellent, no spillage."</p>
+                <div class="review-author">
+                    <div class="review-avatar">A</div>
+                    <div>
+                        <h5>Anjali R.</h5>
+                        <span>Mumbai</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Media / Promotions -->
+    <section class="social-section">
+        <div class="social-container">
+            <h3>Follow Us for More</h3>
+            <p>Recipes, behind-the-scenes, and exclusive offers on our social media</p>
+
+            <div class="social-embeds">
+                <div class="social-box instagram-box">
+                    <div class="social-header">
+                        <i class="fab fa-instagram"></i>
+                        <span>@padmajahomefoods</span>
+                    </div>
+                    <div class="social-preview">
+                        <div class="insta-grid">
+                            <div class="insta-item"><i class="fas fa-image"></i></div>
+                            <div class="insta-item"><i class="fas fa-image"></i></div>
+                            <div class="insta-item"><i class="fas fa-image"></i></div>
+                            <div class="insta-item"><i class="fas fa-image"></i></div>
+                        </div>
+                        <p>Latest updates, recipes & customer stories</p>
+                    </div>
+                    <a href="https://www.instagram.com/padmajahomefoods/" target="_blank" class="social-follow-btn">
+                        <i class="fab fa-instagram"></i> Follow on Instagram
+                    </a>
+                </div>
+
+                <div class="social-box youtube-box">
+                    <div class="social-header">
+                        <i class="fab fa-youtube"></i>
+                        <span>@PadmajaHomeFoods</span>
+                    </div>
+                    <div class="social-preview">
+                        <div class="yt-preview">
+                            <i class="fas fa-play-circle"></i>
+                            <p>Watch how we make authentic Guntur pickles</p>
+                        </div>
+                    </div>
+                    <a href="https://www.youtube.com/@PadmajaHomeFoods" target="_blank" class="social-follow-btn youtube-btn">
+                        <i class="fab fa-youtube"></i> Subscribe on YouTube
+                    </a>
+                </div>
+            </div>
+
+            <div class="social-big-links">
+                <a href="https://wa.me/919381311511" target="_blank" class="social-big whatsapp">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>Order on WhatsApp</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact Banner -->
     <section class="contact-banner" id="contact">
         <h3>Ready to Order?</h3>
@@ -738,35 +405,21 @@
         </a>
     </section>
 
-    <!-- Social Media Section -->
-    <section class="social-section">
-        <div class="social-container">
-            <h3>Follow Us</h3>
-            <p>Stay connected for latest updates, recipes, and offers</p>
-            <div class="social-big-links">
-                <a href="https://www.instagram.com/padmajahomefoods/" target="_blank" class="social-big instagram">
-                    <i class="fab fa-instagram"></i>
-                    <span>@padmajahomefoods</span>
-                </a>
-                <a href="https://www.youtube.com/@PadmajaHomeFoods" target="_blank" class="social-big youtube">
-                    <i class="fab fa-youtube"></i>
-                    <span>@PadmajaHomeFoods</span>
-                </a>
-                <a href="https://wa.me/919381311511" target="_blank" class="social-big whatsapp">
-                    <i class="fab fa-whatsapp"></i>
-                    <span>Order on WhatsApp</span>
-                </a>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-logo">
-                <img src="logo.png" alt="Padmaja Home Foods">
+                <img src="logo.png" alt="Padmaja Home Foods" onerror="this.style.display='none'">
                 <h4>Padmaja Home Foods</h4>
                 <p>Authentic Guntur Based Spices & Pickles</p>
+            </div>
+
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="shop/">Shop</a>
+                <a href="#offers">Offers</a>
+                <a href="#reviews">Reviews</a>
+                <a href="#contact">Contact</a>
             </div>
 
             <div class="social-links">
@@ -781,24 +434,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- Sticky Mobile Cart Button -->
-    <div class="sticky-cart-btn" id="stickyCartBtn" onclick="toggleCart()">
-        <i class="fas fa-shopping-cart"></i>
-        <span class="sticky-cart-count" id="stickyCartCount">0</span>
-        <span class="sticky-cart-total" id="stickyCartTotal">₹0</span>
-    </div>
-
-    <!-- Delivery Notice -->
-    <div class="delivery-notice">
-        <i class="fas fa-truck"></i>
-        Delivery Charges Extra
-    </div>
-
-    <!-- Tick Sound for Add to Cart (Base64 - no external file needed) -->
-    <audio id="tickSound" preload="auto">
-        <source src="data:audio/wav;base64,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TQB1AJkAugDWAO0A/gAIAQ0BCgEBAfIA3QDDAKQAgABaADIACADg/7f/kP9r/0v/L/8Y/wf//P73/vn+Av8Q/yX/Pv9d/3//pf/N//b/HgBGAG0AkQCxAM0A5AD1AAABBQEDAfsA7QDZAMAAogCAAFsANAALAOT/vP+W/3L/Uv83/yD/D/8E///+Af8I/xb/Kv9D/2D/gv+m/83/9f8cAEMAaQCMAKsAxgDdAO0A+AD9APwA9ADmANMAugCdAHwAWAAyAAsA5P+9/5j/dv9X/zz/Jv8W/wv/B/8I/xD/Hv8x/0n/Zv+H/6r/0P/3/x0AQwBoAIoAqADCANcA5wDyAPYA9ADsAN4AywCzAJYAdgBSAC0ABwDh/7z/mP92/1n/P/8q/xv/Ef8O/xD/GP8m/zr/Uv9v/4//sv/X//z/IQBGAGoAigCnAMAA1ADjAOwA7wDsAOMA1QDBAKkAjABsAEoAJQAAANv/t/+U/3X/WP9A/y3/H/8X/xX/GP8h/zD/RP9d/3n/mf+8/+D/BAApAEwAbgCNAKgAwADSAN8A5gDoAOQA2gDLALYAnQCBAGEAPgAaAPf/0/+w/4//cf9W/0D/L/8j/xz/HP8h/yv/O/9Q/2n/hv+m/8j/7P8PADMAVQB1AJIAqwDAANEA2wDhAOAA2wDPAL8AqQCQAHIAUgAwAA0A6//I/6b/h/9r/1P/P/8w/yb/Iv8j/yr/N/9I/17/eP+W/7b/2P/6/xwAPwBfAH0AmACvAMIA0ADYANsA2ADQAMMAsQCaAIAAYgBCACAA/v/c/7v/m/9+/2T/Tv89/zH/Kv8o/yz/Nv9E/1f/bv+J/6f/x//p/woALABNAGsAhwCfALQAxADOANQA1ADPAMQAtQChAIkAbQBPAC8ADgDt/8z/rP+O/3T/Xf9K/zz/M/8v/zD/N/9C/1P/aP+B/53/u//b//z/HQA9AFwAeACRAKcAuADFAMwAzwDMAMMAtgClAI8AdQBZADoAGgD6/9r/uv+c/4H/av9W/0b/O/81/zX/Of9D/1H/ZP97/5X/sv/R//H/EQAwAE8AawCFAJsArgC8AMUAyADHAMEAtgCmAJIAegBfAEIAIwADAOT/xf+o/43/dP9g/0//Q/88/zr/Pf9F/1L/Y/95/5H/rf/K/+n/CAAnAEUAYQB7AJIApQCzAL0AwgDCAL0AtAClAJMAfABjAEcAKQAKAOz/zv+w/5X/ff9o/1f/S/9D/0D/Qv9J/1T/ZP94/5D/qv/G/+T/AgAgAD4AWgB0AIoAnQCsALcAvAC9ALkAsACjAJIAfABkAEkALAAOAPH/0/+2/5z/hP9v/17/Uf9J/0X/R/9N/1j/Z/96/5D/qf/F/+L/AAAdADkAVQBuAIQAlwCmALEAtwC4ALQArACgAI8AegBjAEkALQAQAPP/1v+6/6D/iP90/2P/V/9O/0v/TP9S/1z/av99/5P/q//G/+L///8bADcAUgBrAIAAkwChAKwAsgCzAK8ApwCbAIsAdwBgAEYAKwAPAPP/1/+7/6L/i/93/2f/W/9T/1D/Uf9X/2H/b/+B/5f/r//J/+X/AAAcADgAUgBpAH4AkACeAKcArQCuAKoAogCVAIUAcQBbAEIAJwALAPD/1f+7/6L/jP95/2r/X/9X/1X/Vv9d/2f/dv+I/53/tf/O/+n/BAAfADoAUwBqAH4AjgCbAKQAqACoAKQAmwCPAH4AawBUADsAIQAGAOz/0f+4/6H/jP96/2z/Yf9b/1n/XP9j/27/ff+P/6T/vP/V//D/CgAkAD4AVgBrAH4AjQCZAKEApACjAJ4AlACHAHYAYgBMADMAGQAAAOb/zP+0/53/iv95/23/ZP9f/17/Yv9q/3b/hf+Y/67/xf/e//j/EQArAEMAWgBuAIAAjQCYAJ4AoACdAJcAjAB+AG0AWABCACkAEAD3/97/xf+u/5n/h/94/23/Zv9j/2T/af9y/3//j/+i/7j/0P/p/wEAGgAzAEoAYAByAIIAjgCWAJoAmwCXAI8AgwB0AGIATQA2AB4ABQDt/9T/vf+n/5T/hP93/27/aP9n/2r/cf97/4n/mv+u/8T/3P/1/wwAJQA8AFIAZgB3AIQAjgCUAJcAlQCPAIYAeQBpAFUAQAApABEA+v/h/8r/tP+g/4//gf92/2//bP9s/3H/ev+G/5X/p/+8/9L/6v8BABkAMABGAFsAbAB7AIYAjgCSAJIAjgCHAHsAbQBbAEcAMgAbAAMA7P/V/7//qv+Z/4n/fv91/3D/cP9z/3r/hP+S/6P/tv/L/+H/+f8PACcAPQBRAGMAcgB/AIgAjQCOAIwAhgB8AG8AXwBNADgAIgALAPX/3v/I/7P/of+R/4X/e/92/3P/df97/4T/kP+g/7L/xv/b//L/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" type="audio/wav">
-    </audio>
 
     <script src="script.js"></script>
 </body>
