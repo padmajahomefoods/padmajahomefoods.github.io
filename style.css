@@ -1059,19 +1059,19 @@ footer {
 .shop-controls {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 20px 20px;
+    padding: 30px 15px 20px;
 }
 
 .category-filter {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .filter-btn {
-    padding: 10px 25px;
+    padding: 10px 20px;
     border: 2px solid var(--deep-brown);
     background: white;
     color: var(--deep-brown);
@@ -1080,6 +1080,11 @@ footer {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 100px;
+    max-width: 160px;
 }
 
 .filter-btn:hover {
@@ -1225,7 +1230,7 @@ footer {
 }
 
 .product-info {
-    padding: 25px;
+    padding: 20px;
 }
 
 .product-info h4 {
@@ -1293,7 +1298,7 @@ footer {
 .product-actions {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 6px;
 }
 
 .order-btn {
@@ -1506,10 +1511,11 @@ footer {
 .quantity-control {
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    gap: 6px;
     background: var(--warm-cream);
     border-radius: 25px;
-    padding: 5px;
+    padding: 4px 8px;
 }
 
 .quantity-control button {
@@ -1695,10 +1701,12 @@ footer {
     align-items: center;
     background: white;
     border-radius: 50px;
-    padding: 5px 5px 5px 20px;
+    padding: 5px 8px 5px 20px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.1);
     border: 2px solid transparent;
     transition: all 0.3s;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .search-box:focus-within {
@@ -1749,7 +1757,7 @@ footer {
     position: absolute;
     top: 100%;
     left: 0;
-    right: 0;
+    width: 100%;
     background: white;
     border-radius: 15px;
     margin-top: 10px;
@@ -1758,6 +1766,7 @@ footer {
     overflow-y: auto;
     display: none;
     z-index: 100;
+    box-sizing: border-box;
 }
 
 .search-results.active {
@@ -1832,7 +1841,7 @@ footer {
 }
 
 .mobile-nav li {
-    margin: 20px 0;
+    margin: 12px 0;
 }
 
 .mobile-nav a {
@@ -1893,25 +1902,70 @@ footer {
         display: block;
     }
 
+    .hero {
+        min-height: auto;
+        padding: 20px 0 40px;
+    }
+
     .hero-container {
         grid-template-columns: 1fr;
         text-align: center;
+        gap: 20px;
+    }
+
+    .hero-content {
+        order: 2;
     }
 
     .hero-content h2 {
-        font-size: 2.5rem;
+        font-size: 1.9rem;
+        line-height: 1.2;
+        margin-bottom: 12px;
+    }
+
+    .hero-content p {
+        font-size: 0.95rem;
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+
+    .hero-badge {
+        margin-bottom: 15px;
+        padding: 8px 18px;
+        font-size: 0.85rem;
     }
 
     .hero-image {
-        order: -1;
+        order: 1;
+        margin-top: 10px;
     }
 
     .hero-image img {
-        max-height: 300px;
+        max-height: 180px;
+    }
+
+    .hero-buttons {
+        gap: 8px;
+        margin-bottom: 25px;
+        justify-content: center;
+    }
+
+    .btn-primary, .btn-secondary {
+        padding: 12px 28px;
+        font-size: 0.9rem;
     }
 
     .hero-stats {
         justify-content: center;
+        gap: 20px;
+    }
+
+    .stat-number {
+        font-size: 1.3rem;
+    }
+
+    .stat-label {
+        font-size: 0.75rem;
     }
 
     .category-grid {
@@ -1941,6 +1995,28 @@ footer {
 
     .products-grid {
         grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .product-card {
+        border-radius: 16px;
+    }
+
+    .product-image {
+        height: 180px;
+    }
+
+    .product-info {
+        padding: 15px;
+    }
+
+    .product-info h4 {
+        font-size: 1.1rem;
+    }
+
+    .order-btn, .add-cart-btn {
+        padding: 10px;
+        font-size: 0.9rem;
     }
 
     .menu-card-image img {
@@ -1964,6 +2040,20 @@ footer {
 
     .cart-sidebar.active {
         right: 0;
+    }
+
+    .cart-item {
+        padding: 12px 15px;
+        gap: 10px;
+    }
+
+    .cart-item-info h4 {
+        font-size: 0.95rem;
+    }
+
+    .quantity-control button {
+        width: 28px;
+        height: 28px;
     }
 
     .sticky-cart-btn {
