@@ -463,6 +463,14 @@ if (deliveryNotice && socialSection) {
 loadCart();
 updateCartUI();
 
+// On shop page load, show all product sections by default
+// (since "All" filter is the default)
+if (document.querySelector('.category-filter')) {
+    document.querySelectorAll('.products-section').forEach(section => {
+        section.classList.add('active');
+    });
+}
+
 // Check for URL hash on shop page
 if (window.location.hash) {
     const hash = window.location.hash.substring(1);
