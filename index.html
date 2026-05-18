@@ -70,7 +70,7 @@
 }
 </script>
 
-<!-- Product Structured Data -->
+<!-- Product Structured Data - Fixed -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -82,13 +82,50 @@
       "item": {
         "@type": "Product",
         "name": "Kura Karam",
+        "brand": {
+          "@type": "Brand",
+          "name": "Padmaja Home Foods"
+        },
         "description": "Traditional curry powder",
         "image": "https://padmajahomefoods.github.io/images/kura-karam.jpg",
         "offers": {
           "@type": "Offer",
           "price": "55",
           "priceCurrency": "INR",
-          "availability": "https://schema.org/InStock"
+          "availability": "https://schema.org/InStock",
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+            "returnFees": "https://schema.org/FreeReturn",
+            "merchantReturnDays": 0
+          },
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingRate": {
+              "@type": "MonetaryAmount",
+              "value": "0",
+              "currency": "INR"
+            },
+            "shippingDestination": {
+              "@type": "DefinedRegion",
+              "addressCountry": "IN"
+            },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": {
+                "@type": "QuantitativeValue",
+                "minValue": 1,
+                "maxValue": 2,
+                "unitCode": "DAY"
+              },
+              "transitTime": {
+                "@type": "QuantitativeValue",
+                "minValue": 2,
+                "maxValue": 10,
+                "unitCode": "DAY"
+              }
+            }
+          }
         }
       }
     },
@@ -98,13 +135,50 @@
       "item": {
         "@type": "Product",
         "name": "Gongura Pickle",
+        "brand": {
+          "@type": "Brand",
+          "name": "Padmaja Home Foods"
+        },
         "description": "Authentic gongura pickle",
         "image": "https://padmajahomefoods.github.io/images/gongura-pickle.jpg",
         "offers": {
           "@type": "Offer",
           "price": "125",
           "priceCurrency": "INR",
-          "availability": "https://schema.org/InStock"
+          "availability": "https://schema.org/InStock",
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+            "returnFees": "https://schema.org/FreeReturn",
+            "merchantReturnDays": 0
+          },
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingRate": {
+              "@type": "MonetaryAmount",
+              "value": "0",
+              "currency": "INR"
+            },
+            "shippingDestination": {
+              "@type": "DefinedRegion",
+              "addressCountry": "IN"
+            },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": {
+                "@type": "QuantitativeValue",
+                "minValue": 1,
+                "maxValue": 2,
+                "unitCode": "DAY"
+              },
+              "transitTime": {
+                "@type": "QuantitativeValue",
+                "minValue": 2,
+                "maxValue": 10,
+                "unitCode": "DAY"
+              }
+            }
+          }
         }
       }
     },
@@ -114,13 +188,50 @@
       "item": {
         "@type": "Product",
         "name": "Chicken Boneless Pickle",
+        "brand": {
+          "@type": "Brand",
+          "name": "Padmaja Home Foods"
+        },
         "description": "Premium boneless chicken pickle",
         "image": "https://padmajahomefoods.github.io/images/chicken-boneless-pickle.jpg",
         "offers": {
           "@type": "Offer",
           "price": "350",
           "priceCurrency": "INR",
-          "availability": "https://schema.org/InStock"
+          "availability": "https://schema.org/InStock",
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+            "returnFees": "https://schema.org/FreeReturn",
+            "merchantReturnDays": 0
+          },
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingRate": {
+              "@type": "MonetaryAmount",
+              "value": "0",
+              "currency": "INR"
+            },
+            "shippingDestination": {
+              "@type": "DefinedRegion",
+              "addressCountry": "IN"
+            },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": {
+                "@type": "QuantitativeValue",
+                "minValue": 1,
+                "maxValue": 2,
+                "unitCode": "DAY"
+              },
+              "transitTime": {
+                "@type": "QuantitativeValue",
+                "minValue": 2,
+                "maxValue": 10,
+                "unitCode": "DAY"
+              }
+            }
+          }
         }
       }
     }
