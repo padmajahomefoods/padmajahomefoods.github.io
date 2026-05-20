@@ -27,7 +27,7 @@ function clearSavedCart() {
     localStorage.removeItem('padmaja_cart');
 }
 
-// Navbar scroll effect - passive listener for better performance
+// Navbar scroll effect
 window.addEventListener('scroll', function() {
     const navbar = document.getElementById('navbar');
     if (window.scrollY > 50) {
@@ -35,7 +35,7 @@ window.addEventListener('scroll', function() {
     } else {
         navbar.classList.remove('scrolled');
     }
-}, { passive: true });
+});
 
 // Mobile menu
 function openMobileMenu() {
@@ -52,7 +52,6 @@ function closeMobileMenu() {
 function toggleCart(forceOpen = null) {
     const cartSidebar = document.getElementById('cartSidebar');
     const cartOverlay = document.getElementById('cartOverlay');
-    if (!cartSidebar || !cartOverlay) return;
 
     const isOpen = cartSidebar.classList.contains('active');
 
@@ -80,6 +79,7 @@ function addToCart(btn, productName, basePrice) {
 
     const finalPrice = Math.round((basePrice * weightInGrams) / 1000);
 
+    // Check if item already exists
     const existingItem = cart.find(item => item.name === productName && item.weight === weight);
 
     if (existingItem) {
@@ -102,11 +102,27 @@ function addToCart(btn, productName, basePrice) {
     updateCartUI();
     saveCart();
 
-    // Simple visual feedback instead of audio to avoid AudioContext issues
+    // Play tick sound using Web Audio API
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+        oscillator.start(audioCtx.currentTime);
+        oscillator.stop(audioCtx.currentTime + 0.1);
+    } catch (e) {}
+
+    // Show added animation
     const originalText = btn.innerHTML;
     btn.innerHTML = '<i class="fas fa-check"></i> Added!';
     btn.classList.add('added-glow');
 
+    // Bounce cart icon and re-trigger badge animation
     const cartIcon = document.querySelector('.cart-icon');
     const badge = document.getElementById('cartBadge');
     if (cartIcon) {
@@ -115,7 +131,7 @@ function addToCart(btn, productName, basePrice) {
     }
     if (badge) {
         badge.style.animation = 'none';
-        badge.offsetHeight;
+        badge.offsetHeight; // trigger reflow
         badge.style.animation = 'bounce 0.5s ease';
     }
 
@@ -171,12 +187,12 @@ function updateCartUI() {
             </div>
             <div class="cart-item-controls">
                 <div class="quantity-control">
-                    <button onclick="updateQuantity(${index}, -1)" aria-label="Decrease quantity"><i class="fas fa-minus"></i></button>
+                    <button onclick="updateQuantity(${index}, -1)"><i class="fas fa-minus"></i></button>
                     <span>${item.quantity}</span>
-                    <button onclick="updateQuantity(${index}, 1)" aria-label="Increase quantity"><i class="fas fa-plus"></i></button>
+                    <button onclick="updateQuantity(${index}, 1)"><i class="fas fa-plus"></i></button>
                 </div>
                 <div class="cart-item-total">₹${item.price * item.quantity}</div>
-                <button class="cart-item-remove" onclick="removeFromCart(${index})" aria-label="Remove item">
+                <button class="cart-item-remove" onclick="removeFromCart(${index})">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
@@ -186,9 +202,11 @@ function updateCartUI() {
 
 function updateQuantity(index, change) {
     cart[index].quantity += change;
+
     if (cart[index].quantity <= 0) {
         cart.splice(index, 1);
     }
+
     updateCartUI();
     saveCart();
 }
@@ -227,8 +245,10 @@ function placeOrder() {
 // ==================== WEIGHT SELECTION ====================
 function selectWeight(btn, weight) {
     const card = btn.closest('.product-card');
+
     const allBtns = card.querySelectorAll('.weight-btn');
     allBtns.forEach(b => b.classList.remove('active'));
+
     btn.classList.add('active');
 
     const basePrice = parseInt(card.getAttribute('data-base-price'));
@@ -256,6 +276,7 @@ function orderProduct(btn, productName, basePrice) {
     const encodedMessage = encodeURIComponent(message);
 
     window.open(`https://wa.me/919381311511?text=${encodedMessage}`, '_blank');
+
     return false;
 }
 
@@ -264,14 +285,8 @@ function filterCategory(category) {
     const allSections = document.querySelectorAll('.products-section');
     const allBtns = document.querySelectorAll('.filter-btn');
 
-    // Use event.currentTarget if available, otherwise find by text
-    let clickedBtn = event.target;
-    if (clickedBtn && !clickedBtn.classList.contains('filter-btn')) {
-        clickedBtn = clickedBtn.closest('.filter-btn');
-    }
-
     allBtns.forEach(btn => btn.classList.remove('active'));
-    if (clickedBtn) clickedBtn.classList.add('active');
+    event.target.classList.add('active');
 
     if (category === 'all') {
         allSections.forEach(section => {
@@ -314,18 +329,16 @@ function searchProducts() {
     const input = document.getElementById('productSearch');
     const results = document.getElementById('searchResults');
     const clearBtn = document.getElementById('searchClear');
-    if (!input || !results) return;
-
     const query = input.value.trim().toLowerCase();
 
     if (query.length === 0) {
         results.innerHTML = '';
         results.classList.remove('active');
-        if (clearBtn) clearBtn.classList.remove('active');
+        clearBtn.classList.remove('active');
         return;
     }
 
-    if (clearBtn) clearBtn.classList.add('active');
+    clearBtn.classList.add('active');
 
     const matches = allProducts.filter(p => 
         p.name.toLowerCase().includes(query) || 
@@ -362,35 +375,34 @@ function clearSearch() {
     const results = document.getElementById('searchResults');
     const clearBtn = document.getElementById('searchClear');
 
-    if (input) input.value = '';
-    if (results) {
-        results.innerHTML = '';
-        results.classList.remove('active');
-    }
-    if (clearBtn) clearBtn.classList.remove('active');
-    if (input) input.focus();
+    input.value = '';
+    results.innerHTML = '';
+    results.classList.remove('active');
+    clearBtn.classList.remove('active');
+    input.focus();
 }
 
 function goToProduct(categoryId, productName) {
     clearSearch();
 
+    // Hide all sections first
     document.querySelectorAll('.products-section').forEach(s => s.classList.remove('active'));
 
+    // Show target section
     const targetSection = document.getElementById(categoryId);
     if (targetSection) {
         targetSection.classList.add('active');
     }
 
+    // Update filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.remove('active');
-        const btnText = btn.textContent.toLowerCase();
-        if (categoryId === 'masala' && btnText.includes('masala')) btn.classList.add('active');
-        else if (categoryId === 'vegpickles' && btnText.includes('veg')) btn.classList.add('active');
-        else if (categoryId === 'nonvegpickles' && btnText.includes('non-veg')) btn.classList.add('active');
-        else if (categoryId === 'sweets' && btnText.includes('sweets')) btn.classList.add('active');
-        else if (btnText.includes('all')) btn.classList.add('active');
+        if (btn.textContent.toLowerCase().includes(categoryId.replace('vegpickles', 'veg').replace('nonvegpickles', 'non-veg'))) {
+            btn.classList.add('active');
+        }
     });
 
+    // Scroll to product
     setTimeout(() => {
         const cards = document.querySelectorAll(`#${categoryId} .product-card`);
         cards.forEach(card => {
@@ -405,7 +417,7 @@ function goToProduct(categoryId, productName) {
     }, 300);
 }
 
-// ==================== SCROLL ANIMATIONS (Intersection Observer) ====================
+// ==================== SCROLL ANIMATIONS ====================
 const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -421,58 +433,52 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe elements after DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.category-card, .offer-card, .review-card, .feature').forEach((el, index) => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = `all 0.6s ease ${index * 0.1}s`;
-        observer.observe(el);
-    });
+document.querySelectorAll('.category-card, .offer-card, .review-card, .feature').forEach((el, index) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = `all 0.6s ease ${index * 0.1}s`;
+    observer.observe(el);
 });
 
 // ==================== DELIVERY NOTICE HIDE ====================
-document.addEventListener('DOMContentLoaded', function() {
-    const deliveryNotice = document.querySelector('.delivery-notice');
-    const socialSection = document.querySelector('.social-section');
+const deliveryNotice = document.querySelector('.delivery-notice');
+const socialSection = document.querySelector('.social-section');
 
-    if (deliveryNotice && socialSection) {
-        window.addEventListener('scroll', function() {
-            const socialTop = socialSection.getBoundingClientRect().top;
-            const windowHeight = window.innerHeight;
+if (deliveryNotice && socialSection) {
+    window.addEventListener('scroll', function() {
+        const socialTop = socialSection.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
 
-            if (socialTop < windowHeight - 100) {
-                deliveryNotice.style.opacity = '0';
-                deliveryNotice.style.pointerEvents = 'none';
-            } else {
-                deliveryNotice.style.opacity = '1';
-                deliveryNotice.style.pointerEvents = 'auto';
-            }
-        }, { passive: true });
-    }
-});
+        if (socialTop < windowHeight - 100) {
+            deliveryNotice.style.opacity = '0';
+            deliveryNotice.style.pointerEvents = 'none';
+        } else {
+            deliveryNotice.style.opacity = '1';
+            deliveryNotice.style.pointerEvents = 'auto';
+        }
+    });
+}
 
 // ==================== INIT ====================
-document.addEventListener('DOMContentLoaded', function() {
-    loadCart();
-    updateCartUI();
+loadCart();
+updateCartUI();
 
-    // On shop page load, show all product sections by default
-    if (document.querySelector('.category-filter')) {
-        document.querySelectorAll('.products-section').forEach(section => {
+// On shop page load, show all product sections by default
+// (since "All" filter is the default)
+if (document.querySelector('.category-filter')) {
+    document.querySelectorAll('.products-section').forEach(section => {
+        section.classList.add('active');
+    });
+}
+
+// Check for URL hash on shop page
+if (window.location.hash) {
+    const hash = window.location.hash.substring(1);
+    const section = document.getElementById(hash);
+    if (section) {
+        setTimeout(() => {
             section.classList.add('active');
-        });
+            section.scrollIntoView({ behavior: 'smooth' });
+        }, 500);
     }
-
-    // Check for URL hash on shop page
-    if (window.location.hash) {
-        const hash = window.location.hash.substring(1);
-        const section = document.getElementById(hash);
-        if (section) {
-            setTimeout(() => {
-                section.classList.add('active');
-                section.scrollIntoView({ behavior: 'smooth' });
-            }, 500);
-        }
-    }
-});
+}
