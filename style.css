@@ -122,7 +122,7 @@ nav.scrolled {
 }
 
 .whatsapp-btn-nav {
-    background: #25D366;
+    background: #1DA851;
     color: white !important;
     padding: 10px 20px;
     border-radius: 50px;
@@ -136,7 +136,7 @@ nav.scrolled {
 
 .whatsapp-btn-nav:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+    box-shadow: 0 6px 20px rgba(29, 168, 81, 0.4);
 }
 
 /* CART ICON */
@@ -581,7 +581,7 @@ nav.scrolled {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    background: #25D366;
+    background: #1DA851;
     color: white;
     padding: 14px;
     border-radius: 12px;
@@ -591,7 +591,7 @@ nav.scrolled {
 }
 
 .offer-btn:hover {
-    background: #128C7E;
+    background: #158A40;
     transform: scale(1.02);
 }
 
@@ -718,7 +718,7 @@ nav.scrolled {
     font-size: 1.2rem;
 }
 
-.review-author h5 {
+.review-author h4 {
     font-size: 1rem;
     color: var(--deep-brown);
     margin-bottom: 3px;
@@ -892,7 +892,7 @@ nav.scrolled {
 }
 
 .social-big.whatsapp {
-    background: #25D366;
+    background: #1DA851;
     color: white;
 }
 
@@ -1303,7 +1303,7 @@ footer {
 
 .order-btn {
     width: 100%;
-    background: #25D366;
+    background: #1DA851;
     color: white;
     border: none;
     padding: 14px;
@@ -1321,7 +1321,7 @@ footer {
 }
 
 .order-btn:hover {
-    background: #128C7E;
+    background: #158A40;
     transform: scale(1.02);
     box-shadow: 0 5px 20px rgba(37, 211, 102, 0.3);
 }
@@ -1619,7 +1619,7 @@ footer {
 
 .cart-order-btn {
     width: 100%;
-    background: #25D366;
+    background: #1DA851;
     color: white;
     border: none;
     padding: 16px;
@@ -1637,7 +1637,7 @@ footer {
 }
 
 .cart-order-btn:hover {
-    background: #128C7E;
+    background: #158A40;
     transform: scale(1.02);
     box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
 }
