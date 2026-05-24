@@ -2106,3 +2106,65 @@ footer {
         gap: 15px;
     }
 }
+
+/* ==================== SHARE BUTTON ==================== */
+.share-btn {
+    width: 100%;
+    background: transparent;
+    color: var(--deep-brown);
+    border: 2px solid var(--deep-brown);
+    padding: 10px;
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s;
+    margin-top: 4px;
+}
+
+.share-btn:hover {
+    background: var(--deep-brown);
+    color: white;
+    transform: scale(1.02);
+}
+
+.share-btn:active {
+    transform: scale(0.98);
+}
+
+/* Toast notification for share */
+.share-toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--deep-brown);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    z-index: 3000;
+    opacity: 0;
+    transition: all 0.4s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+.share-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.share-toast i {
+    color: var(--primary-gold);
+}
+

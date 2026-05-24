@@ -482,3 +482,72 @@ if (window.location.hash) {
         }, 500);
     }
 }
+
+// ==================== SHARE PRODUCT ====================
+function shareProduct(btn) {
+    const card = btn.closest('.product-card');
+    const productName = card.getAttribute('data-product');
+    const activeBtn = card.querySelector('.weight-btn.active');
+    const weight = activeBtn ? activeBtn.textContent : '250g';
+
+    const priceEl = card.querySelector('.product-price');
+    const priceText = priceEl ? priceEl.textContent.trim() : '';
+
+    const section = card.closest('.products-section');
+    const categoryId = section ? section.id : '';
+    const shareUrl = window.location.href.split('#')[0] + '#' + categoryId;
+    const shareText = `Check out ${productName} (${weight}) from Padmaja Home Foods — ${priceText}\n\n${shareUrl}`;
+
+    // Auto-scroll to the product with highlight animation
+    if (categoryId) {
+        goToProduct(categoryId, productName);
+    }
+
+    // Try native Web Share API first (mobile + supported desktop)
+    if (navigator.share) {
+        navigator.share({
+            title: `${productName} | Padmaja Home Foods`,
+            text: shareText,
+            url: shareUrl
+        }).catch(() => {
+            // User cancelled or error — silent fail
+        });
+    } else {
+        // Fallback: copy to clipboard + show toast
+        copyToClipboard(shareText);
+        showShareToast(`Link copied for ${productName}!`);
+    }
+}
+
+function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text);
+    } else {
+        // Fallback for older browsers
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+    }
+}
+
+function showShareToast(message) {
+    let toast = document.querySelector('.share-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.className = 'share-toast';
+        toast.innerHTML = '<i class="fas fa-check-circle"></i> <span class="toast-msg"></span>';
+        document.body.appendChild(toast);
+    }
+    toast.querySelector('.toast-msg').textContent = message;
+    toast.classList.add('show');
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 2500);
+}
+
