@@ -474,12 +474,22 @@ if (document.querySelector('.category-filter')) {
 // Check for URL hash on shop page
 if (window.location.hash) {
     const hash = window.location.hash.substring(1);
-    const section = document.getElementById(hash);
-    if (section) {
+
+    // First check if it's a product ID
+    const productCard = document.getElementById(hash);
+    if (productCard && productCard.classList.contains('product-card')) {
         setTimeout(() => {
-            section.classList.add('active');
-            section.scrollIntoView({ behavior: 'smooth' });
+            scrollToProduct(hash);
         }, 500);
+    } else {
+        // Fallback: check if it's a category section
+        const section = document.getElementById(hash);
+        if (section) {
+            setTimeout(() => {
+                section.classList.add('active');
+                section.scrollIntoView({ behavior: 'smooth' });
+            }, 500);
+        }
     }
 }
 
@@ -487,21 +497,18 @@ if (window.location.hash) {
 function shareProduct(btn) {
     const card = btn.closest('.product-card');
     const productName = card.getAttribute('data-product');
+    const productId = card.id;
     const activeBtn = card.querySelector('.weight-btn.active');
     const weight = activeBtn ? activeBtn.textContent : '250g';
 
     const priceEl = card.querySelector('.product-price');
     const priceText = priceEl ? priceEl.textContent.trim() : '';
 
-    const section = card.closest('.products-section');
-    const categoryId = section ? section.id : '';
-    const shareUrl = window.location.href.split('#')[0] + '#' + categoryId;
+    const shareUrl = window.location.href.split('#')[0] + '#' + productId;
     const shareText = `Check out ${productName} (${weight}) from Padmaja Home Foods — ${priceText}\n\n${shareUrl}`;
 
     // Auto-scroll to the product with highlight animation
-    if (categoryId) {
-        goToProduct(categoryId, productName);
-    }
+    scrollToProduct(productId);
 
     // Try native Web Share API first (mobile + supported desktop)
     if (navigator.share) {
@@ -517,6 +524,28 @@ function shareProduct(btn) {
         copyToClipboard(shareText);
         showShareToast(`Link copied for ${productName}!`);
     }
+}
+
+function scrollToProduct(productId) {
+    const card = document.getElementById(productId);
+    if (!card) return;
+
+    // Show the parent section if hidden by filter
+    const section = card.closest('.products-section');
+    if (section) {
+        document.querySelectorAll('.products-section').forEach(s => s.classList.add('active'));
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            if (btn.textContent.trim() === 'All') btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+    }
+
+    // Scroll to the card
+    setTimeout(() => {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.style.animation = 'highlightProduct 1.5s ease';
+        setTimeout(() => { card.style.animation = ''; }, 1500);
+    }, 100);
 }
 
 function copyToClipboard(text) {
