@@ -496,6 +496,8 @@ if (window.location.hash) {
 // ==================== SHARE PRODUCT ====================
 function shareProduct(btn) {
     const card = btn.closest('.product-card');
+    if (!card) return;
+
     const productName = card.getAttribute('data-product');
     const productId = card.id;
     const activeBtn = card.querySelector('.weight-btn.active');

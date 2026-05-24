@@ -2107,34 +2107,48 @@ footer {
     }
 }
 
-/* ==================== SHARE BUTTON ==================== */
-.share-btn {
-    width: 100%;
-    background: transparent;
-    color: var(--deep-brown);
-    border: 2px solid var(--deep-brown);
-    padding: 10px;
-    border-radius: 12px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 0.85rem;
+/* ==================== PRODUCT SHARE ICON ==================== */
+.product-share-icon {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(4px);
+    border: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    transition: all 0.3s;
-    margin-top: 4px;
+    z-index: 5;
+    transition: all 0.3s ease;
+    color: var(--deep-brown);
+    font-size: 0.9rem;
 }
 
-.share-btn:hover {
-    background: var(--deep-brown);
-    color: white;
-    transform: scale(1.02);
+.product-share-icon:hover {
+    background: var(--primary-gold);
+    color: var(--deep-brown);
+    transform: scale(1.15);
+    box-shadow: 0 4px 15px rgba(244, 196, 48, 0.4);
 }
 
-.share-btn:active {
-    transform: scale(0.98);
+.product-share-icon:active {
+    transform: scale(0.95);
+}
+
+/* Mobile: slightly larger touch target */
+@media (max-width: 768px) {
+    .product-share-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+        top: 10px;
+        right: 10px;
+    }
 }
 
 /* Toast notification for share */
