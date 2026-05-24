@@ -514,8 +514,9 @@ function shareProduct(btn) {
     if (navigator.share) {
         navigator.share({
             title: `${productName} | Padmaja Home Foods`,
-            text: shareText,
-            url: shareUrl
+            text: shareText
+            // Note: no separate 'url' field — URL is already inside shareText
+            // This prevents duplicate links in WhatsApp and other apps
         }).catch(() => {
             // User cancelled or error — silent fail
         });
