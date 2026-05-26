@@ -322,7 +322,8 @@ const allProducts = [
     { name: 'Prawns Pickle', category: 'Non-Veg Pickles', price: 1999, weights: ['250g', '500g', '1Kg'] },
     { name: 'Sunnundalu Sugar', category: 'Sweets', price: 799, weights: ['250g', '500g', '1Kg'] },
     { name: 'Nuvvula Laddu', category: 'Sweets', price: 599, weights: ['250g', '500g', '1Kg'] },
-    { name: 'Ravva Laddu', category: 'Sweets', price: 599, weights: ['250g', '500g', '1Kg'] }
+    { name: 'Ravva Laddu', category: 'Sweets', price: 599, weights: ['250g', '500g', '1Kg'] },
+    { name: 'Nalla Karam', category: 'Masala & Karam', price: 599, weights: ['100g', '250g', '500g', '1Kg'] }
 ];
 
 function searchProducts() {
