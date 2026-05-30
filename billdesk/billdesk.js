@@ -237,32 +237,35 @@ function printBill() {
 function shareBill() {
     const customerName = document.getElementById('customerName').value.trim() || 'Customer';
     const total = document.getElementById('billTotalAmount').textContent;
-    const now = new Date().toLocaleDateString('en-IN');
-
-    let message = `*Padmaja Home Foods* 🌶️\n`;
-    message += `Date: ${now}\n`;
-    message += `Customer: ${customerName}\n\n`;
-    message += `*Bill Details:*\n`;
-
-    billItems.forEach((item, index) => {
-        const emoji = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'][index] || `${index + 1}.`;
-        message += `${emoji} ${item.name} - ${item.weight} × ${item.qty} = ₹${item.total}\n`;
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-IN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
     });
 
-    message += `\n*Total: ${total}*\n\n`;
-    message += `Thank you for choosing Padmaja Home Foods! 🙏`;
+    let message = 'PADMAJA HOME FOODS\n';
+    message += '==================\n\n';
+    message += 'Date: ' + dateStr + '\n';
+    message += 'Customer: ' + customerName + '\n\n';
+    message += 'BILL DETAILS\n';
+    message += '------------\n';
+
+    billItems.forEach(function(item, index) {
+        const num = (index + 1) + '.';
+        message += num + ' ' + item.name + ' (' + item.weight + ') x' + item.qty + ' = Rs.' + item.total + '\n';
+    });
+
+    message += '\n------------\n';
+    message += 'TOTAL: ' + total + '\n';
+    message += '==================\n\n';
+    message += 'Thank you for choosing Padmaja Home Foods.\n\n';
+    message += 'Phone: +91 93813 11511\n';
+    message += 'Email: padmajahomefoods@gmail.com';
 
     const encodedMessage = encodeURIComponent(message);
-    window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
+    window.open('https://wa.me/?text=' + encodedMessage, '_blank');
 }
 
-// Close modal on outside click
-document.addEventListener('click', function(e) {
-    const modal = document.getElementById('billModal');
-    if (e.target === modal) {
-        closeBill();
-    }
-});
 
-// Initialize on load
-window.onload = init;
+

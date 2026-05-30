@@ -476,27 +476,39 @@ body {
 
 /* Print Styles */
 @media print {
-    body * {
-        visibility: hidden;
+    @page {
+        size: auto;
+        margin: 10mm;
     }
-    .bill-modal, .bill-modal * {
-        visibility: visible;
-    }
-    .bill-modal {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        padding: 0;
+    body {
         background: white;
+    }
+    .bill-header,
+    .customer-section,
+    .category-section,
+    .cart-summary,
+    .bill-modal {
+        display: none !important;
+    }
+    .bill-modal.active {
+        display: flex !important;
+        position: static;
+        background: white;
+        padding: 0;
     }
     .bill-content {
         box-shadow: none;
         max-width: 100%;
         max-height: none;
+        border-radius: 0;
+    }
+    .bill-header-section {
+        border-radius: 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
     }
     .bill-actions {
-        display: none;
+        display: none !important;
     }
 }
 
