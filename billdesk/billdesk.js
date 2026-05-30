@@ -267,5 +267,5 @@ function shareBill() {
     window.open('https://wa.me/?text=' + encodedMessage, '_blank');
 }
 
-
-
+// Initialize on load
+window.onload = init;
