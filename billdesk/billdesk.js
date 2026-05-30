@@ -261,7 +261,7 @@ function shareBill() {
     message += '==================\n\n';
     message += 'Thank you for choosing Padmaja Home Foods.\n\n';
     message += 'Phone: +91 93813 11511\n';
-    message += 'Email: padmajahomefoods@gmail.com';
+    message += 'Email: contactpadmajahomefoods@gmail.com';
 
     const encodedMessage = encodeURIComponent(message);
     window.open('https://wa.me/?text=' + encodedMessage, '_blank');
