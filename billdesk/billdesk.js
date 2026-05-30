@@ -147,21 +147,27 @@ function removeFromBill(index) {
 // Update Cart Summary
 function updateCartSummary() {
     const cartItems = document.getElementById('cartItems');
-    const cartTotal = document.getElementById('cartTotal');
+    const cartProductsTotal = document.getElementById('cartProductsTotal');
+    const cartDeliveryCharge = document.getElementById('cartDeliveryCharge');
+    const cartGrandTotal = document.getElementById('cartGrandTotal');
     const showBillBtn = document.getElementById('showBillBtn');
     const itemCount = document.getElementById('itemCount');
 
+    const deliveryCharge = parseInt(document.getElementById('deliveryCharge').value) || 0;
+
     if (billItems.length === 0) {
         cartItems.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">No items added yet</p>';
-        cartTotal.textContent = '₹0';
+        cartProductsTotal.textContent = '₹0';
+        cartDeliveryCharge.textContent = '₹' + deliveryCharge;
+        cartGrandTotal.textContent = '₹' + deliveryCharge;
         showBillBtn.disabled = true;
         itemCount.textContent = '0';
         return;
     }
 
-    let total = 0;
+    let productsTotal = 0;
     cartItems.innerHTML = billItems.map((item, index) => {
-        total += item.total;
+        productsTotal += item.total;
         return `
             <div class="cart-item">
                 <div class="cart-item-info">
@@ -176,7 +182,10 @@ function updateCartSummary() {
         `;
     }).join('');
 
-    cartTotal.textContent = '₹' + total;
+    const grandTotal = productsTotal + deliveryCharge;
+    cartProductsTotal.textContent = '₹' + productsTotal;
+    cartDeliveryCharge.textContent = '₹' + deliveryCharge;
+    cartGrandTotal.textContent = '₹' + grandTotal;
     showBillBtn.disabled = false;
     itemCount.textContent = billItems.length;
 }
@@ -184,9 +193,12 @@ function updateCartSummary() {
 // Show Bill Modal
 function showBill() {
     const customerName = document.getElementById('customerName').value.trim() || 'Customer';
+    const deliveryCharge = parseInt(document.getElementById('deliveryCharge').value) || 0;
     const billModal = document.getElementById('billModal');
     const billCustomer = document.getElementById('billCustomer');
     const billItemsContainer = document.getElementById('billItems');
+    const billProductsTotal = document.getElementById('billProductsTotal');
+    const billDeliveryCharge = document.getElementById('billDeliveryCharge');
     const billTotalAmount = document.getElementById('billTotalAmount');
     const billDate = document.getElementById('billDate');
 
@@ -204,9 +216,9 @@ function showBill() {
     billCustomer.innerHTML = `<p>Customer: <span>${customerName}</span></p>`;
 
     // Render bill items
-    let total = 0;
+    let productsTotal = 0;
     billItemsContainer.innerHTML = billItems.map(item => {
-        total += item.total;
+        productsTotal += item.total;
         return `
             <div class="bill-item">
                 <div class="bill-item-name">
@@ -218,7 +230,10 @@ function showBill() {
         `;
     }).join('');
 
-    billTotalAmount.textContent = '₹' + total;
+    const grandTotal = productsTotal + deliveryCharge;
+    billProductsTotal.textContent = '₹' + productsTotal;
+    billDeliveryCharge.textContent = '₹' + deliveryCharge;
+    billTotalAmount.textContent = '₹' + grandTotal;
 
     billModal.classList.add('active');
 }
@@ -236,13 +251,19 @@ function printBill() {
 // Share Bill via WhatsApp
 function shareBill() {
     const customerName = document.getElementById('customerName').value.trim() || 'Customer';
-    const total = document.getElementById('billTotalAmount').textContent;
+    const deliveryCharge = parseInt(document.getElementById('deliveryCharge').value) || 0;
     const now = new Date();
     const dateStr = now.toLocaleDateString('en-IN', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
     });
+
+    let productsTotal = 0;
+    billItems.forEach(function(item) {
+        productsTotal += item.total;
+    });
+    const grandTotal = productsTotal + deliveryCharge;
 
     let message = 'PADMAJA HOME FOODS\n';
     message += '==================\n\n';
@@ -257,7 +278,9 @@ function shareBill() {
     });
 
     message += '\n------------\n';
-    message += 'TOTAL: ' + total + '\n';
+    message += 'Products Total: Rs.' + productsTotal + '\n';
+    message += 'Delivery Charge: Rs.' + deliveryCharge + '\n';
+    message += 'Grand Total: Rs.' + grandTotal + '\n';
     message += '==================\n\n';
     message += 'Thank you for choosing Padmaja Home Foods.\n\n';
     message += 'Phone: +91 93813 11511\n';
@@ -268,4 +291,14 @@ function shareBill() {
 }
 
 // Initialize on load
+
+
+// Update totals when delivery charge changes
+document.addEventListener('DOMContentLoaded', function() {
+    const deliveryInput = document.getElementById('deliveryCharge');
+    if (deliveryInput) {
+        deliveryInput.addEventListener('input', updateCartSummary);
+    }
+});
+
 window.onload = init;
