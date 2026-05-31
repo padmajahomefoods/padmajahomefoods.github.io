@@ -576,35 +576,28 @@
             <p>Recipes, behind-the-scenes, and exclusive offers on our social media</p>
 
             <div class="social-embeds">
+                <!-- Instagram -->
                 <div class="social-box instagram-box">
                     <div class="social-header">
                         <i class="fab fa-instagram"></i>
                         <span>@padmajahomefoods</span>
                     </div>
                     <div class="social-preview">
-                        <div class="insta-grid">
-                            <div class="insta-item"><i class="fas fa-image"></i></div>
-                            <div class="insta-item"><i class="fas fa-image"></i></div>
-                            <div class="insta-item"><i class="fas fa-image"></i></div>
-                            <div class="insta-item"><i class="fas fa-image"></i></div>
-                        </div>
-                        <p>Latest updates, recipes & customer stories</p>
+                        <p>Daily reels, recipes & customer updates</p>
                     </div>
                     <a href="https://www.instagram.com/padmajahomefoods/" target="_blank" class="social-follow-btn">
                         <i class="fab fa-instagram"></i> Follow on Instagram
                     </a>
                 </div>
 
+                <!-- YouTube Latest Videos -->
                 <div class="social-box youtube-box">
                     <div class="social-header">
                         <i class="fab fa-youtube"></i>
                         <span>@PadmajaHomeFoods</span>
                     </div>
-                    <div class="social-preview">
-                        <div class="yt-preview">
-                            <i class="fas fa-play-circle"></i>
-                            <p>Watch how we make authentic Guntur pickles</p>
-                        </div>
+                    <div class="youtube-videos" id="youtubeVideos">
+                        <!-- Videos rendered by JavaScript -->
                     </div>
                     <a href="https://www.youtube.com/@PadmajaHomeFoods" target="_blank" class="social-follow-btn youtube-btn">
                         <i class="fab fa-youtube"></i> Subscribe on YouTube
@@ -665,5 +658,48 @@
     </footer>
 
     <script src="script.js"></script>
+<script>
+// YouTube Videos Configuration - Update these with your actual videos
+const YOUTUBE_VIDEOS = [
+    {
+        thumbnail: "https://img.youtube.com/vi/VIDEO_ID_1/hqdefault.jpg",
+        title: "How we make authentic Guntur Chicken Pickle",
+        url: "https://youtube.com/shorts/VIDEO_ID_1"
+    },
+    {
+        thumbnail: "https://img.youtube.com/vi/VIDEO_ID_2/hqdefault.jpg",
+        title: "Gongura Pickle - Traditional Recipe",
+        url: "https://youtube.com/shorts/VIDEO_ID_2"
+    },
+    {
+        thumbnail: "https://img.youtube.com/vi/VIDEO_ID_3/hqdefault.jpg",
+        title: "Sunnundalu Making Process",
+        url: "https://youtube.com/shorts/VIDEO_ID_3"
+    },
+    {
+        thumbnail: "https://img.youtube.com/vi/VIDEO_ID_4/hqdefault.jpg",
+        title: "Behind the Scenes - Our Kitchen",
+        url: "https://youtube.com/shorts/VIDEO_ID_4"
+    }
+];
+
+function renderYouTubeVideos() {
+    const container = document.getElementById('youtubeVideos');
+    if (!container) return;
+
+    container.innerHTML = YOUTUBE_VIDEOS.map(video => `
+        <a href="${video.url}" target="_blank" class="video-card" title="${video.title}">
+            <img src="${video.thumbnail}" alt="${video.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/180x320/1a1a1a/ffffff?text=Video'">
+            <div class="play-overlay">
+                <i class="fas fa-play-circle"></i>
+            </div>
+            <div class="video-title">${video.title}</div>
+        </a>
+    `).join('');
+}
+
+// Render on load
+document.addEventListener('DOMContentLoaded', renderYouTubeVideos);
+</script>
 </body>
 </html>
