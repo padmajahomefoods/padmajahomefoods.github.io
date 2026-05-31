@@ -36,6 +36,13 @@ const CATEGORY_ICONS = {
     "Sweets": "fa-cookie"
 };
 
+const CATEGORY_EMOJIS = {
+    "Masala & Karam": "🌶️",
+    "Veg Pickles": "🥒",
+    "Non-Veg Pickles": "🍗",
+    "Sweets": "🍬"
+};
+
 let billItems = [];
 
 // Initialize
@@ -99,6 +106,16 @@ function getWeightLabel(productId) {
     return weight >= 1000 ? '1Kg' : weight + 'g';
 }
 
+// Get Category for Product
+function getCategory(productName) {
+    for (const [category, items] of Object.entries(PRODUCTS)) {
+        if (items.some(p => p.name === productName)) {
+            return category;
+        }
+    }
+    return "Products";
+}
+
 // Add to Bill
 function addToBill(productId, productName, basePrice) {
     const qtyInput = document.getElementById(`qty-${productId}`);
@@ -144,54 +161,105 @@ function removeFromBill(index) {
     updateCartSummary();
 }
 
-// Update Cart Summary
+// Update Quantity in Sheet
+function updateSheetQty(index, change) {
+    billItems[index].qty += change;
+    if (billItems[index].qty <= 0) {
+        billItems.splice(index, 1);
+    } else {
+        billItems[index].total = billItems[index].price * billItems[index].qty;
+    }
+    updateCartSummary();
+}
+
+// Update Cart Summary (Sticky Bar + Sheet)
 function updateCartSummary() {
-    const cartItems = document.getElementById('cartItems');
-    const cartProductsTotal = document.getElementById('cartProductsTotal');
-    const cartDeliveryCharge = document.getElementById('cartDeliveryCharge');
-    const cartGrandTotal = document.getElementById('cartGrandTotal');
-    const showBillBtn = document.getElementById('showBillBtn');
-    const itemCount = document.getElementById('itemCount');
-
     const deliveryCharge = parseInt(document.getElementById('deliveryCharge').value) || 0;
+    const totalQty = billItems.reduce((sum, item) => sum + item.qty, 0);
+    const productsTotal = billItems.reduce((sum, item) => sum + item.total, 0);
+    const grandTotal = productsTotal + deliveryCharge;
 
-    if (billItems.length === 0) {
-        cartItems.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">No items added yet</p>';
-        cartProductsTotal.textContent = '₹0';
-        cartDeliveryCharge.textContent = '₹' + deliveryCharge;
-        cartGrandTotal.textContent = '₹' + deliveryCharge;
-        showBillBtn.disabled = true;
-        itemCount.textContent = '0';
-        return;
+    // Update Sticky Bar
+    const stickyBar = document.getElementById('stickyCartBar');
+    const stickyBadge = document.getElementById('stickyCartBadge');
+    const stickyItems = document.getElementById('stickyCartItems');
+    const stickyTotal = document.getElementById('stickyCartTotal');
+
+    if (totalQty > 0) {
+        stickyBar.classList.add('active');
+        stickyBadge.textContent = totalQty;
+        stickyItems.textContent = totalQty === 1 ? '1 item' : `${totalQty} items`;
+        stickyTotal.textContent = '₹' + grandTotal;
+    } else {
+        stickyBar.classList.remove('active');
     }
 
-    let productsTotal = 0;
-    cartItems.innerHTML = billItems.map((item, index) => {
-        productsTotal += item.total;
-        return `
-            <div class="cart-item">
-                <div class="cart-item-info">
-                    <div class="cart-item-name">${item.name}</div>
-                    <div class="cart-item-details">${item.weight} × ${item.qty}</div>
-                </div>
-                <div class="cart-item-price">₹${item.total}</div>
-                <button class="cart-item-remove" onclick="removeFromBill(${index})">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        `;
-    }).join('');
+    // Update Sheet
+    const sheetItems = document.getElementById('cartSheetItems');
+    const sheetEmpty = document.getElementById('cartSheetEmpty');
+    const sheetProductsTotal = document.getElementById('sheetProductsTotal');
+    const sheetDeliveryCharge = document.getElementById('sheetDeliveryCharge');
+    const sheetGrandTotal = document.getElementById('sheetGrandTotal');
+    const sheetShowBillBtn = document.getElementById('sheetShowBillBtn');
 
-    const grandTotal = productsTotal + deliveryCharge;
-    cartProductsTotal.textContent = '₹' + productsTotal;
-    cartDeliveryCharge.textContent = '₹' + deliveryCharge;
-    cartGrandTotal.textContent = '₹' + grandTotal;
-    showBillBtn.disabled = false;
-    itemCount.textContent = billItems.length;
+    sheetProductsTotal.textContent = '₹' + productsTotal;
+    sheetDeliveryCharge.textContent = '₹' + deliveryCharge;
+    sheetGrandTotal.textContent = '₹' + grandTotal;
+
+    if (billItems.length === 0) {
+        sheetItems.style.display = 'none';
+        sheetEmpty.classList.add('active');
+        sheetShowBillBtn.disabled = true;
+    } else {
+        sheetItems.style.display = 'block';
+        sheetEmpty.classList.remove('active');
+        sheetShowBillBtn.disabled = false;
+
+        sheetItems.innerHTML = billItems.map((item, index) => {
+            const category = getCategory(item.name);
+            const emoji = CATEGORY_EMOJIS[category] || '📦';
+            return `
+                <div class="sheet-item">
+                    <div class="sheet-item-image">${emoji}</div>
+                    <div class="sheet-item-details">
+                        <div class="sheet-item-name">${item.name}</div>
+                        <div class="sheet-item-meta">${item.weight} @ ₹${item.price}</div>
+                    </div>
+                    <div class="sheet-item-qty-control">
+                        <button onclick="updateSheetQty(${index}, -1)" aria-label="Decrease quantity">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <span>${item.qty}</span>
+                        <button onclick="updateSheetQty(${index}, 1)" aria-label="Increase quantity">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="sheet-item-price">₹${item.total}</div>
+                    <button class="sheet-item-remove" onclick="removeFromBill(${index})" aria-label="Remove item">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            `;
+        }).join('');
+    }
+}
+
+// Cart Sheet Controls
+function openCartSheet() {
+    document.getElementById('cartSheetOverlay').classList.add('active');
+    document.getElementById('cartSheet').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCartSheet() {
+    document.getElementById('cartSheetOverlay').classList.remove('active');
+    document.getElementById('cartSheet').classList.remove('active');
+    document.body.style.overflow = '';
 }
 
 // Show Bill Modal
 function showBill() {
+    closeCartSheet();
     const customerName = document.getElementById('customerName').value.trim() || 'Customer';
     const deliveryCharge = parseInt(document.getElementById('deliveryCharge').value) || 0;
     const billModal = document.getElementById('billModal');
@@ -287,18 +355,14 @@ function shareBill() {
     message += 'Email: contactpadmajahomefoods@gmail.com';
 
     const encodedMessage = encodeURIComponent(message);
-    window.open('https://wa.me/?text=' + encodedMessage, '_blank');
+    window.open('https://wa.me/919381311511?text=' + encodedMessage, '_blank');
 }
 
 // Initialize on load
-
-
-// Update totals when delivery charge changes
 document.addEventListener('DOMContentLoaded', function() {
+    init();
     const deliveryInput = document.getElementById('deliveryCharge');
     if (deliveryInput) {
         deliveryInput.addEventListener('input', updateCartSummary);
     }
 });
-
-window.onload = init;
