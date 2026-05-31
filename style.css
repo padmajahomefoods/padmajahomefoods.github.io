@@ -764,11 +764,13 @@ nav.scrolled {
 .social-box {
     background: white;
     border-radius: 20px;
-    padding: 25px;
+    padding: 30px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.08);
     transition: all 0.4s;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 .social-box:hover {
@@ -780,13 +782,13 @@ nav.scrolled {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     font-weight: 600;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
 }
 
 .social-header i {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
 }
 
 .instagram-box .social-header i {
@@ -804,12 +806,14 @@ nav.scrolled {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-bottom: 20px;
 }
 
-.social-preview > p {
+.social-preview p {
     color: #666;
     font-size: 0.95rem;
-    margin-bottom: 15px;
+    margin: 0;
+    line-height: 1.6;
 }
 
 .social-follow-btn {
@@ -817,99 +821,24 @@ nav.scrolled {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    padding: 12px;
-    border-radius: 10px;
+    padding: 14px 28px;
+    border-radius: 50px;
     text-decoration: none;
     font-weight: 600;
     color: white;
     background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-    margin-top: 15px;
     transition: all 0.3s;
+    width: 100%;
+    max-width: 280px;
 }
 
 .social-follow-btn:hover {
-    transform: scale(1.02);
+    transform: scale(1.03);
     box-shadow: 0 5px 20px rgba(0,0,0,0.2);
 }
 
 .youtube-btn {
     background: #FF0000;
-}
-
-/* YouTube Videos Grid */
-.youtube-videos {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 15px;
-}
-
-.video-card {
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    aspect-ratio: 9/16;
-    background: #1a1a1a;
-    cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.video-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-}
-
-.video-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.video-card .play-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.3s;
-}
-
-.video-card:hover .play-overlay {
-    background: rgba(0,0,0,0.15);
-}
-
-.video-card .play-overlay i {
-    font-size: 2rem;
-    color: white;
-    opacity: 0.9;
-    transition: transform 0.3s;
-}
-
-.video-card:hover .play-overlay i {
-    transform: scale(1.15);
-}
-
-.video-card .video-title {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 10px;
-    background: linear-gradient(transparent, rgba(0,0,0,0.8));
-    color: white;
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-align: left;
-    line-height: 1.3;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
 }
 
 /* Social Big Links */
@@ -949,25 +878,29 @@ nav.scrolled {
 
 /* Responsive */
 @media (max-width: 768px) {
-    .youtube-videos {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
-
-    .video-card .video-title {
-        font-size: 0.7rem;
-        padding: 8px;
-    }
-
-    .video-card .play-overlay i {
-        font-size: 1.5rem;
-    }
-
     .social-embeds {
         grid-template-columns: 1fr;
     }
+
+    .social-box {
+        padding: 25px 20px;
+    }
+
+    .social-header {
+        font-size: 1.1rem;
+    }
+
+    .social-header i {
+        font-size: 1.5rem;
+    }
+
+    .social-follow-btn {
+        padding: 12px 24px;
+        font-size: 0.95rem;
+    }
 }
 
+/* ==================== CONTACT BANNER ==================== */
 /* ==================== CONTACT BANNER ==================== */
 /* ==================== CONTACT BANNER ==================== */
 .contact-banner {
