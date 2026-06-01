@@ -350,9 +350,9 @@ function shareBill() {
     message += 'Delivery Charge: Rs.' + deliveryCharge + '\n';
     message += 'Grand Total: Rs.' + grandTotal + '\n';
     message += '==================\n\n';
-    message += 'Thank you for choosing Padmaja Home Foods.\n\n';
-    message += 'Phone: +91 93813 11511\n';
-    message += 'Email: contactpadmajahomefoods@gmail.com';
+    message += '📞 +91 93813 11511\n';
+    message += '✉️ contactpadmajahomefoods@gmail.com\n\n';
+    message += 'Thank you for choosing Padmaja Home Foods ❤️';
 
     const encodedMessage = encodeURIComponent(message);
     window.open('https://wa.me/919381311511?text=' + encodedMessage, '_blank');
