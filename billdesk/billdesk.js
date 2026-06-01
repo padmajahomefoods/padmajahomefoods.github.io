@@ -45,6 +45,11 @@ const CATEGORY_EMOJIS = {
 
 let billItems = [];
 
+// Currency formatter - always 2 decimal places
+function formatCurrency(value) {
+    return '₹' + Number(value).toFixed(2);
+}
+
 // Initialize
 function init() {
     renderProducts();
@@ -78,7 +83,7 @@ function renderProducts() {
                             return `<option value="${w}" data-price="${price}">${label} - ₹${price}</option>`;
                         }).join('')}
                     </select>
-                    <input type="number" class="qty-input" id="qty-${productId}" value="1" min="1" max="10">
+                    <input type="number" class="qty-input" id="qty-${productId}" value="1" min="1" max="10" step="1">
                     <button class="add-btn" onclick="addToBill('${productId}', '${product.name}', ${product.price})">
                         <i class="fas fa-plus"></i> Add
                     </button>
@@ -92,7 +97,7 @@ function renderProducts() {
     container.innerHTML = html;
 }
 
-// Calculate Price for Weight
+// Calculate Price for Weight (exact decimal, no rounding)
 function getPrice(productId, basePrice) {
     const weightSelect = document.getElementById(`weight-${productId}`);
     const weight = parseInt(weightSelect.value);
@@ -174,7 +179,7 @@ function updateSheetQty(index, change) {
 
 // Update Cart Summary (Sticky Bar + Sheet)
 function updateCartSummary() {
-    const deliveryCharge = parseInt(document.getElementById('deliveryCharge').value) || 0;
+    const deliveryCharge = parseFloat(document.getElementById('deliveryCharge').value) || 0;
     const totalQty = billItems.reduce((sum, item) => sum + item.qty, 0);
     const productsTotal = billItems.reduce((sum, item) => sum + item.total, 0);
     const grandTotal = productsTotal + deliveryCharge;
@@ -189,7 +194,7 @@ function updateCartSummary() {
         stickyBar.classList.add('active');
         stickyBadge.textContent = totalQty;
         stickyItems.textContent = totalQty === 1 ? '1 item' : `${totalQty} items`;
-        stickyTotal.textContent = '₹' + grandTotal;
+        stickyTotal.textContent = formatCurrency(grandTotal);
     } else {
         stickyBar.classList.remove('active');
     }
@@ -202,9 +207,9 @@ function updateCartSummary() {
     const sheetGrandTotal = document.getElementById('sheetGrandTotal');
     const sheetShowBillBtn = document.getElementById('sheetShowBillBtn');
 
-    sheetProductsTotal.textContent = '₹' + productsTotal;
-    sheetDeliveryCharge.textContent = '₹' + deliveryCharge;
-    sheetGrandTotal.textContent = '₹' + grandTotal;
+    sheetProductsTotal.textContent = formatCurrency(productsTotal);
+    sheetDeliveryCharge.textContent = formatCurrency(deliveryCharge);
+    sheetGrandTotal.textContent = formatCurrency(grandTotal);
 
     if (billItems.length === 0) {
         sheetItems.style.display = 'none';
@@ -261,7 +266,7 @@ function closeCartSheet() {
 function showBill() {
     closeCartSheet();
     const customerName = document.getElementById('customerName').value.trim() || 'Customer';
-    const deliveryCharge = parseInt(document.getElementById('deliveryCharge').value) || 0;
+    const deliveryCharge = parseFloat(document.getElementById('deliveryCharge').value) || 0;
     const billModal = document.getElementById('billModal');
     const billCustomer = document.getElementById('billCustomer');
     const billItemsContainer = document.getElementById('billItems');
@@ -299,9 +304,9 @@ function showBill() {
     }).join('');
 
     const grandTotal = productsTotal + deliveryCharge;
-    billProductsTotal.textContent = '₹' + productsTotal;
-    billDeliveryCharge.textContent = '₹' + deliveryCharge;
-    billTotalAmount.textContent = '₹' + grandTotal;
+    billProductsTotal.textContent = formatCurrency(productsTotal);
+    billDeliveryCharge.textContent = formatCurrency(deliveryCharge);
+    billTotalAmount.textContent = formatCurrency(grandTotal);
 
     billModal.classList.add('active');
 }
@@ -319,7 +324,7 @@ function printBill() {
 // Share Bill via WhatsApp
 function shareBill() {
     const customerName = document.getElementById('customerName').value.trim() || 'Customer';
-    const deliveryCharge = parseInt(document.getElementById('deliveryCharge').value) || 0;
+    const deliveryCharge = parseFloat(document.getElementById('deliveryCharge').value) || 0;
     const now = new Date();
     const dateStr = now.toLocaleDateString('en-IN', {
         day: '2-digit',
@@ -346,9 +351,9 @@ function shareBill() {
     });
 
     message += '\n------------\n';
-    message += 'Products Total: Rs.' + productsTotal + '\n';
-    message += 'Delivery Charge: Rs.' + deliveryCharge + '\n';
-    message += 'Grand Total: Rs.' + grandTotal + '\n';
+    message += 'Products Total: Rs.' + productsTotal.toFixed(2) + '\n';
+    message += 'Delivery Charge: Rs.' + deliveryCharge.toFixed(2) + '\n';
+    message += 'Grand Total: Rs.' + grandTotal.toFixed(2) + '\n';
     message += '==================\n\n';
     message += '📞 +91 93813 11511\n';
     message += '✉️ contactpadmajahomefoods@gmail.com\n\n';
