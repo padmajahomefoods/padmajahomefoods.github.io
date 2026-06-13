@@ -2865,59 +2865,18 @@ input:focus-visible {
 
 /* ============================================
    MOBILE SHOP REDESIGN — AMAZON-STYLE VERTICAL LIST
-   One product per row, image left, info right
-   Mobile only. Desktop unchanged.
+   Clean horizontal cards: image left, info right
+   Mobile only (≤767px). Desktop unchanged.
    ============================================ */
 
-/* ---- BASE MOBILE FIXES ---- */
-
-/* Prevent horizontal scroll */
+/* ---- Base mobile overflow prevention ---- */
 html, body {
     overflow-x: hidden;
     max-width: 100vw;
 }
 
-/* Ensure containers respect viewport */
-.nav-container,
-.shop-container,
-.pdp-container,
-.hero-container,
-.home-features-grid,
-.reviews-grid,
-.offers-grid,
-.trust-badges-grid,
-.best-sellers-grid,
-.social-cards-grid,
-.footer-content {
-    max-width: 100%;
-}
-
 /* ============================================
-   CATEGORY TABS — HORIZONTAL SCROLL FIX
-   ============================================ */
-
-.category-filter {
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    padding-bottom: 8px;
-    padding-left: 4px;
-    padding-right: 4px;
-    margin-left: -4px;
-    margin-right: -4px;
-}
-
-.category-filter::-webkit-scrollbar {
-    display: none;
-}
-
-.filter-btn {
-    flex-shrink: 0;
-    white-space: nowrap;
-}
-
-/* ============================================
-   PRODUCT GRID — MOBILE: SINGLE COLUMN
+   1. PRODUCT GRID — Single column stack
    ============================================ */
 
 @media (max-width: 767px) {
@@ -2929,8 +2888,7 @@ html, body {
 }
 
 /* ============================================
-   PRODUCT CARD — MOBILE: HORIZONTAL ROW
-   Image left, info right
+   2. PRODUCT CARD — Horizontal layout
    ============================================ */
 
 @media (max-width: 767px) {
@@ -2945,7 +2903,7 @@ html, body {
         border: 1px solid var(--gray-200);
         transition: all 0.25s ease;
         position: relative;
-        min-height: 160px;
+        min-height: 180px;
     }
 
     .product-card:hover {
@@ -2954,19 +2912,20 @@ html, body {
         border-color: var(--primary-gold);
     }
 
-    /* ---- Product Image (Left Side) ---- */
-    .product-card-link {
-        display: flex;
-        flex-direction: row;
-        flex: 1 1 auto;
-        min-width: 0;
+    /* ---- First product-card-link wraps the image ---- */
+    .product-card > .product-card-link {
+        display: block;
+        flex: 0 0 auto;
+        width: 140px;
+        min-width: 140px;
+        max-width: 140px;
+        align-self: stretch;
     }
 
-    .product-image {
-        width: 130px;
-        min-width: 130px;
-        max-width: 130px;
-        aspect-ratio: 1 / 1;
+    .product-card > .product-card-link .product-image {
+        width: 100%;
+        height: 100%;
+        aspect-ratio: auto;
         background: linear-gradient(135deg, #faf8f5 0%, var(--warm-cream) 100%);
         display: flex;
         align-items: center;
@@ -2977,7 +2936,7 @@ html, body {
         border-right: 1px solid var(--gray-100);
     }
 
-    .product-image img {
+    .product-card > .product-card-link .product-image img {
         width: 100%;
         height: 100%;
         object-fit: contain;
@@ -2988,7 +2947,7 @@ html, body {
         transform: scale(1.05);
     }
 
-    /* ---- Badges on Image ---- */
+    /* ---- Badges on image ---- */
     .product-badges {
         position: absolute;
         top: 6px;
@@ -3008,29 +2967,37 @@ html, body {
         letter-spacing: 0.5px;
     }
 
-    /* ---- Hide Share Button on Mobile ---- */
+    /* ---- Hide share button on mobile ---- */
     .product-share-btn {
         display: none !important;
     }
 
-    /* ---- Product Info (Right Side) ---- */
-    .product-info {
+    /* ---- Product info (right side) ---- */
+    .product-card > .product-info {
         flex: 1 1 auto;
-        padding: 12px 14px;
+        padding: 14px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: flex-start;
         min-width: 0;
-        gap: 6px;
+        gap: 0;
     }
 
-    .product-name {
+    /* ---- Inner link wraps name, desc, price ---- */
+    .product-info > .product-card-link {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        margin-bottom: 8px;
+    }
+
+    .product-info > .product-card-link .product-name {
         font-family: 'Poppins', sans-serif;
-        font-size: 0.92rem;
+        font-size: 0.95rem;
         font-weight: 600;
         color: var(--deep-brown);
         line-height: 1.35;
-        margin-bottom: 3px;
+        margin-bottom: 4px;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
@@ -3040,8 +3007,8 @@ html, body {
         min-height: 0;
     }
 
-    .product-desc {
-        font-size: 0.72rem;
+    .product-info > .product-card-link .product-desc {
+        font-size: 0.75rem;
         color: var(--gray-500);
         margin-bottom: 6px;
         line-height: 1.35;
@@ -3053,35 +3020,34 @@ html, body {
         max-height: 2.7em;
     }
 
-    /* ---- Price Row ---- */
-    .product-price-row {
+    .product-info > .product-card-link .product-price-row {
         display: flex;
         align-items: baseline;
         gap: 6px;
-        margin-bottom: 8px;
+        margin-bottom: 0;
     }
 
-    .product-price {
+    .product-info > .product-card-link .product-price {
         font-size: 1.1rem;
         font-weight: 700;
         color: var(--spice-red);
     }
 
-    .product-price span {
+    .product-info > .product-card-link .product-price span {
         font-size: 0.7rem;
         color: var(--gray-500);
         font-weight: 400;
     }
 
-    /* ---- Weight Options ---- */
-    .weight-options {
+    /* ---- Weight options ---- */
+    .product-info > .weight-options {
         display: flex;
         gap: 5px;
         margin-bottom: 10px;
         flex-wrap: wrap;
     }
 
-    .weight-btn {
+    .product-info > .weight-options .weight-btn {
         padding: 5px 10px;
         border: 1.5px solid var(--gray-300);
         background: white;
@@ -3102,60 +3068,60 @@ html, body {
         -webkit-user-select: none;
     }
 
-    .weight-btn:hover {
+    .product-info > .weight-options .weight-btn:hover {
         border-color: var(--primary-gold);
         background: var(--warm-cream);
     }
 
-    .weight-btn.active {
+    .product-info > .weight-options .weight-btn.active {
         border-color: var(--spice-red);
         background: var(--spice-red);
         color: white;
         font-weight: 600;
     }
 
-    /* ---- Product Actions ---- */
-    .product-actions {
+    /* ---- Product actions: stacked buttons ---- */
+    .product-info > .product-actions {
         display: flex;
-        flex-direction: row;
-        gap: 8px;
+        flex-direction: column;
+        gap: 6px;
         margin-top: auto;
-        align-items: center;
+        width: 100%;
     }
 
-    .btn-whatsapp {
-        flex: 1 1 auto;
+    .product-info > .product-actions .btn-whatsapp {
+        width: 100%;
         background: var(--whatsapp-green);
         color: white;
         border: none;
-        padding: 10px 12px;
+        padding: 11px 14px;
         border-radius: var(--radius-sm);
         font-family: 'Poppins', sans-serif;
         font-weight: 600;
-        font-size: 0.78rem;
+        font-size: 0.82rem;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 6px;
         transition: all 0.2s;
-        min-height: 40px;
+        min-height: 42px;
         touch-action: manipulation;
         white-space: nowrap;
     }
 
-    .btn-whatsapp:hover {
+    .product-info > .product-actions .btn-whatsapp:hover {
         background: var(--whatsapp-dark);
         transform: scale(1.02);
         box-shadow: 0 4px 12px rgba(29, 168, 81, 0.3);
     }
 
-    .btn-whatsapp:active {
+    .product-info > .product-actions .btn-whatsapp:active {
         transform: scale(0.98);
     }
 
-    .btn-cart {
-        flex: 0 0 auto;
+    .product-info > .product-actions .btn-cart {
+        width: 100%;
         background: white;
         color: var(--deep-brown);
         border: 1.5px solid var(--deep-brown);
@@ -3163,7 +3129,7 @@ html, body {
         border-radius: var(--radius-sm);
         font-family: 'Poppins', sans-serif;
         font-weight: 600;
-        font-size: 0.75rem;
+        font-size: 0.78rem;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -3171,143 +3137,180 @@ html, body {
         gap: 4px;
         transition: all 0.2s;
         min-height: 40px;
-        min-width: 40px;
         touch-action: manipulation;
     }
 
-    .btn-cart:hover {
+    .product-info > .product-actions .btn-cart:hover {
         background: var(--deep-brown);
         color: white;
         transform: scale(1.02);
     }
 
-    .btn-cart.added {
+    .product-info > .product-actions .btn-cart.added {
         background: var(--whatsapp-green);
         border-color: var(--whatsapp-green);
         color: white;
     }
 
-    /* ---- Hide Quick View Link on Mobile ---- */
-    .quick-view-link {
+    /* ---- Hide quick view link on mobile ---- */
+    .product-info > .quick-view-link {
         display: none !important;
     }
 }
 
 /* ============================================
-   SMALL PHONES — 320px to 374px
+   3. SMALL PHONES — 320px to 374px
    ============================================ */
 
 @media (max-width: 374px) {
     .product-card {
-        min-height: 140px;
+        min-height: 160px;
     }
 
-    .product-image {
-        width: 110px;
-        min-width: 110px;
-        max-width: 110px;
+    .product-card > .product-card-link {
+        width: 120px;
+        min-width: 120px;
+        max-width: 120px;
+    }
+
+    .product-card > .product-card-link .product-image {
         padding: 8px;
     }
 
-    .product-info {
+    .product-card > .product-info {
         padding: 10px 12px;
-        gap: 4px;
     }
 
-    .product-name {
-        font-size: 0.85rem;
+    .product-info > .product-card-link .product-name {
+        font-size: 0.88rem;
         line-height: 1.3;
     }
 
-    .product-desc {
-        font-size: 0.68rem;
+    .product-info > .product-card-link .product-desc {
+        font-size: 0.7rem;
         margin-bottom: 4px;
     }
 
-    .product-price {
+    .product-info > .product-card-link .product-price {
         font-size: 1rem;
     }
 
-    .weight-btn {
+    .product-info > .weight-options .weight-btn {
         padding: 4px 8px;
-        font-size: 0.65rem;
+        font-size: 0.68rem;
         min-height: 28px;
     }
 
-    .btn-whatsapp {
+    .product-info > .product-actions .btn-whatsapp {
+        padding: 9px 10px;
+        font-size: 0.76rem;
+        min-height: 38px;
+    }
+
+    .product-info > .product-actions .btn-cart {
         padding: 8px 10px;
         font-size: 0.72rem;
         min-height: 36px;
     }
-
-    .btn-cart {
-        padding: 8px 10px;
-        font-size: 0.7rem;
-        min-height: 36px;
-        min-width: 36px;
-    }
 }
 
 /* ============================================
-   MEDIUM PHONES — 375px to 413px
+   4. MEDIUM PHONES — 375px to 413px
    ============================================ */
 
 @media (min-width: 375px) and (max-width: 413px) {
-    .product-image {
-        width: 140px;
-        min-width: 140px;
-        max-width: 140px;
-    }
-
-    .product-name {
-        font-size: 0.95rem;
-    }
-
-    .product-desc {
-        font-size: 0.75rem;
-    }
-
-    .product-price {
-        font-size: 1.15rem;
-    }
-}
-
-/* ============================================
-   LARGER PHONES — 414px to 767px
-   ============================================ */
-
-@media (min-width: 414px) and (max-width: 767px) {
-    .product-image {
+    .product-card > .product-card-link {
         width: 150px;
         min-width: 150px;
         max-width: 150px;
     }
 
-    .product-name {
+    .product-info > .product-card-link .product-name {
         font-size: 1rem;
     }
 
-    .product-desc {
+    .product-info > .product-card-link .product-desc {
         font-size: 0.78rem;
     }
 
-    .product-price {
+    .product-info > .product-card-link .product-price {
+        font-size: 1.15rem;
+    }
+
+    .product-info > .product-actions .btn-whatsapp {
+        font-size: 0.85rem;
+    }
+
+    .product-info > .product-actions .btn-cart {
+        font-size: 0.8rem;
+    }
+}
+
+/* ============================================
+   5. LARGER PHONES — 414px to 767px
+   ============================================ */
+
+@media (min-width: 414px) and (max-width: 767px) {
+    .product-card > .product-card-link {
+        width: 160px;
+        min-width: 160px;
+        max-width: 160px;
+    }
+
+    .product-card > .product-card-link .product-image {
+        padding: 14px;
+    }
+
+    .product-info > .product-card-link .product-name {
+        font-size: 1.05rem;
+    }
+
+    .product-info > .product-card-link .product-desc {
+        font-size: 0.8rem;
+    }
+
+    .product-info > .product-card-link .product-price {
         font-size: 1.2rem;
     }
 
-    .btn-whatsapp {
-        font-size: 0.82rem;
-        padding: 11px 14px;
+    .product-info > .product-actions .btn-whatsapp {
+        font-size: 0.88rem;
+        padding: 12px 16px;
     }
 
-    .btn-cart {
-        font-size: 0.78rem;
+    .product-info > .product-actions .btn-cart {
+        font-size: 0.84rem;
         padding: 11px 16px;
     }
 }
 
 /* ============================================
-   HEADER / NAVIGATION — MOBILE
+   6. CATEGORY TABS — Horizontal scroll fix
+   ============================================ */
+
+.category-filter {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 8px;
+    padding-left: 4px;
+    padding-right: 4px;
+    margin-left: -4px;
+    margin-right: -4px;
+}
+
+.category-filter::-webkit-scrollbar {
+    display: none;
+}
+
+.filter-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    min-height: 36px;
+}
+
+/* ============================================
+   7. HEADER / NAVIGATION — Mobile
    ============================================ */
 
 @media (max-width: 768px) {
@@ -3349,7 +3352,7 @@ html, body {
 }
 
 /* ============================================
-   SHOP TOP BAR — MOBILE
+   8. SHOP TOP BAR — Mobile spacing
    ============================================ */
 
 @media (max-width: 768px) {
@@ -3370,7 +3373,7 @@ html, body {
 }
 
 /* ============================================
-   SEARCH & FILTER — MOBILE
+   9. SEARCH & FILTER — Mobile
    ============================================ */
 
 @media (max-width: 768px) {
@@ -3391,16 +3394,10 @@ html, body {
     .category-filter {
         gap: 6px;
     }
-
-    .filter-btn {
-        padding: 6px 14px;
-        font-size: 0.8rem;
-        min-height: 36px;
-    }
 }
 
 /* ============================================
-   SHOP CONTAINER — MOBILE PADDING
+   10. SHOP CONTAINER — Mobile padding
    ============================================ */
 
 @media (max-width: 768px) {
@@ -3418,17 +3415,13 @@ html, body {
         font-size: 1.1rem;
     }
 
-    .section-header-row h3 i {
-        font-size: 1rem;
-    }
-
     .section-count {
         font-size: 0.75rem;
     }
 }
 
 /* ============================================
-   FLOATING CART — MOBILE
+   11. FLOATING CART — Safe positioning
    ============================================ */
 
 @media (max-width: 768px) {
@@ -3453,7 +3446,7 @@ html, body {
 }
 
 /* ============================================
-   PRODUCT DETAIL PAGE — MOBILE
+   12. PRODUCT DETAIL PAGE — Mobile
    ============================================ */
 
 @media (max-width: 768px) {
@@ -3604,7 +3597,7 @@ html, body {
 }
 
 /* ============================================
-   CART SIDEBAR — MOBILE
+   13. CART SIDEBAR — Mobile
    ============================================ */
 
 @media (max-width: 768px) {
@@ -3684,7 +3677,7 @@ html, body {
 }
 
 /* ============================================
-   HOME PAGE — MOBILE
+   14. HOME PAGE — Mobile
    ============================================ */
 
 @media (max-width: 768px) {
@@ -4008,7 +4001,7 @@ html, body {
 }
 
 /* ============================================
-   EXTRA SMALL SCREENS — ≤374px OVERRIDES
+   15. EXTRA SMALL SCREENS — ≤374px overrides
    ============================================ */
 
 @media (max-width: 374px) {
@@ -4096,7 +4089,7 @@ html, body {
         min-height: 44px;
     }
 
-    /* Cart as bottom sheet on very small screens */
+    /* Cart as bottom sheet */
     .cart-sidebar {
         border-radius: var(--radius-lg) var(--radius-lg) 0 0;
         top: auto;
@@ -4115,7 +4108,7 @@ html, body {
 }
 
 /* ============================================
-   TABLET — 768px to 1023px
+   16. TABLET — 768px to 1023px
    ============================================ */
 
 @media (min-width: 768px) and (max-width: 1023px) {
@@ -4135,7 +4128,7 @@ html, body {
 }
 
 /* ============================================
-   SAFE AREA INSETS — Notch devices
+   17. SAFE AREA INSETS — Notch devices
    ============================================ */
 
 @supports (padding-top: env(safe-area-inset-top)) {
@@ -4179,7 +4172,7 @@ html, body {
 }
 
 /* ============================================
-   REDUCED MOTION — Accessibility
+   18. REDUCED MOTION — Accessibility
    ============================================ */
 
 @media (prefers-reduced-motion: reduce) {
