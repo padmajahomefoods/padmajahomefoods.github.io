@@ -2864,19 +2864,20 @@ input:focus-visible {
 
 
 /* ============================================
-   MOBILE UX IMPROVEMENTS — TARGETED PATCH
-   Preserves all colors, branding, desktop layout
+   MOBILE SHOP REDESIGN — AMAZON-STYLE VERTICAL LIST
+   One product per row, image left, info right
+   Mobile only. Desktop unchanged.
    ============================================ */
 
-/* ---- BASE MOBILE FIXES (apply to all small screens) ---- */
+/* ---- BASE MOBILE FIXES ---- */
 
-/* Prevent horizontal scroll globally */
+/* Prevent horizontal scroll */
 html, body {
     overflow-x: hidden;
     max-width: 100vw;
 }
 
-/* Ensure all containers respect viewport */
+/* Ensure containers respect viewport */
 .nav-container,
 .shop-container,
 .pdp-container,
@@ -2892,69 +2893,7 @@ html, body {
 }
 
 /* ============================================
-   1. PRODUCT CARDS — CONSISTENT HEIGHT
-   ============================================ */
-
-/* Grid cells stretch to equal height */
-.products-grid {
-    align-items: stretch;
-}
-
-/* Each product card is a flex column so children distribute */
-.product-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-/* The link wrapper should flex to fill available space */
-.product-card-link {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-}
-
-/* Product info flexes to push actions to bottom */
-.product-info {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-}
-
-/* Actions stick to bottom */
-.product-actions {
-    margin-top: auto;
-}
-
-/* ============================================
-   2. PRODUCT DESCRIPTIONS — 2-LINE CLAMP
-   ============================================ */
-
-.product-desc {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    /* Fallback for browsers without line-clamp */
-    max-height: 2.8em;
-    line-height: 1.4;
-}
-
-/* Also clamp product name to 2 lines for consistency */
-.product-name {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-height: 2.8em;
-    line-height: 1.4;
-    min-height: 2.8em;
-}
-
-/* ============================================
-   3. CATEGORY TABS — HORIZONTAL SCROLL FIX
+   CATEGORY TABS — HORIZONTAL SCROLL FIX
    ============================================ */
 
 .category-filter {
@@ -2962,7 +2901,6 @@ html, body {
     scrollbar-width: none;
     -ms-overflow-style: none;
     padding-bottom: 8px;
-    /* Add padding so focus rings don't get cut */
     padding-left: 4px;
     padding-right: 4px;
     margin-left: -4px;
@@ -2973,108 +2911,406 @@ html, body {
     display: none;
 }
 
-/* Ensure filter buttons don't shrink */
 .filter-btn {
     flex-shrink: 0;
     white-space: nowrap;
 }
 
 /* ============================================
-   4. WEIGHT BUTTONS — TOUCH & SPACING
+   PRODUCT GRID — MOBILE: SINGLE COLUMN
    ============================================ */
 
-.weight-options {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
-.weight-btn {
-    flex: 1 1 0;
-    min-width: 44px;
-    min-height: 32px;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-    -webkit-user-select: none;
+@media (max-width: 767px) {
+    .products-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
 }
 
 /* ============================================
-   5. FLOATING CART — POSITION FIX
+   PRODUCT CARD — MOBILE: HORIZONTAL ROW
+   Image left, info right
    ============================================ */
 
-.sticky-cart-btn {
-    /* Ensure it doesn't cover bottom content */
-    bottom: 16px;
-    right: 16px;
-    z-index: 998;
-    /* Add safe area for notch devices */
-    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-}
+@media (max-width: 767px) {
+    .product-card {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        background: white;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--gray-200);
+        transition: all 0.25s ease;
+        position: relative;
+        min-height: 160px;
+    }
 
-/* Add bottom padding to shop container so last cards aren't covered */
-.shop-container {
-    padding-bottom: 80px;
-}
+    .product-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--primary-gold);
+    }
 
-/* Also add padding to PDP container */
-.pdp-container {
-    padding-bottom: 80px;
+    /* ---- Product Image (Left Side) ---- */
+    .product-card-link {
+        display: flex;
+        flex-direction: row;
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .product-image {
+        width: 130px;
+        min-width: 130px;
+        max-width: 130px;
+        aspect-ratio: 1 / 1;
+        background: linear-gradient(135deg, #faf8f5 0%, var(--warm-cream) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        padding: 12px;
+        border-right: 1px solid var(--gray-100);
+    }
+
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: transform 0.3s ease;
+    }
+
+    .product-card:hover .product-image img {
+        transform: scale(1.05);
+    }
+
+    /* ---- Badges on Image ---- */
+    .product-badges {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        z-index: 2;
+    }
+
+    .badge {
+        padding: 3px 8px;
+        border-radius: var(--radius-sm);
+        font-size: 0.6rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* ---- Hide Share Button on Mobile ---- */
+    .product-share-btn {
+        display: none !important;
+    }
+
+    /* ---- Product Info (Right Side) ---- */
+    .product-info {
+        flex: 1 1 auto;
+        padding: 12px 14px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-width: 0;
+        gap: 6px;
+    }
+
+    .product-name {
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: var(--deep-brown);
+        line-height: 1.35;
+        margin-bottom: 3px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-height: 2.7em;
+        min-height: 0;
+    }
+
+    .product-desc {
+        font-size: 0.72rem;
+        color: var(--gray-500);
+        margin-bottom: 6px;
+        line-height: 1.35;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-height: 2.7em;
+    }
+
+    /* ---- Price Row ---- */
+    .product-price-row {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        margin-bottom: 8px;
+    }
+
+    .product-price {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--spice-red);
+    }
+
+    .product-price span {
+        font-size: 0.7rem;
+        color: var(--gray-500);
+        font-weight: 400;
+    }
+
+    /* ---- Weight Options ---- */
+    .weight-options {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+    }
+
+    .weight-btn {
+        padding: 5px 10px;
+        border: 1.5px solid var(--gray-300);
+        background: white;
+        border-radius: var(--radius-sm);
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.72rem;
+        font-weight: 500;
+        color: var(--gray-600);
+        cursor: pointer;
+        transition: all 0.2s;
+        flex: 0 0 auto;
+        text-align: center;
+        min-height: 32px;
+        min-width: 44px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    .weight-btn:hover {
+        border-color: var(--primary-gold);
+        background: var(--warm-cream);
+    }
+
+    .weight-btn.active {
+        border-color: var(--spice-red);
+        background: var(--spice-red);
+        color: white;
+        font-weight: 600;
+    }
+
+    /* ---- Product Actions ---- */
+    .product-actions {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        margin-top: auto;
+        align-items: center;
+    }
+
+    .btn-whatsapp {
+        flex: 1 1 auto;
+        background: var(--whatsapp-green);
+        color: white;
+        border: none;
+        padding: 10px 12px;
+        border-radius: var(--radius-sm);
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 0.78rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: all 0.2s;
+        min-height: 40px;
+        touch-action: manipulation;
+        white-space: nowrap;
+    }
+
+    .btn-whatsapp:hover {
+        background: var(--whatsapp-dark);
+        transform: scale(1.02);
+        box-shadow: 0 4px 12px rgba(29, 168, 81, 0.3);
+    }
+
+    .btn-whatsapp:active {
+        transform: scale(0.98);
+    }
+
+    .btn-cart {
+        flex: 0 0 auto;
+        background: white;
+        color: var(--deep-brown);
+        border: 1.5px solid var(--deep-brown);
+        padding: 10px 14px;
+        border-radius: var(--radius-sm);
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 0.75rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        transition: all 0.2s;
+        min-height: 40px;
+        min-width: 40px;
+        touch-action: manipulation;
+    }
+
+    .btn-cart:hover {
+        background: var(--deep-brown);
+        color: white;
+        transform: scale(1.02);
+    }
+
+    .btn-cart.added {
+        background: var(--whatsapp-green);
+        border-color: var(--whatsapp-green);
+        color: white;
+    }
+
+    /* ---- Hide Quick View Link on Mobile ---- */
+    .quick-view-link {
+        display: none !important;
+    }
 }
 
 /* ============================================
-   6. TOUCH TARGETS — MINIMUM 44px
+   SMALL PHONES — 320px to 374px
    ============================================ */
 
-.btn-whatsapp,
-.btn-cart,
-.pdp-weight-btn,
-.filter-btn,
-.product-share-btn,
-.quantity-control button,
-.cart-item-remove,
-.cart-close,
-.cart-order-btn,
-.view-all-btn,
-.best-seller-btn,
-.social-card-btn,
-.offer-btn,
-.contact-banner .phone,
-.mobile-menu,
-.nav-cart {
-    min-height: 44px;
-    min-width: 44px;
-    touch-action: manipulation;
-}
+@media (max-width: 374px) {
+    .product-card {
+        min-height: 140px;
+    }
 
-/* Exception for very small inline elements */
-.search-clear {
-    min-height: 36px;
-    min-width: 36px;
+    .product-image {
+        width: 110px;
+        min-width: 110px;
+        max-width: 110px;
+        padding: 8px;
+    }
+
+    .product-info {
+        padding: 10px 12px;
+        gap: 4px;
+    }
+
+    .product-name {
+        font-size: 0.85rem;
+        line-height: 1.3;
+    }
+
+    .product-desc {
+        font-size: 0.68rem;
+        margin-bottom: 4px;
+    }
+
+    .product-price {
+        font-size: 1rem;
+    }
+
+    .weight-btn {
+        padding: 4px 8px;
+        font-size: 0.65rem;
+        min-height: 28px;
+    }
+
+    .btn-whatsapp {
+        padding: 8px 10px;
+        font-size: 0.72rem;
+        min-height: 36px;
+    }
+
+    .btn-cart {
+        padding: 8px 10px;
+        font-size: 0.7rem;
+        min-height: 36px;
+        min-width: 36px;
+    }
 }
 
 /* ============================================
-   7. SHOP TOP BAR — REDUCE VERTICAL SPACING
+   MEDIUM PHONES — 375px to 413px
    ============================================ */
 
-.shop-topbar {
-    padding: 16px;
-}
+@media (min-width: 375px) and (max-width: 413px) {
+    .product-image {
+        width: 140px;
+        min-width: 140px;
+        max-width: 140px;
+    }
 
-.shop-topbar h2 {
-    margin-bottom: 4px;
-}
+    .product-name {
+        font-size: 0.95rem;
+    }
 
-.shop-topbar p {
-    margin-top: 4px;
+    .product-desc {
+        font-size: 0.75rem;
+    }
+
+    .product-price {
+        font-size: 1.15rem;
+    }
 }
 
 /* ============================================
-   8. MOBILE-SPECIFIC MEDIA QUERY OVERRIDES
+   LARGER PHONES — 414px to 767px
+   ============================================ */
+
+@media (min-width: 414px) and (max-width: 767px) {
+    .product-image {
+        width: 150px;
+        min-width: 150px;
+        max-width: 150px;
+    }
+
+    .product-name {
+        font-size: 1rem;
+    }
+
+    .product-desc {
+        font-size: 0.78rem;
+    }
+
+    .product-price {
+        font-size: 1.2rem;
+    }
+
+    .btn-whatsapp {
+        font-size: 0.82rem;
+        padding: 11px 14px;
+    }
+
+    .btn-cart {
+        font-size: 0.78rem;
+        padding: 11px 16px;
+    }
+}
+
+/* ============================================
+   HEADER / NAVIGATION — MOBILE
    ============================================ */
 
 @media (max-width: 768px) {
-    /* --- Header --- */
     .nav-container {
         height: 52px;
         padding: 8px 12px;
@@ -3103,7 +3339,20 @@ html, body {
         font-size: 1.1rem;
     }
 
-    /* --- Shop Top Bar --- */
+    .cart-badge {
+        width: 16px;
+        height: 16px;
+        font-size: 0.6rem;
+        top: 0;
+        right: 0;
+    }
+}
+
+/* ============================================
+   SHOP TOP BAR — MOBILE
+   ============================================ */
+
+@media (max-width: 768px) {
     .shop-topbar {
         margin-top: 52px;
         padding: 14px 12px;
@@ -3118,8 +3367,13 @@ html, body {
         font-size: 0.8rem;
         margin-top: 2px;
     }
+}
 
-    /* --- Search & Filter --- */
+/* ============================================
+   SEARCH & FILTER — MOBILE
+   ============================================ */
+
+@media (max-width: 768px) {
     .shop-controls {
         top: 52px;
         padding: 10px 12px;
@@ -3141,18 +3395,18 @@ html, body {
     .filter-btn {
         padding: 6px 14px;
         font-size: 0.8rem;
+        min-height: 36px;
     }
+}
 
-    /* --- Product Grid --- */
+/* ============================================
+   SHOP CONTAINER — MOBILE PADDING
+   ============================================ */
+
+@media (max-width: 768px) {
     .shop-container {
         padding: 12px;
         padding-bottom: 80px;
-    }
-
-    .products-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        align-items: stretch;
     }
 
     .section-header-row {
@@ -3164,105 +3418,45 @@ html, body {
         font-size: 1.1rem;
     }
 
+    .section-header-row h3 i {
+        font-size: 1rem;
+    }
+
     .section-count {
         font-size: 0.75rem;
     }
+}
 
-    /* --- Product Card --- */
-    .product-card {
-        border-radius: var(--radius-sm);
+/* ============================================
+   FLOATING CART — MOBILE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .sticky-cart-btn {
+        bottom: 12px;
+        right: 12px;
+        padding: 12px 16px;
+        font-size: 0.9rem;
+        min-height: 48px;
+        z-index: 998;
     }
 
-    .product-image {
-        padding: 10px;
-        aspect-ratio: 1 / 1;
-    }
-
-    .product-badges {
-        top: 6px;
-        left: 6px;
-        gap: 3px;
-    }
-
-    .badge {
-        padding: 3px 8px;
-        font-size: 0.6rem;
-    }
-
-    .product-share-btn {
-        top: 6px;
-        right: 6px;
-        width: 32px;
-        height: 32px;
-        font-size: 0.75rem;
-    }
-
-    .product-info {
-        padding: 10px;
-    }
-
-    .product-name {
-        font-size: 0.82rem;
-        line-height: 1.35;
-        min-height: 2.8em;
-        max-height: 2.8em;
-    }
-
-    .product-desc {
-        font-size: 0.72rem;
-        margin-bottom: 6px;
-        line-height: 1.4;
-        max-height: 2.8em;
-    }
-
-    .product-price-row {
-        margin-bottom: 6px;
-    }
-
-    .product-price {
-        font-size: 0.95rem;
-    }
-
-    .product-price span {
+    .sticky-cart-count {
+        width: 20px;
+        height: 20px;
         font-size: 0.7rem;
     }
 
-    .weight-options {
-        gap: 4px;
-        margin-bottom: 8px;
+    .sticky-cart-total {
+        font-size: 0.9rem;
     }
+}
 
-    .weight-btn {
-        padding: 4px 6px;
-        font-size: 0.68rem;
-        min-height: 32px;
-        min-width: 44px;
-    }
+/* ============================================
+   PRODUCT DETAIL PAGE — MOBILE
+   ============================================ */
 
-    .product-actions {
-        gap: 5px;
-    }
-
-    .btn-whatsapp {
-        padding: 10px;
-        font-size: 0.78rem;
-        gap: 5px;
-        min-height: 44px;
-    }
-
-    .btn-cart {
-        padding: 8px;
-        font-size: 0.72rem;
-        gap: 4px;
-        min-height: 44px;
-    }
-
-    .quick-view-link {
-        padding: 6px;
-        font-size: 0.7rem;
-    }
-
-    /* --- Product Detail Page --- */
+@media (max-width: 768px) {
     .pdp-container {
         padding: 12px;
         padding-bottom: 80px;
@@ -3407,27 +3601,13 @@ html, body {
         font-size: 1.15rem;
         margin-bottom: 14px;
     }
+}
 
-    /* --- Floating Cart --- */
-    .sticky-cart-btn {
-        bottom: 12px;
-        right: 12px;
-        padding: 12px 16px;
-        font-size: 0.9rem;
-        min-height: 48px;
-    }
+/* ============================================
+   CART SIDEBAR — MOBILE
+   ============================================ */
 
-    .sticky-cart-count {
-        width: 20px;
-        height: 20px;
-        font-size: 0.7rem;
-    }
-
-    .sticky-cart-total {
-        font-size: 0.9rem;
-    }
-
-    /* --- Cart Sidebar --- */
+@media (max-width: 768px) {
     .cart-sidebar {
         max-width: 100%;
         width: 100%;
@@ -3501,8 +3681,13 @@ html, body {
         font-size: 0.95rem;
         min-height: 48px;
     }
+}
 
-    /* --- Home Page --- */
+/* ============================================
+   HOME PAGE — MOBILE
+   ============================================ */
+
+@media (max-width: 768px) {
     .hero {
         margin-top: 52px;
         min-height: auto;
@@ -3776,7 +3961,6 @@ html, body {
         min-height: 44px;
     }
 
-    /* --- Footer --- */
     footer {
         padding: 36px 16px 20px;
     }
@@ -3821,22 +4005,10 @@ html, body {
         margin-top: 20px;
         font-size: 0.75rem;
     }
-
-    /* --- Toast --- */
-    .toast-container {
-        bottom: 70px;
-        width: 92%;
-        max-width: 360px;
-    }
-
-    .toast {
-        padding: 12px 16px;
-        font-size: 0.85rem;
-    }
 }
 
 /* ============================================
-   EXTRA SMALL SCREENS — 320px to 374px
+   EXTRA SMALL SCREENS — ≤374px OVERRIDES
    ============================================ */
 
 @media (max-width: 374px) {
@@ -3879,58 +4051,6 @@ html, body {
     .filter-btn {
         padding: 5px 12px;
         font-size: 0.75rem;
-    }
-
-    .products-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-    }
-
-    .product-image {
-        padding: 8px;
-    }
-
-    .product-info {
-        padding: 8px;
-    }
-
-    .product-name {
-        font-size: 0.75rem;
-        min-height: 2.7em;
-        max-height: 2.7em;
-    }
-
-    .product-desc {
-        font-size: 0.65rem;
-        margin-bottom: 4px;
-        max-height: 2.8em;
-    }
-
-    .product-price {
-        font-size: 0.88rem;
-    }
-
-    .weight-btn {
-        padding: 3px 5px;
-        font-size: 0.62rem;
-        min-height: 28px;
-    }
-
-    .btn-whatsapp {
-        padding: 8px;
-        font-size: 0.72rem;
-        min-height: 40px;
-    }
-
-    .btn-cart {
-        padding: 6px;
-        font-size: 0.68rem;
-        min-height: 40px;
-    }
-
-    .quick-view-link {
-        font-size: 0.65rem;
-        padding: 5px;
     }
 
     .hero-content h2 {
@@ -3995,56 +4115,7 @@ html, body {
 }
 
 /* ============================================
-   SMALL SCREENS — 375px to 413px
-   ============================================ */
-
-@media (min-width: 375px) and (max-width: 413px) {
-    .product-name {
-        font-size: 0.82rem;
-    }
-
-    .product-price {
-        font-size: 1rem;
-    }
-
-    .weight-btn {
-        padding: 4px 7px;
-        font-size: 0.7rem;
-    }
-
-    .btn-whatsapp {
-        font-size: 0.8rem;
-    }
-
-    .btn-cart {
-        font-size: 0.74rem;
-    }
-}
-
-/* ============================================
-   MEDIUM SCREENS — 414px to 767px
-   ============================================ */
-
-@media (min-width: 414px) and (max-width: 767px) {
-    .product-name {
-        font-size: 0.88rem;
-    }
-
-    .product-price {
-        font-size: 1.05rem;
-    }
-
-    .btn-whatsapp {
-        font-size: 0.82rem;
-    }
-
-    .btn-cart {
-        font-size: 0.76rem;
-    }
-}
-
-/* ============================================
-   TABLET FINE-TUNING — 768px to 1023px
+   TABLET — 768px to 1023px
    ============================================ */
 
 @media (min-width: 768px) and (max-width: 1023px) {
@@ -4103,16 +4174,6 @@ html, body {
     @media (max-width: 768px) {
         .sticky-cart-btn {
             bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-        }
-    }
-
-    .toast-container {
-        bottom: calc(80px + env(safe-area-inset-bottom, 0px));
-    }
-
-    @media (max-width: 768px) {
-        .toast-container {
-            bottom: calc(70px + env(safe-area-inset-bottom, 0px));
         }
     }
 }
