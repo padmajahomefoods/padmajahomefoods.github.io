@@ -3,20 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>Shop | Padmaja Home Foods — Authentic Guntur Spices & Pickles</title>
-    <meta name="description" content="Shop authentic Guntur pickles, masalas, and sweets. Hand-crafted, 100% natural, delivered across India. Order now on WhatsApp!">
-    <meta name="keywords" content="Guntur pickles, Andhra spices, homemade masala, chicken pickle, prawns pickle, Indian sweets, sunnundalu, gongura, avakaya, buy online">
+    <title>Product | Padmaja Home Foods</title>
+    <meta name="description" content="Order authentic Guntur spices and pickles from Padmaja Home Foods. Homemade, 100% natural, delivered across India.">
     <meta name="theme-color" content="#FFF8E1">
 
-    <meta property="og:title" content="Shop | Padmaja Home Foods — Authentic Guntur Spices & Pickles">
-    <meta property="og:description" content="Hand-crafted pickles, masalas, and sweets from Guntur. Made with love, delivered to your doorstep.">
+    <meta property="og:title" content="Padmaja Home Foods — Authentic Guntur Product">
+    <meta property="og:description" content="Hand-crafted pickles, masalas, and sweets from Guntur.">
     <meta property="og:image" content="https://padmajahomefoods.github.io/logo.png">
-    <meta property="og:url" content="https://padmajahomefoods.github.io/">
-    <meta property="og:type" content="website">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Shop | Padmaja Home Foods">
-    <meta name="twitter:description" content="Authentic Guntur spices & pickles delivered across India">
+    <meta property="og:type" content="product">
 
     <link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
@@ -39,47 +33,18 @@
       gtag('config', 'G-ERJ64KPYVV');
     </script>
 
-    <script type="application/ld+json">
+    <script type="application/ld+json" id="productSchema">
     {
       "@context": "https://schema.org",
-      "@type": "Store",
-      "name": "Padmaja Home Foods",
-      "description": "Shop authentic Guntur pickles, masalas, and sweets online",
-      "url": "https://padmajahomefoods.github.io/",
-      "telephone": "+919381311511",
-      "email": "padmajahomefoods@gmail.com",
-      "image": "https://padmajahomefoods.github.io/logo.png",
-      "priceRange": "₹",
-      "currenciesAccepted": "INR",
-      "paymentAccepted": "Cash, UPI, Bank Transfer",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Guntur",
-        "addressRegion": "Andhra Pradesh",
-        "addressCountry": "IN"
-      },
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Guntur Specialties",
-        "itemListElement": [
-          {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Masala & Karam Powders"}},
-          {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Veg Pickles"}},
-          {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Non-Veg Pickles"}},
-          {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Sweets"}}
-        ]
+      "@type": "Product",
+      "name": "Padmaja Home Foods Product",
+      "brand": {"@type": "Brand", "name": "Padmaja Home Foods"},
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "INR",
+        "availability": "https://schema.org/InStock",
+        "seller": {"@type": "Organization", "name": "Padmaja Home Foods"}
       }
-    }
-    </script>
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "itemListElement": [
-        {"@type": "ListItem", "position": 1, "item": {"@type": "Product", "name": "Kura Karam", "offers": {"@type": "Offer", "price": "55", "priceCurrency": "INR", "availability": "https://schema.org/InStock"}}},
-        {"@type": "ListItem", "position": 2, "item": {"@type": "Product", "name": "Gongura Pickle", "offers": {"@type": "Offer", "price": "125", "priceCurrency": "INR", "availability": "https://schema.org/InStock"}}},
-        {"@type": "ListItem", "position": 3, "item": {"@type": "Product", "name": "Chicken Boneless Pickle", "offers": {"@type": "Offer", "price": "350", "priceCurrency": "INR", "availability": "https://schema.org/InStock"}}}
-      ]
     }
     </script>
 </head>
@@ -96,7 +61,7 @@
                 </div>
             </a>
             <ul class="nav-links">
-                <li><a href="index.html" class="active">Shop</a></li>
+                <li><a href="index.html">Shop</a></li>
                 <li><a href="home.html">Home</a></li>
                 <li><a href="home.html#trust">About</a></li>
                 <li><a href="home.html#contact">Contact</a></li>
@@ -160,72 +125,97 @@
         </div>
     </div>
 
-    <!-- Shop Top Bar -->
-    <section class="shop-topbar">
-        <h2>Our Shop</h2>
-        <p>Hand-crafted pickles, masalas & sweets from Guntur — delivered across India</p>
-    </section>
-
-    <!-- Search & Filter (Sticky) -->
-    <section class="shop-controls">
-        <div class="search-container">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="productSearch" placeholder="Search pickles, masalas, sweets..." onkeyup="searchProducts()" autocomplete="off">
-                <button class="search-clear" id="searchClear" onclick="clearSearch()" aria-label="Clear search">
-                    <i class="fas fa-times"></i>
-                </button>
+    <!-- Product Detail Page -->
+    <div class="product-detail-page">
+        <div class="pdp-container">
+            <!-- Breadcrumb -->
+            <div class="pdp-breadcrumb">
+                <a href="index.html">Shop</a>
+                <i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>
+                <a href="index.html" id="pdpBreadcrumbCategory">Category</a>
+                <i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>
+                <span class="current" id="pdpBreadcrumbName">Product</span>
             </div>
-            <div class="search-results" id="searchResults"></div>
+
+            <div class="pdp-grid">
+                <!-- Image Section -->
+                <div class="pdp-image-section">
+                    <div class="pdp-main-image">
+                        <img src="" alt="" id="pdpImage" onerror="this.onerror=null;this.src='logo.png';this.style.objectFit='contain';this.style.padding='30px'">
+                    </div>
+                </div>
+
+                <!-- Info Section -->
+                <div class="pdp-info-section">
+                    <div class="pdp-badges" id="pdpBadges"></div>
+                    <h1 class="pdp-title" id="pdpTitle">Product Name</h1>
+                    <p class="pdp-subtitle" id="pdpSubtitle">Product description</p>
+
+                    <div class="pdp-price-block">
+                        <div class="pdp-price-row">
+                            <div class="pdp-price" id="pdpPrice">₹0</div>
+                        </div>
+                        <div class="pdp-tax-note">Price varies by weight. Delivery charges extra.</div>
+
+                        <div class="pdp-weight-section">
+                            <span class="pdp-weight-label">Select Weight:</span>
+                            <div class="pdp-weight-options" id="pdpWeightOptions"></div>
+                        </div>
+
+                        <div class="pdp-actions">
+                            <button class="btn-whatsapp" id="pdpOrderBtn">
+                                <i class="fab fa-whatsapp"></i> Order on WhatsApp
+                            </button>
+                            <button class="btn-cart" id="pdpCartBtn">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+
+                        <div class="pdp-delivery-info">
+                            <div class="pdp-delivery-row">
+                                <i class="fas fa-truck"></i>
+                                <span>Pan India delivery — 2 to 5 business days</span>
+                            </div>
+                            <div class="pdp-delivery-row">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Secure packaging — no spillage guaranteed</span>
+                            </div>
+                            <div class="pdp-delivery-row">
+                                <i class="fas fa-leaf"></i>
+                                <span>100% natural — no preservatives or artificial colors</span>
+                            </div>
+                            <div class="pdp-delivery-row">
+                                <i class="fas fa-home"></i>
+                                <span>Homemade in Guntur with traditional recipes</span>
+                            </div>
+                            <div class="pdp-delivery-row">
+                                <i class="fas fa-certificate"></i>
+                                <span>FSSAI Registered — food safety certified</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pdp-description">
+                        <h4><i class="fas fa-info-circle"></i> Product Details</h4>
+                        <p id="pdpDescription">Product description will be loaded here.</p>
+                        <ul>
+                            <li>Hand-crafted in small batches in Guntur, Andhra Pradesh</li>
+                            <li>Made with locally sourced, farm-fresh ingredients</li>
+                            <li>No artificial preservatives, colors, or additives</li>
+                            <li>Traditional recipes passed down through generations</li>
+                            <li>Carefully packed to ensure freshness during transit</li>
+                            <li>Shelf life: 3 months when stored in a cool, dry place</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Products -->
+            <div class="pdp-related" id="pdpRelatedSection">
+                <h3>You May Also Like</h3>
+                <div class="products-grid" id="pdpRelated"></div>
+            </div>
         </div>
-        <div class="category-filter">
-            <button class="filter-btn active" onclick="filterCategory('all')">All</button>
-            <button class="filter-btn" onclick="filterCategory('masala')">Masala</button>
-            <button class="filter-btn" onclick="filterCategory('vegpickles')">Veg Pickles</button>
-            <button class="filter-btn" onclick="filterCategory('nonvegpickles')">Non-Veg</button>
-            <button class="filter-btn" onclick="filterCategory('sweets')">Sweets</button>
-        </div>
-    </section>
-
-    <!-- Products Container -->
-    <div class="shop-container">
-
-        <!-- Masala & Karam -->
-        <section class="products-section active" id="masala" data-category="masala">
-            <div class="section-header-row">
-                <h3><i class="fas fa-mortar-pestle"></i> Masala & Karam Powders</h3>
-                <span class="section-count">8 items</span>
-            </div>
-            <div class="products-grid"></div>
-        </section>
-
-        <!-- Veg Pickles -->
-        <section class="products-section active" id="vegpickles" data-category="vegpickles">
-            <div class="section-header-row">
-                <h3><i class="fas fa-carrot"></i> Veg Pickles</h3>
-                <span class="section-count">5 items</span>
-            </div>
-            <div class="products-grid"></div>
-        </section>
-
-        <!-- Non-Veg Pickles -->
-        <section class="products-section active" id="nonvegpickles" data-category="nonvegpickles">
-            <div class="section-header-row">
-                <h3><i class="fas fa-drumstick-bite"></i> Non-Veg Pickles</h3>
-                <span class="section-count">3 items</span>
-            </div>
-            <div class="products-grid"></div>
-        </section>
-
-        <!-- Sweets -->
-        <section class="products-section active" id="sweets" data-category="sweets">
-            <div class="section-header-row">
-                <h3><i class="fas fa-cookie"></i> Sweets</h3>
-                <span class="section-count">3 items</span>
-            </div>
-            <div class="products-grid"></div>
-        </section>
-
     </div>
 
     <!-- Sticky Cart Button -->
