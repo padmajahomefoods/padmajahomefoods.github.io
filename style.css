@@ -2979,7 +2979,37 @@ html, body {
 
     /* ---- Hide Share Button ---- */
     .product-share-btn {
-        display: none !important;
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.92);
+        border: 1px solid var(--gray-200);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--gray-500);
+        font-size: 0.7rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        z-index: 3;
+        backdrop-filter: blur(4px);
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+        padding: 0;
+    }
+
+    .product-share-btn:hover {
+        background: var(--primary-gold);
+        border-color: var(--primary-gold);
+        color: var(--deep-brown);
+        transform: scale(1.1);
+    }
+
+    .product-share-btn:active {
+        transform: scale(0.95);
     }
 
     /* ---- Product Info (Bottom, compact) ---- */
