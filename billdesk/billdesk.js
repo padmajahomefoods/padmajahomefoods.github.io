@@ -360,7 +360,7 @@ function shareBill() {
     message += 'Thank you for choosing Padmaja Home Foods ❤️';
 
     const encodedMessage = encodeURIComponent(message);
-    window.open('https://wa.me/919381311511?text=' + encodedMessage, '_blank');
+    window.open('https://wa.me/?text=' + encodedMessage, '_blank');
 }
 
 // Initialize on load
