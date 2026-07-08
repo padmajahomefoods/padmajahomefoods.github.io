@@ -13,18 +13,30 @@ let PRODUCTS = []; // Loaded dynamically from products.json
 // This enables the Admin Panel to manage products
 // without editing JavaScript files.
 // ============================================
-async function loadProducts() {
-    try {
-        const response = await fetch('products.json?v=' + Date.now());
-        if (!response.ok) throw new Error('Failed to load products');
-        const data = await response.json();
-        PRODUCTS = data;
-        return true;
-    } catch (error) {
-        console.error('Error loading products:', error);
-        showToast('Failed to load products. Please refresh.', 'error');
-        return false;
+// ============================================
+// PRODUCT DATA LOADER — Optimized for perceived speed
+// Kicks off fetch immediately, renders as soon as data arrives.
+// ============================================
+let productsPromise = null;
+
+function startProductLoad() {
+    // Start fetching immediately; store the promise for later await
+    if (!productsPromise) {
+        productsPromise = fetch('products.json?v=' + Date.now())
+            .then(r => { if (!r.ok) throw new Error('Failed'); return r.json(); })
+            .then(data => { PRODUCTS = data; return true; })
+            .catch(err => {
+                console.error('Error loading products:', err);
+                showToast('Failed to load products. Please refresh.', 'error');
+                return false;
+            });
     }
+    return productsPromise;
+}
+
+async function loadProducts() {
+    // Await the already-in-flight fetch
+    return await startProductLoad();
 }
 
 // ============================================
@@ -677,7 +689,7 @@ function updatePDPButtons(product, weight, price) {
 // ============================================
 // PRODUCT CARD GENERATOR — CLEAN, NO FAKE DATA
 // ============================================
-function createProductCard(product) {
+function createProductCard(product, isPriority = false) {
     const defaultWeight = product.weights[0];
     const defaultPrice = getPriceForWeight(product, defaultWeight);
 
@@ -697,7 +709,7 @@ function createProductCard(product) {
         <div class="product-card" id="${product.id}" data-product="${product.name}" data-base-price="${product.price}">
             <a href="product.html?id=${product.id}" class="product-card-link">
                 <div class="product-image">
-                    <img src="${imgPath}" alt="${product.name}" loading="lazy" 
+                    <img src="${imgPath}" alt="${product.name}" loading="${isPriority ? 'eager' : 'lazy'}" decoding="async" width="300" height="300"
                         onerror="this.onerror=null;this.src='logo.png';this.style.objectFit='contain';this.style.padding='20px'">
                     <div class="product-badges">${badgeHtml}</div>
                 </div>
@@ -733,6 +745,7 @@ function createProductCard(product) {
 // ============================================
 function renderShopPage() {
     const categories = ['masala', 'vegpickles', 'nonvegpickles', 'sweets'];
+    let renderedCount = 0;
 
     categories.forEach(catId => {
         const section = document.getElementById(catId);
@@ -743,7 +756,12 @@ function renderShopPage() {
         const countEl = section.querySelector('.section-count');
 
         if (grid) {
-            grid.innerHTML = catProducts.map(p => createProductCard(p)).join('');
+            // First 4 product images across all categories get eager loading + preload link
+            grid.innerHTML = catProducts.map((p, i) => {
+                const isPriority = renderedCount < 4;
+                if (isPriority) renderedCount++;
+                return createProductCard(p, isPriority);
+            }).join('');
         }
         if (countEl) {
             countEl.textContent = `${catProducts.length} items`;
@@ -751,6 +769,21 @@ function renderShopPage() {
     });
 
     initScrollAnimations();
+
+    // Preload first 4 visible product images for instant perceived speed
+    injectImagePreloads();
+}
+
+// Inject <link rel="preload"> for first 4 product images
+function injectImagePreloads() {
+    const firstFour = PRODUCTS.filter(p => p.available !== false).slice(0, 4);
+    firstFour.forEach(p => {
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.href = p.image;
+        document.head.appendChild(link);
+    });
 }
 
 // ============================================
@@ -760,15 +793,20 @@ document.addEventListener('DOMContentLoaded', async function() {
     loadCart();
     updateCartUI();
 
-    // Load products from JSON before rendering any product-related UI
-    const loaded = await loadProducts();
-    if (!loaded) return;
+    // Kick off product fetch immediately (don't wait for anything else)
+    startProductLoad();
 
     const path = window.location.pathname;
 
     if (path.includes('product.html')) {
+        // PDP: wait for products then render
+        const loaded = await loadProducts();
+        if (!loaded) return;
         initProductPage();
     } else if (path.includes('index.html') || path === '/' || path.endsWith('/')) {
+        // Shop page: wait for products then render cards ASAP
+        const loaded = await loadProducts();
+        if (!loaded) return;
         renderShopPage();
     }
 
