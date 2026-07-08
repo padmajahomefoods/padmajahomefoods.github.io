@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Admin | Padmaja Home Foods</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#3E2723">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-body{background:var(--warm-cream);min-height:100vh}
+        .admin-login-container{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+        .admin-login-box{background:white;border-radius:var(--radius-lg);padding:48px 40px;width:100%;max-width:420px;box-shadow:var(--shadow-lg);border:1px solid var(--gray-200);text-align:center}
+        .admin-login-box img{height:80px;margin-bottom:20px}
+        .admin-login-box h2{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--deep-brown);margin-bottom:8px}
+        .admin-login-box p{color:var(--gray-500);font-size:.9rem;margin-bottom:32px}
+        .admin-form-group{margin-bottom:20px;text-align:left}
+        .admin-form-group label{display:block;font-size:.85rem;font-weight:600;color:var(--deep-brown);margin-bottom:8px}
+        .admin-form-group input{width:100%;padding:14px 16px;border:2px solid var(--gray-200);border-radius:var(--radius-md);font-family:'Poppins',sans-serif;font-size:.95rem;color:var(--deep-brown);background:white;transition:border-color .2s}
+        .admin-form-group input:focus{outline:none;border-color:var(--primary-gold)}
+        .admin-login-btn{width:100%;background:var(--spice-red);color:white;border:none;padding:16px;border-radius:var(--radius-md);font-family:'Poppins',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:all .2s;margin-top:8px}
+        .admin-login-btn:hover{background:#b71c1c;transform:scale(1.01)}
+        .admin-error{color:var(--spice-red);font-size:.85rem;margin-top:16px;display:none}
+        .admin-error.active{display:block}
+        .admin-dashboard{display:none;min-height:100vh}
+        .admin-dashboard.active{display:block}
+        .admin-header{background:var(--deep-brown);color:white;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+        .admin-header-brand{display:flex;align-items:center;gap:12px}
+        .admin-header-brand img{height:36px}
+        .admin-header-brand h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--primary-gold)}
+        .admin-header-actions{display:flex;gap:12px;align-items:center}
+        .admin-header-btn{background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.2);padding:10px 18px;border-radius:var(--radius-md);font-family:'Poppins',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px}
+        .admin-header-btn:hover{background:var(--primary-gold);color:var(--deep-brown)}
+        .admin-header-btn.logout{background:var(--spice-red);border-color:var(--spice-red)}
+        .admin-header-btn.logout:hover{background:#b71c1c;color:white}
+        .admin-content{max-width:1200px;margin:0 auto;padding:24px}
+        .admin-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px}
+        @media(min-width:640px){.admin-stats{grid-template-columns:repeat(4,1fr)}}
+        .admin-stat-card{background:white;border-radius:var(--radius-md);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);text-align:center}
+        .admin-stat-card .number{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--spice-red)}
+        .admin-stat-card .label{font-size:.8rem;color:var(--gray-500);margin-top:4px}
+        .admin-toolbar{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;align-items:center}
+        .admin-search-box{flex:1;min-width:200px;position:relative}
+        .admin-search-box input{width:100%;padding:12px 16px 12px 44px;border:2px solid var(--gray-200);border-radius:var(--radius-full);font-family:'Poppins',sans-serif;font-size:.9rem;color:var(--deep-brown);background:white}
+        .admin-search-box i{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--gray-400)}
+        .admin-filter-select{padding:12px 16px;border:2px solid var(--gray-200);border-radius:var(--radius-md);font-family:'Poppins',sans-serif;font-size:.9rem;color:var(--deep-brown);background:white;cursor:pointer;min-width:160px}
+        .admin-btn-primary{background:var(--spice-red);color:white;border:none;padding:12px 24px;border-radius:var(--radius-md);font-family:'Poppins',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s}
+        .admin-btn-primary:hover{background:#b71c1c;transform:scale(1.02)}
+        .admin-table-wrap{background:white;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);overflow:hidden}
+        .admin-table{width:100%;border-collapse:collapse;font-size:.9rem}
+        .admin-table thead{background:var(--warm-cream)}
+        .admin-table th{padding:14px 16px;text-align:left;font-weight:600;color:var(--deep-brown);font-size:.8rem;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--gray-200);white-space:nowrap}
+        .admin-table td{padding:14px 16px;border-bottom:1px solid var(--gray-100);color:var(--gray-700);vertical-align:middle}
+        .admin-table tr:hover td{background:var(--warm-cream)}
+        .admin-table .product-name-cell{font-weight:600;color:var(--deep-brown)}
+        .admin-table .badge-instock{background:var(--whatsapp-green);color:white;padding:4px 12px;border-radius:var(--radius-full);font-size:.75rem;font-weight:600}
+        .admin-table .badge-outstock{background:var(--gray-400);color:white;padding:4px 12px;border-radius:var(--radius-full);font-size:.75rem;font-weight:600}
+        .admin-table-actions{display:flex;gap:8px}
+        .admin-table-actions button{width:32px;height:32px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:white;color:var(--gray-500);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+        .admin-table-actions button:hover{background:var(--warm-cream);color:var(--deep-brown)}
+        .admin-table-actions button.edit:hover{border-color:var(--primary-gold);color:var(--dark-gold)}
+        .admin-table-actions button.delete:hover{border-color:var(--spice-red);color:var(--spice-red)}
+        .admin-mobile-cards{display:none}
+        @media(max-width:768px){.admin-table-wrap{display:none}.admin-mobile-cards{display:flex;flex-direction:column;gap:12px}.admin-mobile-card{background:white;border-radius:var(--radius-md);padding:16px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200)}.admin-mobile-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.admin-mobile-card-header h4{font-size:1rem;color:var(--deep-brown)}.admin-mobile-card-body{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:.85rem;color:var(--gray-600);margin-bottom:12px}.admin-mobile-card-body span{display:block}.admin-mobile-card-body .label{font-size:.75rem;color:var(--gray-400);margin-bottom:2px}.admin-mobile-card-actions{display:flex;gap:8px;border-top:1px solid var(--gray-100);padding-top:12px}.admin-mobile-card-actions button{flex:1;padding:10px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:white;font-family:'Poppins',sans-serif;font-weight:600;font-size:.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}.admin-mobile-card-actions button.edit-btn{color:var(--dark-gold);border-color:var(--primary-gold)}.admin-mobile-card-actions button.delete-btn{color:var(--spice-red);border-color:var(--spice-red)}}
+        .admin-modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}
+        .admin-modal-overlay.active{display:flex}
+        .admin-modal{background:white;border-radius:var(--radius-lg);width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-xl);animation:modalIn .3s ease}
+        @keyframes modalIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+        .admin-modal-header{padding:20px 24px;border-bottom:1px solid var(--gray-200);display:flex;justify-content:space-between;align-items:center}
+        .admin-modal-header h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--deep-brown)}
+        .admin-modal-close{background:none;border:none;font-size:1.4rem;color:var(--gray-400);cursor:pointer;padding:4px}
+        .admin-modal-close:hover{color:var(--spice-red)}
+        .admin-modal-body{padding:24px}
+        .admin-form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+        @media(max-width:480px){.admin-form-row{grid-template-columns:1fr}}
+        .admin-form-group{margin-bottom:16px}
+        .admin-form-group.full{grid-column:1/-1}
+        .admin-form-group label{display:block;font-size:.8rem;font-weight:600;color:var(--deep-brown);margin-bottom:6px}
+        .admin-form-group label .required{color:var(--spice-red)}
+        .admin-form-group input,.admin-form-group select,.admin-form-group textarea{width:100%;padding:12px 14px;border:2px solid var(--gray-200);border-radius:var(--radius-md);font-family:'Poppins',sans-serif;font-size:.9rem;color:var(--deep-brown);background:white;transition:border-color .2s}
+        .admin-form-group input:focus,.admin-form-group select:focus,.admin-form-group textarea:focus{outline:none;border-color:var(--primary-gold)}
+        .admin-form-group textarea{resize:vertical;min-height:80px}
+        .admin-form-group .hint{font-size:.75rem;color:var(--gray-400);margin-top:4px}
+        .admin-modal-footer{padding:16px 24px;border-top:1px solid var(--gray-200);display:flex;justify-content:flex-end;gap:12px}
+        .admin-btn-secondary{background:white;color:var(--deep-brown);border:2px solid var(--gray-300);padding:12px 24px;border-radius:var(--radius-md);font-family:'Poppins',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;transition:all .2s}
+        .admin-btn-secondary:hover{border-color:var(--primary-gold);background:var(--warm-cream)}
+        .admin-btn-save{background:var(--whatsapp-green);color:white;border:none;padding:12px 28px;border-radius:var(--radius-md);font-family:'Poppins',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;transition:all .2s}
+        .admin-btn-save:hover{background:var(--whatsapp-dark);transform:scale(1.02)}
+        .admin-empty{text-align:center;padding:60px 20px;color:var(--gray-500)}
+        .admin-empty i{font-size:3rem;color:var(--gray-300);margin-bottom:16px}
+        .admin-toast-container{position:fixed;top:80px;right:24px;z-index:3000;display:flex;flex-direction:column;gap:8px}
+        .admin-toast{background:var(--deep-brown);color:white;padding:14px 20px;border-radius:var(--radius-md);font-weight:500;font-size:.9rem;box-shadow:var(--shadow-xl);display:flex;align-items:center;gap:10px;animation:toastSlide .3s ease;max-width:360px}
+        .admin-toast.success{background:var(--whatsapp-green)}
+        .admin-toast.error{background:var(--spice-red)}
+        @keyframes toastSlide{from{transform:translateX(100px);opacity:0}to{transform:translateX(0);opacity:1}}
+        .admin-login-container.hidden{display:none}
+    </style>
+</head>
+<body class="admin-body">
+    <div class="admin-login-container" id="loginScreen">
+        <div class="admin-login-box">
+            <img src="logo.png" alt="Padmaja Home Foods">
+            <h2>Admin Panel</h2>
+            <p>Product Management Dashboard</p>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="admin-form-group">
+                    <label for="adminUser">Username</label>
+                    <input type="text" id="adminUser" placeholder="Enter username" required autocomplete="username">
+                </div>
+                <div class="admin-form-group">
+                    <label for="adminPass">Password</label>
+                    <input type="password" id="adminPass" placeholder="Enter password" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="admin-login-btn"><i class="fas fa-lock"></i> Login</button>
+                <div class="admin-error" id="loginError"><i class="fas fa-exclamation-circle"></i> Invalid username or password</div>
+            </form>
+        </div>
+    </div>
+    <div class="admin-dashboard" id="dashboard">
+        <div class="admin-header">
+            <div class="admin-header-brand"><img src="logo.png" alt="Padmaja Home Foods"><h3>Admin Dashboard</h3><span id="unsavedIndicator" style="display:none;background:var(--spice-red);color:white;padding:4px 12px;border-radius:20px;font-size:0.75rem;margin-left:12px;font-weight:600"><i class="fas fa-circle" style="font-size:0.5rem;margin-right:6px;vertical-align:middle"></i>Unsaved Changes</span></div>
+            <div class="admin-header-actions">
+                <button class="admin-header-btn" onclick="window.open('index.html','_blank')"><i class="fas fa-external-link-alt"></i> View Shop</button>
+                <button class="admin-header-btn logout" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+        <div class="admin-content">
+            <div class="admin-stats" id="adminStats">
+                <div class="admin-stat-card"><div class="number" id="statTotal">0</div><div class="label">Total Products</div></div>
+                <div class="admin-stat-card"><div class="number" id="statMasala">0</div><div class="label">Masala</div></div>
+                <div class="admin-stat-card"><div class="number" id="statPickles">0</div><div class="label">Pickles</div></div>
+                <div class="admin-stat-card"><div class="number" id="statSweets">0</div><div class="label">Sweets</div></div>
+            </div>
+            <div class="admin-toolbar">
+                <div class="admin-search-box"><i class="fas fa-search"></i><input type="text" id="adminSearch" placeholder="Search products..." onkeyup="filterAdminProducts()"></div>
+                <select class="admin-filter-select" id="adminCategoryFilter" onchange="filterAdminProducts()">
+                    <option value="all">All Categories</option><option value="masala">Masala & Karam</option><option value="vegpickles">Veg Pickles</option><option value="nonvegpickles">Non-Veg Pickles</option><option value="sweets">Sweets</option>
+                </select>
+                <button class="admin-btn-primary" onclick="exportProducts()" id="exportBtn" style="background:var(--dark-gold)"><i class="fas fa-download"></i> Export Products</button>
+                <button class="admin-btn-primary" onclick="openAddModal()"><i class="fas fa-plus"></i> Add Product</button>
+            </div>
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead><tr><th>Product</th><th>Category</th><th>100g</th><th>250g</th><th>500g</th><th>1Kg</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody id="adminTableBody"></tbody>
+                </table>
+            </div>
+            <div class="admin-mobile-cards" id="adminMobileCards"></div>
+        </div>
+    </div>
+    <div class="admin-modal-overlay" id="productModal">
+        <div class="admin-modal">
+            <div class="admin-modal-header"><h3 id="modalTitle">Add Product</h3><button class="admin-modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
+            <div class="admin-modal-body">
+                <form id="productForm" onsubmit="handleSaveProduct(event)">
+                    <input type="hidden" id="editProductId">
+                    <div class="admin-form-row"><div class="admin-form-group full"><label>Product Name <span class="required">*</span></label><input type="text" id="prodName" required placeholder="e.g. Kandi Podi"></div></div>
+                    <div class="admin-form-row">
+                        <div class="admin-form-group"><label>Category <span class="required">*</span></label><select id="prodCategory" required><option value="masala">Masala & Karam</option><option value="vegpickles">Veg Pickles</option><option value="nonvegpickles">Non-Veg Pickles</option><option value="sweets">Sweets</option></select></div>
+                        <div class="admin-form-group"><label>Availability <span class="required">*</span></label><select id="prodAvailable" required><option value="true">In Stock</option><option value="false">Out of Stock</option></select></div>
+                    </div>
+                    <div class="admin-form-row">
+                        <div class="admin-form-group"><label>100g Price (Rs) <span style="color:var(--gray-400);font-weight:400">(optional)</span></label><input type="number" id="prodPrice100g" min="1" placeholder="Leave blank if not sold in 100g"></div>
+                        <div class="admin-form-group"><label>250g Price (Rs) <span class="required">*</span></label><input type="number" id="prodPrice250" required min="1" placeholder="e.g. 149"></div>
+                    </div>
+                    <div class="admin-form-row">
+                        <div class="admin-form-group"><label>500g Price (Rs) <span class="required">*</span></label><input type="number" id="prodPrice500" required min="1" placeholder="e.g. 299"></div>
+                        <div class="admin-form-group"><label>1Kg Price (Rs) <span class="required">*</span></label><input type="number" id="prodPrice1000" required min="1" placeholder="e.g. 599"></div>
+                    </div>
+                    <div class="admin-form-row"><div class="admin-form-group full"><label>Image Filename <span class="required">*</span></label><input type="text" id="prodImage" required placeholder="e.g. kandi-podi.jpg"><div class="hint">Upload image to /images/ folder first, then enter filename here</div></div></div>
+                    <div class="admin-form-row"><div class="admin-form-group full"><label>Short Description <span class="required">*</span></label><textarea id="prodDesc" required placeholder="Brief product description..." rows="3"></textarea></div></div>
+                    <div class="admin-form-row"><div class="admin-form-group"><label>Badge (optional)</label><select id="prodBadge"><option value="">None</option><option value="bestseller">Best Seller</option><option value="popular">Popular</option><option value="new">New</option><option value="premium">Premium</option></select></div></div>
+                    <div class="admin-modal-footer"><button type="button" class="admin-btn-secondary" onclick="closeModal()">Cancel</button><button type="submit" class="admin-btn-save"><i class="fas fa-save"></i> Save Product</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="admin-toast-container" id="adminToastContainer"></div>
+    <script>
+    const ADMIN_CREDENTIALS={username:'padmaja',password:'homefoods2026'};
+    let unsavedChanges=false;
+    const SESSION_KEY='padmaja_admin_session';
+    let productsData=[],editingProductId=null;
+    const CAT_NAMES={'masala':'Masala & Karam','vegpickles':'Veg Pickles','nonvegpickles':'Non-Veg Pickles','sweets':'Sweets'};
+    const CAT_WEIGHTS={'masala':['100g','250g','500g','1Kg'],'vegpickles':['250g','500g','1Kg'],'nonvegpickles':['250g','500g','1Kg'],'sweets':['250g','500g','1Kg']};
+    function markUnsaved(){unsavedChanges=true;document.getElementById('unsavedIndicator').style.display='inline-block';document.getElementById('exportBtn').style.background='var(--spice-red)';}
+    function markSaved(){unsavedChanges=false;document.getElementById('unsavedIndicator').style.display='none';document.getElementById('exportBtn').style.background='var(--dark-gold)';}
+    function checkSession(){if(localStorage.getItem(SESSION_KEY)==='active')showDashboard()}
+    function handleLogin(e){e.preventDefault();const u=document.getElementById('adminUser').value.trim(),p=document.getElementById('adminPass').value,err=document.getElementById('loginError');if(u===ADMIN_CREDENTIALS.username&&p===ADMIN_CREDENTIALS.password){localStorage.setItem(SESSION_KEY,'active');err.classList.remove('active');showDashboard()}else{err.classList.add('active');document.getElementById('adminPass').value=''}}
+    function handleLogout(){localStorage.removeItem(SESSION_KEY);location.reload()}
+    function showDashboard(){document.getElementById('loginScreen').classList.add('hidden');document.getElementById('dashboard').classList.add('active');loadAdminProducts()}
+    async function loadAdminProducts(){try{const r=await fetch('products.json?v='+Date.now());if(!r.ok)throw new Error('Failed');productsData=await r.json();renderAdminProducts();updateStats()}catch(e){showAdminToast('Failed to load products','error')}}
+    function renderAdminProducts(){const s=document.getElementById('adminSearch').value.trim().toLowerCase(),c=document.getElementById('adminCategoryFilter').value;let f=productsData;if(s)f=f.filter(p=>p.name.toLowerCase().includes(s)||p.desc.toLowerCase().includes(s));if(c!=='all')f=f.filter(p=>p.catId===c);const tb=document.getElementById('adminTableBody');if(f.length===0){tb.innerHTML='<tr><td colspan="7"><div class="admin-empty"><i class="fas fa-box-open"></i><p>No products found</p></div></td></tr>'}else{tb.innerHTML=f.map(p=>`<tr><td class="product-name-cell">${p.name}</td><td>${CAT_NAMES[p.catId]||p.catId}</td><td>${p.price100g?"Rs"+p.price100g:"-"}</td><td>Rs${p.price250||'-'}</td><td>Rs${p.price500||'-'}</td><td>Rs${p.price1000||'-'}</td><td><span class="badge-${p.available!==false?'instock':'outstock'}">${p.available!==false?'In Stock':'Out of Stock'}</span></td><td><div class="admin-table-actions"><button class="edit" onclick='openEditModal("${p.id}")' title="Edit"><i class="fas fa-pen"></i></button><button class="delete" onclick='deleteProduct("${p.id}")' title="Delete"><i class="fas fa-trash"></i></button></div></td></tr>`).join('')}const mc=document.getElementById('adminMobileCards');if(f.length===0){mc.innerHTML='<div class="admin-empty"><i class="fas fa-box-open"></i><p>No products found</p></div>'}else{mc.innerHTML=f.map(p=>`<div class="admin-mobile-card"><div class="admin-mobile-card-header"><h4>${p.name}</h4><span class="badge-${p.available!==false?'instock':'outstock'}">${p.available!==false?'In Stock':'Out'}</span></div><div class="admin-mobile-card-body"><div><span class="label">Category</span><span>${CAT_NAMES[p.catId]||p.catId}</span></div><div><span class="label">100g</span><span>${p.price100g?"Rs"+p.price100g:"-"}</span></div><div><span class="label">250g</span><span>Rs${p.price250||'-'}</span></div><div><span class="label">500g</span><span>Rs${p.price500||'-'}</span></div><div><span class="label">1Kg</span><span>Rs${p.price1000||'-'}</span></div></div><div class="admin-mobile-card-actions"><button class="edit-btn" onclick='openEditModal("${p.id}")'><i class="fas fa-pen"></i> Edit</button><button class="delete-btn" onclick='deleteProduct("${p.id}")'><i class="fas fa-trash"></i> Delete</button></div></div>`).join('')}}
+    function updateStats(){document.getElementById('statTotal').textContent=productsData.length;document.getElementById('statMasala').textContent=productsData.filter(p=>p.catId==='masala').length;document.getElementById('statPickles').textContent=productsData.filter(p=>p.catId==='vegpickles'||p.catId==='nonvegpickles').length;document.getElementById('statSweets').textContent=productsData.filter(p=>p.catId==='sweets').length}
+    function filterAdminProducts(){renderAdminProducts()}
+    function openAddModal(){editingProductId=null;document.getElementById('modalTitle').textContent='Add Product';document.getElementById('productForm').reset();document.getElementById('editProductId').value='';document.getElementById('productModal').classList.add('active')}
+    function openEditModal(pid){const p=productsData.find(x=>x.id===pid);if(!p)return;editingProductId=pid;document.getElementById('modalTitle').textContent='Edit Product';document.getElementById('editProductId').value=pid;document.getElementById('prodName').value=p.name;document.getElementById('prodCategory').value=p.catId;document.getElementById('prodAvailable').value=String(p.available!==false);document.getElementById('prodPrice100g').value=p.price100g||'';document.getElementById('prodPrice250').value=p.price250||'';document.getElementById('prodPrice500').value=p.price500||'';document.getElementById('prodPrice1000').value=p.price1000||'';document.getElementById('prodImage').value=p.image?p.image.replace('images/',''):'';document.getElementById('prodDesc').value=p.desc||'';document.getElementById('prodBadge').value=p.badge||'';document.getElementById('productModal').classList.add('active')}
+    function closeModal(){document.getElementById('productModal').classList.remove('active');editingProductId=null}
+    async function handleSaveProduct(e){e.preventDefault();const name=document.getElementById('prodName').value.trim(),catId=document.getElementById('prodCategory').value,available=document.getElementById('prodAvailable').value==='true',price100g=parseInt(document.getElementById('prodPrice100g').value)||null,price250=parseInt(document.getElementById('prodPrice250').value)||0,price500=parseInt(document.getElementById('prodPrice500').value)||0,price1000=parseInt(document.getElementById('prodPrice1000').value)||0;let image=document.getElementById('prodImage').value.trim();const desc=document.getElementById('prodDesc').value.trim(),badge=document.getElementById('prodBadge').value;if(!image.startsWith('images/'))image='images/'+image;let id=editingProductId;if(!id){id=name.toLowerCase().replace(/[^a-z0-9\s]/g,'').replace(/\s+/g,'-').substring(0,50);let c=1,b=id;while(productsData.some(p=>p.id===id)){id=b+'-'+c;c++}}const product={id:id,name:name,category:CAT_NAMES[catId],catId:catId,desc:desc,image:image,badge:badge,available:available,weights:price100g?['100g','250g','500g','1Kg']:['250g','500g','1Kg'],price100g:price100g,price250:price250,price500:price500,price1000:price1000};if(editingProductId){const idx=productsData.findIndex(p=>p.id===editingProductId);if(idx!==-1)productsData[idx]=product}else{productsData.push(product)}const catOrder={'masala':1,'vegpickles':2,'nonvegpickles':3,'sweets':4};productsData.sort((a,b)=>{const d=(catOrder[a.catId]||99)-(catOrder[b.catId]||99);if(d!==0)return d;return a.name.localeCompare(b.name)});markUnsaved();closeModal();renderAdminProducts();updateStats();showAdminToast(editingProductId?'Product updated!':'Product added!','success')}
+    async function deleteProduct(pid){const p=productsData.find(x=>x.id===pid);if(!p)return;if(!confirm(`Delete "${p.name}"?`))return;productsData=productsData.filter(x=>x.id!==pid);markUnsaved();renderAdminProducts();updateStats();showAdminToast('Product deleted','success')}
+    async function exportProducts(){if(!unsavedChanges){showAdminToast('No changes to export','info');return}const jsonStr=JSON.stringify(productsData,null,2);const blob=new Blob([jsonStr],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='products.json';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);markSaved();showAdminToast('products.json exported! Upload to GitHub.','success')}
+    function showAdminToast(msg,type='info'){const c=document.getElementById('adminToastContainer'),t=document.createElement('div');t.className=`admin-toast ${type}`;const i=type==='success'?'fa-check-circle':'fa-exclamation-circle';t.innerHTML=`<i class="fas ${i}"></i> <span>${msg}</span>`;c.appendChild(t);setTimeout(()=>t.remove(),3000)}
+    window.addEventListener('beforeunload',function(e){if(unsavedChanges){e.preventDefault();e.returnValue='You have unsaved changes. Export products.json before leaving.';return e.returnValue}});document.addEventListener('DOMContentLoaded',function(){checkSession()});
+    document.getElementById('productModal').addEventListener('click',function(e){if(e.target===this)closeModal()});
+    </script>
+</body>
+</html>

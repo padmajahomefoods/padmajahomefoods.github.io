@@ -1,39 +1,57 @@
 // ============================================
 // PADMAJA HOME FOODS — CLEAN, TRUST-FOCUSED JS
+// REFACTORED: Products now loaded from products.json
 // No fake data. Only real business info.
 // ============================================
 
 let cart = [];
+let PRODUCTS = []; // Loaded dynamically from products.json
 
 // ============================================
-// REAL PRODUCT DATA — Only verified products
+// PRODUCT DATA LOADER
+// Fetches products.json and populates PRODUCTS array.
+// This enables the Admin Panel to manage products
+// without editing JavaScript files.
 // ============================================
-const PRODUCTS = [
-    { id: 'kura-karam', name: 'Kura Karam', category: 'Masala & Karam', catId: 'masala', price: 549, weights: ['100g','250g','500g','1Kg'], badge: '', desc: 'Traditional curry powder for authentic Andhra curries.', image: 'images/kura-karam.jpg' },
-    { id: 'garam-masala', name: 'Garam Masala', category: 'Masala & Karam', catId: 'masala', price: 799, weights: ['100g','250g','500g','1Kg'], badge: 'popular', desc: 'Aromatic blend of whole spices roasted and ground fresh.', image: 'images/garam-masala.jpg' },
-    { id: 'sambar-powder', name: 'Sambar Powder', category: 'Masala & Karam', catId: 'masala', price: 499, weights: ['100g','250g','500g','1Kg'], badge: '', desc: 'Authentic sambar powder with lentils and spices.', image: 'images/sambar-powder.jpg' },
-    { id: 'turmeric-powder', name: 'Turmeric Powder', category: 'Masala & Karam', catId: 'masala', price: 499, weights: ['100g','250g','500g','1Kg'], badge: '', desc: 'Pure turmeric powder from Guntur farms.', image: 'images/turmeric-powder.jpg' },
-    { id: 'pachi-karam', name: 'Pachi Karam', category: 'Masala & Karam', catId: 'masala', price: 599, weights: ['100g','250g','500g','1Kg'], badge: '', desc: 'Fresh green chili powder. For true spice lovers.', image: 'images/pachi-karam.jpg' },
-    { id: 'munagaku-karam', name: 'Munagaku Karam', category: 'Masala & Karam', catId: 'masala', price: 639, weights: ['100g','250g','500g','1Kg'], badge: '', desc: 'Nutrient-rich drumstick leaf powder with spices.', image: 'images/munagaku-karam.jpg' },
-    { id: 'karivepaku-karam', name: 'Karivepaku Karam', category: 'Masala & Karam', catId: 'masala', price: 599, weights: ['100g','250g','500g','1Kg'], badge: '', desc: 'Fragrant curry leaf powder. Perfect for rice and idli.', image: 'images/karivepaku-karam.jpg' },
-    { id: 'nalla-karam', name: 'Nalla Karam', category: 'Masala & Karam', catId: 'masala', price: 599, weights: ['100g','250g','500g','1Kg'], badge: 'new', desc: 'Spicy mix for idli, dosa and hot rice. Guntur specialty.', image: 'images/nalla-karam.jpg' },
+async function loadProducts() {
+    try {
+        const response = await fetch('products.json?v=' + Date.now());
+        if (!response.ok) throw new Error('Failed to load products');
+        const data = await response.json();
+        PRODUCTS = data;
+        return true;
+    } catch (error) {
+        console.error('Error loading products:', error);
+        showToast('Failed to load products. Please refresh.', 'error');
+        return false;
+    }
+}
 
-    { id: 'kandi-podi', name: 'Kandi Podi', category: 'Masala & Karam', catId: 'masala', price: 599, weights: ['250g','500g','1Kg'], badge: '', desc: 'Authentic Andhra-style Kandi Podi made with premium quality toor dal and traditional ingredients. Best enjoyed with hot rice and ghee.', image: 'images/kandi-podi.jpg' },
-    { id: 'putnala-karam-podi', name: 'Putnala Karam Podi', category: 'Masala & Karam', catId: 'masala', price: 599, weights: ['250g','500g','1Kg'], badge: '', desc: 'Traditional Andhra Putnala Karam Podi prepared with roasted gram and premium spices. Perfect with idli, dosa, upma and hot rice.', image: 'images/putnala-podi.jpg' },
-    { id: 'tomato-pickle', name: 'Tomato Pickle', category: 'Veg Pickles', catId: 'vegpickles', price: 499, weights: ['250g','500g','1Kg'], badge: '', desc: 'Tangy and spicy tomato pickle made with ripe Guntur tomatoes.', image: 'images/tomato-pickle.jpg' },
-    { id: 'usirikay-pickle', name: 'Usirikay Pickle', category: 'Veg Pickles', catId: 'vegpickles', price: 499, weights: ['250g','500g','1Kg'], badge: '', desc: 'Traditional amla pickle. Rich in Vitamin C.', image: 'images/usirikay-pickle.jpg' },
-    { id: 'gongura-pickle', name: 'Gongura Pickle', category: 'Veg Pickles', catId: 'vegpickles', price: 499, weights: ['250g','500g','1Kg'], badge: 'bestseller', desc: 'The crown jewel of Andhra pickles. Tangy sorrel leaves in spice oil.', image: 'images/gongura-pickle.jpg' },
-    { id: 'avakaya-pickle', name: 'Avakaya Pickle', category: 'Veg Pickles', catId: 'vegpickles', price: 499, weights: ['250g','500g','1Kg'], badge: '', desc: 'Traditional mango pickle with mustard and red chili.', image: 'images/avakaya-pickle.jpg' },
-    { id: 'usirikay-thokku', name: 'Usirikay Thokku', category: 'Veg Pickles', catId: 'vegpickles', price: 499, weights: ['250g','500g','1Kg'], badge: '', desc: 'Thick amla thokku with jaggery and spices.', image: 'images/usirikay-thokku.jpg' },
+// ============================================
+// PRICE HELPERS (for backward compatibility)
+// Converts per-weight prices to base price for existing logic.
+// The admin panel stores individual prices per weight (price250,
+// price500, price1000). These helpers bridge to the existing
+// cart/price calculation system.
+// ============================================
+function getBasePrice(product) {
+    // Return per-kg price (price1000) for backward compatibility
+    return product.price1000 || 0;
+}
 
-    { id: 'chicken-bone-pickle', name: 'Chicken Bone Pickle', category: 'Non-Veg Pickles', catId: 'nonvegpickles', price: 1199, weights: ['250g','500g','1Kg'], badge: '', desc: 'Traditional chicken pickle with bone-in pieces.', image: 'images/chicken-bone-pickle.jpg' },
-    { id: 'chicken-boneless-pickle', name: 'Chicken Boneless Pickle', category: 'Non-Veg Pickles', catId: 'nonvegpickles', price: 1399, weights: ['250g','500g','1Kg'], badge: 'popular', desc: 'Premium boneless chicken pickle in fiery Guntur masala.', image: 'images/chicken-boneless-pickle.jpg' },
-    { id: 'prawns-pickle', name: 'Prawns Pickle', category: 'Non-Veg Pickles', catId: 'nonvegpickles', price: 1999, weights: ['250g','500g','1Kg'], badge: 'premium', desc: 'Authentic prawns pickle with coastal Andhra recipe.', image: 'images/prawns-pickle.jpg' },
+function getPriceForWeight(product, weightStr) {
+    // Direct price lookup by weight string
+    const w = weightStr.toLowerCase().replace('kg', 'Kg');
+    if (w === '100g' && product.price100g) return product.price100g;
+    if (w === '250g' && product.price250) return product.price250;
+    if (w === '500g' && product.price500) return product.price500;
+    if ((w === '1kg' || w === '1Kg') && product.price1000) return product.price1000;
+    // Fallback: calculate from base price
+    const grams = parseWeight(weightStr);
+    const base = getBasePrice(product);
+    return Math.round((base * grams) / 1000);
+}
 
-    { id: 'sunnundalu-sugar', name: 'Sunnundalu Sugar', category: 'Sweets', catId: 'sweets', price: 799, weights: ['250g','500g','1Kg'], badge: '', desc: 'Traditional urad dal laddu with pure ghee and jaggery.', image: 'images/sunnundalu.jpg' },
-    { id: 'nuvvula-laddu', name: 'Nuvvula Laddu', category: 'Sweets', catId: 'sweets', price: 599, weights: ['250g','500g','1Kg'], badge: 'popular', desc: 'Sesame seeds laddu with jaggery. Rich in calcium.', image: 'images/nuvvula-laddu.jpg' },
-    { id: 'ravva-laddu', name: 'Ravva Laddu', category: 'Sweets', catId: 'sweets', price: 599, weights: ['250g','500g','1Kg'], badge: '', desc: 'Semolina laddu with coconut, ghee and cardamom.', image: 'images/ravva-laddu.jpg' }
-];
 
 // ============================================
 // LOCALSTORAGE
@@ -112,8 +130,9 @@ function addToCart(btn, productName, basePrice) {
     const activeBtn = card.querySelector('.weight-btn.active');
     const weight = activeBtn ? activeBtn.textContent : getDefaultWeight(productName);
 
+    const product = PRODUCTS.find(p => p.name === productName);
+    const finalPrice = product ? getPriceForWeight(product, weight) : Math.round((basePrice * parseWeight(weight)) / 1000);
     const weightInGrams = parseWeight(weight);
-    const finalPrice = Math.round((basePrice * weightInGrams) / 1000);
 
     const existingItem = cart.find(item => item.name === productName && item.weight === weight);
 
@@ -256,8 +275,9 @@ function quickOrder(btn, productName, basePrice) {
     const activeBtn = card.querySelector('.weight-btn.active');
     const weight = activeBtn ? activeBtn.textContent : getDefaultWeight(productName);
 
+    const product = PRODUCTS.find(p => p.name === productName);
+    const finalPrice = product ? getPriceForWeight(product, weight) : Math.round((basePrice * parseWeight(weight)) / 1000);
     const weightInGrams = parseWeight(weight);
-    const finalPrice = Math.round((basePrice * weightInGrams) / 1000);
 
     const message = `Hi! I want to order *${productName}* - ${weight} (₹${finalPrice})\n\nPlease share delivery details:\nName:\nAddress:\nPincode:`;
 
@@ -276,10 +296,10 @@ function selectWeight(btn, weight) {
     allBtns.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 
-    const basePrice = parseInt(card.getAttribute('data-base-price'));
+    const productName = card.getAttribute('data-product');
+    const product = PRODUCTS.find(p => p.name === productName);
     const priceDisplay = card.querySelector('.product-price');
-
-    const calculatedPrice = Math.round((basePrice * weight) / 1000);
+    const calculatedPrice = product ? getPriceForWeight(product, weight >= 1000 ? '1Kg' : weight + 'g') : 0;
     const weightText = weight >= 1000 ? '1Kg' : weight + 'g';
 
     if (priceDisplay) priceDisplay.innerHTML = `₹${calculatedPrice} <span>/ ${weightText}</span>`;
@@ -561,8 +581,7 @@ function initProductPage() {
     // Weight options
     const weightContainer = document.getElementById('pdpWeightOptions');
     weightContainer.innerHTML = product.weights.map((w, i) => {
-        const grams = parseWeight(w);
-        const price = Math.round((product.price * grams) / 1000);
+        const price = getPriceForWeight(product, w);
         const isActive = i === 0 ? 'active' : '';
         return `
             <button class="pdp-weight-btn ${isActive}" onclick="selectPDPWeight(this, '${w}', ${price})" data-weight="${w}">
@@ -573,8 +592,8 @@ function initProductPage() {
     }).join('');
 
     // Set initial price
-    const initialWeight = parseWeight(product.weights[0]);
-    const initialPrice = Math.round((product.price * initialWeight) / 1000);
+    const initialWeight = product.weights[0];
+    const initialPrice = getPriceForWeight(product, initialWeight);
 
     document.getElementById('pdpPrice').textContent = '₹' + initialPrice;
 
@@ -635,7 +654,7 @@ function updatePDPButtons(product, weight, price) {
                     weight: weight,
                     weightInGrams: weightInGrams,
                     price: price,
-                    basePrice: product.price,
+                    basePrice: getBasePrice(product),
                     quantity: 1
                 });
             }
@@ -660,8 +679,7 @@ function updatePDPButtons(product, weight, price) {
 // ============================================
 function createProductCard(product) {
     const defaultWeight = product.weights[0];
-    const defaultGrams = parseWeight(defaultWeight);
-    const defaultPrice = Math.round((product.price * defaultGrams) / 1000);
+    const defaultPrice = getPriceForWeight(product, defaultWeight);
 
     const badgeHtml = product.badge ? 
         `<span class="badge badge-${product.badge}">${product.badge === 'bestseller' ? 'Best Seller' : product.badge === 'popular' ? 'Popular' : product.badge === 'new' ? 'New' : 'Premium'}</span>` : '';
@@ -720,7 +738,7 @@ function renderShopPage() {
         const section = document.getElementById(catId);
         if (!section) return;
 
-        const catProducts = PRODUCTS.filter(p => p.catId === catId);
+        const catProducts = PRODUCTS.filter(p => p.catId === catId && p.available !== false);
         const grid = section.querySelector('.products-grid');
         const countEl = section.querySelector('.section-count');
 
@@ -738,9 +756,13 @@ function renderShopPage() {
 // ============================================
 // INIT
 // ============================================
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     loadCart();
     updateCartUI();
+
+    // Load products from JSON before rendering any product-related UI
+    const loaded = await loadProducts();
+    if (!loaded) return;
 
     const path = window.location.pathname;
 
