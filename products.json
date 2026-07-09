@@ -1,25 +1,5 @@
 [
   {
-    "id": "kura-karam",
-    "name": "Kura Karam",
-    "category": "Masala & Karam",
-    "catId": "masala",
-    "desc": "Traditional curry powder for authentic Andhra curries.",
-    "image": "images/kura-karam.jpg",
-    "badge": "",
-    "available": true,
-    "weights": [
-      "100g",
-      "250g",
-      "500g",
-      "1Kg"
-    ],
-    "price250": 137,
-    "price500": 274,
-    "price1000": 549,
-    "price100g": 55
-  },
-  {
     "id": "garam-masala",
     "name": "Garam Masala",
     "category": "Masala & Karam",
@@ -38,6 +18,146 @@
     "price500": 400,
     "price1000": 799,
     "price100g": 80
+  },
+  {
+    "id": "kandi-podi",
+    "name": "Kandi Podi",
+    "category": "Masala & Karam",
+    "catId": "masala",
+    "desc": "Authentic Andhra-style Kandi Podi made with premium quality toor dal and traditional ingredients. Best enjoyed with hot rice and ghee.",
+    "image": "images/kandi-podi.jpg",
+    "badge": "new",
+    "available": true,
+    "weights": [
+      "100g",
+      "250g",
+      "500g",
+      "1Kg"
+    ],
+    "price100g": 60,
+    "price250": 149,
+    "price500": 299,
+    "price1000": 599
+  },
+  {
+    "id": "karivepaku-karam",
+    "name": "Karivepaku Karam",
+    "category": "Masala & Karam",
+    "catId": "masala",
+    "desc": "Fragrant curry leaf powder. Perfect for rice and idli.",
+    "image": "images/karivepaku-karam.jpg",
+    "badge": "",
+    "available": true,
+    "weights": [
+      "100g",
+      "250g",
+      "500g",
+      "1Kg"
+    ],
+    "price250": 150,
+    "price500": 300,
+    "price1000": 599,
+    "price100g": 60
+  },
+  {
+    "id": "kura-karam",
+    "name": "Kura Karam",
+    "category": "Masala & Karam",
+    "catId": "masala",
+    "desc": "Traditional curry powder for authentic Andhra curries.",
+    "image": "images/kura-karam.jpg",
+    "badge": "bestseller",
+    "available": true,
+    "weights": [
+      "100g",
+      "250g",
+      "500g",
+      "1Kg"
+    ],
+    "price100g": 55,
+    "price250": 137,
+    "price500": 274,
+    "price1000": 549
+  },
+  {
+    "id": "munagaku-karam",
+    "name": "Munagaku Karam",
+    "category": "Masala & Karam",
+    "catId": "masala",
+    "desc": "Nutrient-rich drumstick leaf powder with spices.",
+    "image": "images/munagaku-karam.jpg",
+    "badge": "",
+    "available": true,
+    "weights": [
+      "100g",
+      "250g",
+      "500g",
+      "1Kg"
+    ],
+    "price250": 160,
+    "price500": 320,
+    "price1000": 639,
+    "price100g": 64
+  },
+  {
+    "id": "nalla-karam",
+    "name": "Nalla Karam",
+    "category": "Masala & Karam",
+    "catId": "masala",
+    "desc": "Spicy mix for idli, dosa and hot rice. Guntur specialty.",
+    "image": "images/nalla-karam.jpg",
+    "badge": "new",
+    "available": true,
+    "weights": [
+      "100g",
+      "250g",
+      "500g",
+      "1Kg"
+    ],
+    "price250": 150,
+    "price500": 300,
+    "price1000": 599,
+    "price100g": 60
+  },
+  {
+    "id": "pachi-karam",
+    "name": "Pachi Karam",
+    "category": "Masala & Karam",
+    "catId": "masala",
+    "desc": "Fresh green chili powder. For true spice lovers.",
+    "image": "images/pachi-karam.jpg",
+    "badge": "",
+    "available": true,
+    "weights": [
+      "100g",
+      "250g",
+      "500g",
+      "1Kg"
+    ],
+    "price250": 150,
+    "price500": 300,
+    "price1000": 599,
+    "price100g": 60
+  },
+  {
+    "id": "putnala-karam-podi",
+    "name": "Putnala Karam Podi",
+    "category": "Masala & Karam",
+    "catId": "masala",
+    "desc": "Traditional Andhra Putnala Karam Podi prepared with roasted gram and premium spices. Perfect with idli, dosa, upma and hot rice.",
+    "image": "images/putnala-podi.jpg",
+    "badge": "new",
+    "available": true,
+    "weights": [
+      "100g",
+      "250g",
+      "500g",
+      "1Kg"
+    ],
+    "price100g": 60,
+    "price250": 149,
+    "price500": 299,
+    "price1000": 599
   },
   {
     "id": "sambar-powder",
@@ -80,149 +200,12 @@
     "price100g": 50
   },
   {
-    "id": "pachi-karam",
-    "name": "Pachi Karam",
-    "category": "Masala & Karam",
-    "catId": "masala",
-    "desc": "Fresh green chili powder. For true spice lovers.",
-    "image": "images/pachi-karam.jpg",
-    "badge": "",
-    "available": true,
-    "weights": [
-      "100g",
-      "250g",
-      "500g",
-      "1Kg"
-    ],
-    "price250": 150,
-    "price500": 300,
-    "price1000": 599,
-    "price100g": 60
-  },
-  {
-    "id": "munagaku-karam",
-    "name": "Munagaku Karam",
-    "category": "Masala & Karam",
-    "catId": "masala",
-    "desc": "Nutrient-rich drumstick leaf powder with spices.",
-    "image": "images/munagaku-karam.jpg",
-    "badge": "",
-    "available": true,
-    "weights": [
-      "100g",
-      "250g",
-      "500g",
-      "1Kg"
-    ],
-    "price250": 160,
-    "price500": 320,
-    "price1000": 639,
-    "price100g": 64
-  },
-  {
-    "id": "karivepaku-karam",
-    "name": "Karivepaku Karam",
-    "category": "Masala & Karam",
-    "catId": "masala",
-    "desc": "Fragrant curry leaf powder. Perfect for rice and idli.",
-    "image": "images/karivepaku-karam.jpg",
-    "badge": "",
-    "available": true,
-    "weights": [
-      "100g",
-      "250g",
-      "500g",
-      "1Kg"
-    ],
-    "price250": 150,
-    "price500": 300,
-    "price1000": 599,
-    "price100g": 60
-  },
-  {
-    "id": "nalla-karam",
-    "name": "Nalla Karam",
-    "category": "Masala & Karam",
-    "catId": "masala",
-    "desc": "Spicy mix for idli, dosa and hot rice. Guntur specialty.",
-    "image": "images/nalla-karam.jpg",
-    "badge": "new",
-    "available": true,
-    "weights": [
-      "100g",
-      "250g",
-      "500g",
-      "1Kg"
-    ],
-    "price250": 150,
-    "price500": 300,
-    "price1000": 599,
-    "price100g": 60
-  },
-  {
-    "id": "kandi-podi",
-    "name": "Kandi Podi",
-    "category": "Masala & Karam",
-    "catId": "masala",
-    "desc": "Authentic Andhra-style Kandi Podi made with premium quality toor dal and traditional ingredients. Best enjoyed with hot rice and ghee.",
-    "image": "images/kandi-podi.jpg",
-    "badge": "",
-    "available": true,
-    "weights": [
-      "250g",
-      "500g",
-      "1Kg"
-    ],
-    "price250": 149,
-    "price500": 299,
-    "price1000": 599,
-    "price100g": null
-  },
-  {
-    "id": "putnala-karam-podi",
-    "name": "Putnala Karam Podi",
-    "category": "Masala & Karam",
-    "catId": "masala",
-    "desc": "Traditional Andhra Putnala Karam Podi prepared with roasted gram and premium spices. Perfect with idli, dosa, upma and hot rice.",
-    "image": "images/putnala-podi.jpg",
-    "badge": "",
-    "available": true,
-    "weights": [
-      "250g",
-      "500g",
-      "1Kg"
-    ],
-    "price250": 149,
-    "price500": 299,
-    "price1000": 599,
-    "price100g": null
-  },
-  {
-    "id": "tomato-pickle",
-    "name": "Tomato Pickle",
+    "id": "avakaya-pickle",
+    "name": "Avakaya Pickle",
     "category": "Veg Pickles",
     "catId": "vegpickles",
-    "desc": "Tangy and spicy tomato pickle made with ripe Guntur tomatoes.",
-    "image": "images/tomato-pickle.jpg",
-    "badge": "",
-    "available": true,
-    "weights": [
-      "250g",
-      "500g",
-      "1Kg"
-    ],
-    "price250": 125,
-    "price500": 250,
-    "price1000": 499,
-    "price100g": null
-  },
-  {
-    "id": "usirikay-pickle",
-    "name": "Usirikay Pickle",
-    "category": "Veg Pickles",
-    "catId": "vegpickles",
-    "desc": "Traditional amla pickle. Rich in Vitamin C.",
-    "image": "images/usirikay-pickle.jpg",
+    "desc": "Traditional mango pickle with mustard and red chili.",
+    "image": "images/avakaya-pickle.jpg",
     "badge": "",
     "available": true,
     "weights": [
@@ -255,12 +238,31 @@
     "price100g": null
   },
   {
-    "id": "avakaya-pickle",
-    "name": "Avakaya Pickle",
+    "id": "tomato-pickle",
+    "name": "Tomato Pickle",
     "category": "Veg Pickles",
     "catId": "vegpickles",
-    "desc": "Traditional mango pickle with mustard and red chili.",
-    "image": "images/avakaya-pickle.jpg",
+    "desc": "Tangy and spicy tomato pickle made with ripe Guntur tomatoes.",
+    "image": "images/tomato-pickle.jpg",
+    "badge": "",
+    "available": true,
+    "weights": [
+      "250g",
+      "500g",
+      "1Kg"
+    ],
+    "price250": 125,
+    "price500": 250,
+    "price1000": 499,
+    "price100g": null
+  },
+  {
+    "id": "usirikay-pickle",
+    "name": "Usirikay Pickle",
+    "category": "Veg Pickles",
+    "catId": "vegpickles",
+    "desc": "Traditional amla pickle. Rich in Vitamin C.",
+    "image": "images/usirikay-pickle.jpg",
     "badge": "",
     "available": true,
     "weights": [
@@ -318,17 +320,17 @@
     "catId": "nonvegpickles",
     "desc": "Premium boneless chicken pickle in fiery Guntur masala.",
     "image": "images/chicken-boneless-pickle.jpg",
-    "badge": "popular",
+    "badge": "bestseller",
     "available": true,
     "weights": [
       "250g",
       "500g",
       "1Kg"
     ],
+    "price100g": null,
     "price250": 350,
     "price500": 700,
-    "price1000": 1399,
-    "price100g": null
+    "price1000": 1399
   },
   {
     "id": "prawns-pickle",
@@ -347,25 +349,6 @@
     "price250": 500,
     "price500": 1000,
     "price1000": 1999,
-    "price100g": null
-  },
-  {
-    "id": "sunnundalu-sugar",
-    "name": "Sunnundalu Sugar",
-    "category": "Sweets",
-    "catId": "sweets",
-    "desc": "Traditional urad dal laddu with pure ghee and jaggery.",
-    "image": "images/sunnundalu.jpg",
-    "badge": "",
-    "available": true,
-    "weights": [
-      "250g",
-      "500g",
-      "1Kg"
-    ],
-    "price250": 200,
-    "price500": 400,
-    "price1000": 799,
     "price100g": null
   },
   {
@@ -405,5 +388,24 @@
     "price500": 300,
     "price1000": 599,
     "price100g": null
+  },
+  {
+    "id": "sunnundalu-sugar",
+    "name": "Sunnundalu Sugar",
+    "category": "Sweets",
+    "catId": "sweets",
+    "desc": "Traditional urad dal laddu with pure ghee and jaggery.",
+    "image": "images/sunnundalu.jpg",
+    "badge": "bestseller",
+    "available": true,
+    "weights": [
+      "250g",
+      "500g",
+      "1Kg"
+    ],
+    "price100g": null,
+    "price250": 200,
+    "price500": 400,
+    "price1000": 799
   }
 ]
