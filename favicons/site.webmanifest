@@ -1,21 +1,25 @@
 {
-  "name": "Padmaja Home Foods",
+  "name": "Padmaja Home Foods — Authentic Guntur Spices & Pickles",
   "short_name": "Padmaja Foods",
+  "description": "Hand-crafted pickles, masalas, and sweets from Guntur. Made with love, delivered across India.",
   "icons": [
     {
-      "src": "android-chrome-192x192.png",
+      "src": "favicons/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "android-chrome-512x512.png",
+      "src": "favicons/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
+  "theme_color": "#FFF8E1",
+  "background_color": "#FFF8E1",
   "display": "standalone",
   "start_url": "/",
-  "scope": "/"
+  "scope": "/",
+  "orientation": "portrait",
+  "categories": ["food", "shopping", "lifestyle"],
+  "lang": "en"
 }
