@@ -1,90 +1,114 @@
-// Product Data
-const PRODUCTS = {
-    "Masala & Karam": [
-        {name: "Kura Karam", price: 549, weights: [100, 250, 500, 1000]},
-        {name: "Garam Masala", price: 799, weights: [100, 250, 500, 1000]},
-        {name: "Sambar Powder", price: 499, weights: [100, 250, 500, 1000]},
-        {name: "Turmeric Powder", price: 499, weights: [100, 250, 500, 1000]},
-        {name: "Pachi Karam", price: 599, weights: [100, 250, 500, 1000]},
-        {name: "Munagaku Karam", price: 639, weights: [100, 250, 500, 1000]},
-        {name: "Karivepaku Karam", price: 599, weights: [100, 250, 500, 1000]},
-        {name: "Nalla Karam", price: 599, weights: [100, 250, 500, 1000]},
-    ],
-    "Veg Pickles": [
-        {name: "Tomato Pickle", price: 499, weights: [250, 500, 1000]},
-        {name: "Usirikay Pickle", price: 499, weights: [250, 500, 1000]},
-        {name: "Gongura Pickle", price: 499, weights: [250, 500, 1000]},
-        {name: "Avakaya Pickle", price: 499, weights: [250, 500, 1000]},
-        {name: "Usirikay Thokku", price: 499, weights: [250, 500, 1000]},
-    ],
-    "Non-Veg Pickles": [
-        {name: "Chicken Bone Pickle", price: 1199, weights: [250, 500, 1000]},
-        {name: "Chicken Boneless Pickle", price: 1399, weights: [250, 500, 1000]},
-        {name: "Prawns Pickle", price: 1999, weights: [250, 500, 1000]},
-    ],
-    "Sweets": [
-        {name: "Sunnundalu Sugar", price: 799, weights: [250, 500, 1000]},
-        {name: "Nuvvula Laddu", price: 599, weights: [250, 500, 1000]},
-        {name: "Ravva Laddu", price: 599, weights: [250, 500, 1000]},
-    ]
-};
+// ============================================
+// PADMAJA HOME FOODS — BILL DESK
+// Fetches products from ../products.json (admin-managed)
+// ============================================
 
+let PRODUCTS_DATA = {};   // { categoryName: [products] }
+let CATEGORIES_DATA = []; // categories array from JSON
+let billItems = [];
+
+// Category icon & emoji mapping (fallbacks)
 const CATEGORY_ICONS = {
-    "Masala & Karam": "fa-mortar-pestle",
-    "Veg Pickles": "fa-carrot",
-    "Non-Veg Pickles": "fa-drumstick-bite",
-    "Sweets": "fa-cookie"
+    "masala": "fa-mortar-pestle",
+    "vegpickles": "fa-carrot",
+    "nonvegpickles": "fa-drumstick-bite",
+    "sweets": "fa-cookie"
 };
 
 const CATEGORY_EMOJIS = {
-    "Masala & Karam": "🌶️",
-    "Veg Pickles": "🥒",
-    "Non-Veg Pickles": "🍗",
-    "Sweets": "🍬"
+    "masala": "🌶️",
+    "vegpickles": "🥒",
+    "nonvegpickles": "🍗",
+    "sweets": "🍬"
 };
 
-let billItems = [];
-
-// Currency formatter - always 2 decimal places
+// Currency formatter
 function formatCurrency(value) {
     return '₹' + Number(value).toFixed(2);
 }
 
-// Initialize
-function init() {
-    renderProducts();
-    updateCartSummary();
+// ============================================
+// LOAD PRODUCTS FROM products.json
+// ============================================
+async function loadProducts() {
+    try {
+        const response = await fetch('../products.json?v=' + Date.now());
+        if (!response.ok) throw new Error('Failed to load products');
+        const data = await response.json();
+
+        // Handle Version 2 format
+        if (data && typeof data === 'object' && !Array.isArray(data) && data.products) {
+            CATEGORIES_DATA = data.categories || [];
+            const products = data.products;
+
+            // Group products by category
+            PRODUCTS_DATA = {};
+            CATEGORIES_DATA.forEach(cat => {
+                PRODUCTS_DATA[cat.name] = products.filter(p => p.catId === cat.id && p.available !== false);
+            });
+        } else if (Array.isArray(data)) {
+            // Legacy format
+            CATEGORIES_DATA = [
+                { id: 'masala', name: 'Masala & Karam', icon: 'fa-mortar-pestle' },
+                { id: 'vegpickles', name: 'Veg Pickles', icon: 'fa-carrot' },
+                { id: 'nonvegpickles', name: 'Non-Veg Pickles', icon: 'fa-drumstick-bite' },
+                { id: 'sweets', name: 'Sweets', icon: 'fa-cookie' }
+            ];
+            PRODUCTS_DATA = {};
+            CATEGORIES_DATA.forEach(cat => {
+                PRODUCTS_DATA[cat.name] = data.filter(p => p.catId === cat.id && p.available !== false);
+            });
+        }
+
+        renderProducts();
+    } catch (error) {
+        console.error('Error loading products:', error);
+        document.getElementById('productsContainer').innerHTML = `
+            <div style="text-align:center;padding:40px 20px;color:#666;">
+                <div style="font-size:3rem;margin-bottom:16px;">⚠️</div>
+                <h3 style="color:var(--dark);margin-bottom:8px;">Failed to load products</h3>
+                <p>Please check that products.json exists in the parent folder.</p>
+            </div>
+        `;
+    }
 }
 
-// Render Products
+// ============================================
+// RENDER PRODUCTS
+// ============================================
 function renderProducts() {
     const container = document.getElementById('productsContainer');
     let html = '';
 
-    for (const [category, items] of Object.entries(PRODUCTS)) {
+    for (const [categoryName, items] of Object.entries(PRODUCTS_DATA)) {
+        if (items.length === 0) continue;
+
+        const catInfo = CATEGORIES_DATA.find(c => c.name === categoryName) || {};
+        const icon = catInfo.icon || CATEGORY_ICONS[catInfo.id] || 'fa-tag';
+
         html += `
             <div class="category-section">
                 <div class="category-header">
-                    <i class="fas ${CATEGORY_ICONS[category]}"></i>
-                    ${category}
+                    <i class="fas ${icon}"></i>
+                    ${categoryName}
                 </div>
                 <div class="product-list">
         `;
 
         items.forEach((product, index) => {
-            const productId = `${category}-${index}`;
+            const productId = `${product.catId}-${index}`;
             html += `
                 <div class="product-item" data-product="${productId}">
                     <div class="product-name">${product.name}</div>
                     <select class="weight-select" id="weight-${productId}">
                         ${product.weights.map(w => {
-                            const price = Math.round((product.price * w) / 1000);
-                            const label = w >= 1000 ? '1Kg' : w + 'g';
+                            const price = getPriceForWeight(product, w);
+                            const label = w;
                             return `<option value="${w}" data-price="${price}">${label} - ₹${price}</option>`;
                         }).join('')}
                     </select>
                     <input type="number" class="qty-input" id="qty-${productId}" value="1" min="1" max="10" step="1">
-                    <button class="add-btn" onclick="addToBill('${productId}', '${product.name}', ${product.price})">
+                    <button class="add-btn" onclick="addToBill('${productId}', '${product.name.replace(/'/g, "\'")}')">
                         <i class="fas fa-plus"></i> Add
                     </button>
                 </div>
@@ -97,40 +121,67 @@ function renderProducts() {
     container.innerHTML = html;
 }
 
-// Calculate Price for Weight (exact decimal, no rounding)
-function getPrice(productId, basePrice) {
-    const weightSelect = document.getElementById(`weight-${productId}`);
-    const weight = parseInt(weightSelect.value);
-    return Math.round((basePrice * weight) / 1000);
+// Get actual price for a weight from product data
+function getPriceForWeight(product, weightStr) {
+    const w = weightStr.toLowerCase().replace('kg', 'Kg');
+    if (w === '100g' && product.price100g) return product.price100g;
+    if (w === '250g' && product.price250) return product.price250;
+    if (w === '500g' && product.price500) return product.price500;
+    if ((w === '1kg' || w === '1Kg') && product.price1000) return product.price1000;
+    // Fallback: calculate from 1kg price
+    const grams = parseWeight(weightStr);
+    const base = product.price1000 || 0;
+    return Math.round((base * grams) / 1000);
 }
 
-// Get Weight Label
+function parseWeight(weightStr) {
+    if (weightStr === '1Kg') return 1000;
+    return parseInt(weightStr.replace('g', '')) || 250;
+}
+
+// Get current selected price for a product
+function getCurrentPrice(productId) {
+    const weightSelect = document.getElementById(`weight-${productId}`);
+    if (!weightSelect) return 0;
+    const selectedOption = weightSelect.options[weightSelect.selectedIndex];
+    return parseInt(selectedOption.dataset.price) || 0;
+}
+
+// Get current weight label
 function getWeightLabel(productId) {
     const weightSelect = document.getElementById(`weight-${productId}`);
-    const weight = parseInt(weightSelect.value);
-    return weight >= 1000 ? '1Kg' : weight + 'g';
+    if (!weightSelect) return '250g';
+    return weightSelect.value;
 }
 
-// Get Category for Product
-function getCategory(productName) {
-    for (const [category, items] of Object.entries(PRODUCTS)) {
-        if (items.some(p => p.name === productName)) {
-            return category;
+// Get category info for a product name
+function getCategoryInfo(productName) {
+    for (const [catName, items] of Object.entries(PRODUCTS_DATA)) {
+        const product = items.find(p => p.name === productName);
+        if (product) {
+            const catInfo = CATEGORIES_DATA.find(c => c.name === catName) || {};
+            return {
+                name: catName,
+                id: catInfo.id || '',
+                emoji: CATEGORY_EMOJIS[catInfo.id] || '📦'
+            };
         }
     }
-    return "Products";
+    return { name: 'Products', id: '', emoji: '📦' };
 }
 
-// Add to Bill
-function addToBill(productId, productName, basePrice) {
+// ============================================
+// ADD TO BILL
+// ============================================
+function addToBill(productId, productName) {
     const qtyInput = document.getElementById(`qty-${productId}`);
     const qty = parseInt(qtyInput.value) || 1;
     const weightLabel = getWeightLabel(productId);
-    const price = getPrice(productId, basePrice);
+    const price = getCurrentPrice(productId);
     const total = price * qty;
 
     // Check if same product with same weight already exists
-    const existingIndex = billItems.findIndex(item => 
+    const existingIndex = billItems.findIndex(item =>
         item.name === productName && item.weight === weightLabel
     );
 
@@ -151,22 +202,25 @@ function addToBill(productId, productName, basePrice) {
 
     // Visual feedback
     const btn = document.querySelector(`[data-product="${productId}"] .add-btn`);
-    const originalHTML = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-check"></i> Added';
-    btn.style.background = '#1DA851';
-    setTimeout(() => {
-        btn.innerHTML = originalHTML;
-        btn.style.background = '';
-    }, 800);
+    if (btn) {
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Added';
+        btn.style.background = '#1DA851';
+        setTimeout(() => {
+            btn.innerHTML = originalHTML;
+            btn.style.background = '';
+        }, 800);
+    }
 }
 
-// Remove from Bill
+// ============================================
+// REMOVE / UPDATE QUANTITY
+// ============================================
 function removeFromBill(index) {
     billItems.splice(index, 1);
     updateCartSummary();
 }
 
-// Update Quantity in Sheet
 function updateSheetQty(index, change) {
     billItems[index].qty += change;
     if (billItems[index].qty <= 0) {
@@ -177,7 +231,9 @@ function updateSheetQty(index, change) {
     updateCartSummary();
 }
 
-// Update Cart Summary (Sticky Bar + Sheet)
+// ============================================
+// UPDATE CART SUMMARY (Sticky Bar + Sheet)
+// ============================================
 function updateCartSummary() {
     const deliveryCharge = parseFloat(document.getElementById('deliveryCharge').value) || 0;
     const totalQty = billItems.reduce((sum, item) => sum + item.qty, 0);
@@ -221,11 +277,10 @@ function updateCartSummary() {
         sheetShowBillBtn.disabled = false;
 
         sheetItems.innerHTML = billItems.map((item, index) => {
-            const category = getCategory(item.name);
-            const emoji = CATEGORY_EMOJIS[category] || '📦';
+            const catInfo = getCategoryInfo(item.name);
             return `
                 <div class="sheet-item">
-                    <div class="sheet-item-image">${emoji}</div>
+                    <div class="sheet-item-image">${catInfo.emoji}</div>
                     <div class="sheet-item-details">
                         <div class="sheet-item-name">${item.name}</div>
                         <div class="sheet-item-meta">${item.weight} @ ₹${item.price}</div>
@@ -249,7 +304,9 @@ function updateCartSummary() {
     }
 }
 
-// Cart Sheet Controls
+// ============================================
+// CART SHEET CONTROLS
+// ============================================
 function openCartSheet() {
     document.getElementById('cartSheetOverlay').classList.add('active');
     document.getElementById('cartSheet').classList.add('active');
@@ -262,7 +319,9 @@ function closeCartSheet() {
     document.body.style.overflow = '';
 }
 
-// Show Bill Modal
+// ============================================
+// SHOW BILL MODAL
+// ============================================
 function showBill() {
     closeCartSheet();
     const customerName = document.getElementById('customerName').value.trim() || 'Customer';
@@ -311,17 +370,17 @@ function showBill() {
     billModal.classList.add('active');
 }
 
-// Close Bill Modal
+// ============================================
+// CLOSE / PRINT / SHARE BILL
+// ============================================
 function closeBill() {
     document.getElementById('billModal').classList.remove('active');
 }
 
-// Print Bill
 function printBill() {
     window.print();
 }
 
-// Share Bill via WhatsApp
 function shareBill() {
     const customerName = document.getElementById('customerName').value.trim() || 'Customer';
     const deliveryCharge = parseFloat(document.getElementById('deliveryCharge').value) || 0;
@@ -363,9 +422,11 @@ function shareBill() {
     window.open('https://wa.me/?text=' + encodedMessage, '_blank');
 }
 
-// Initialize on load
+// ============================================
+// INITIALIZE
+// ============================================
 document.addEventListener('DOMContentLoaded', function() {
-    init();
+    loadProducts();
     const deliveryInput = document.getElementById('deliveryCharge');
     if (deliveryInput) {
         deliveryInput.addEventListener('input', updateCartSummary);
