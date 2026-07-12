@@ -98,6 +98,31 @@
         .admin-toast.error{background:var(--spice-red)}
         @keyframes toastSlide{from{transform:translateX(100px);opacity:0}to{transform:translateX(0);opacity:1}}
         .admin-login-container.hidden{display:none}
+
+        /* Admin Tabs */
+        .admin-tabs { display: flex; gap: 8px; }
+        .admin-tab { padding: 10px 20px; border: 2px solid var(--gray-200); background: white; border-radius: var(--radius-md); font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--gray-500); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
+        .admin-tab:hover { border-color: var(--primary-gold); color: var(--deep-brown); background: var(--warm-cream); }
+        .admin-tab.active { background: var(--spice-red); color: white; border-color: var(--spice-red); }
+        .admin-tab-content { display: none; }
+        .admin-tab-content.active { display: block; animation: fadeInTab 0.3s ease; }
+        @keyframes fadeInTab { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .reorder-btn { width: 28px; height: 28px; border-radius: var(--radius-sm); border: 1px solid var(--gray-200); background: white; color: var(--gray-500); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 0.8rem; }
+        .reorder-btn:hover { background: var(--warm-cream); color: var(--deep-brown); border-color: var(--primary-gold); }
+        .reorder-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .cat-icon-preview { width: 36px; height: 36px; border-radius: 50%; background: var(--warm-cream); border: 1px solid var(--gray-200); display: inline-flex; align-items: center; justify-content: center; color: var(--spice-red); font-size: 0.9rem; }
+        .cat-mobile-card { background: white; border-radius: var(--radius-md); padding: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200); margin-bottom: 12px; }
+        .cat-mobile-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .cat-mobile-card-header h4 { font-size: 1rem; color: var(--deep-brown); display: flex; align-items: center; gap: 8px; }
+        .cat-mobile-card-body { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.85rem; color: var(--gray-600); margin-bottom: 12px; }
+        .cat-mobile-card-body span { display: block; }
+        .cat-mobile-card-body .label { font-size: 0.75rem; color: var(--gray-400); margin-bottom: 2px; }
+        .cat-mobile-card-actions { display: flex; gap: 8px; border-top: 1px solid var(--gray-100); padding-top: 12px; }
+        .cat-mobile-card-actions button { flex: 1; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--gray-200); background: white; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .cat-mobile-card-actions .edit-btn { color: var(--dark-gold); border-color: var(--primary-gold); }
+        .cat-mobile-card-actions .delete-btn { color: var(--spice-red); border-color: var(--spice-red); }
+        .cat-mobile-card-actions .reorder-btns { display: flex; gap: 4px; flex: 0 0 auto; }
+        .cat-mobile-card-actions .reorder-btns button { flex: 0 0 auto; width: 36px; padding: 8px; }
     </style>
 </head>
 <body class="admin-body">
@@ -135,6 +160,17 @@
                 <div class="admin-stat-card"><div class="number" id="statPickles">0</div><div class="label">Pickles</div></div>
                 <div class="admin-stat-card"><div class="number" id="statSweets">0</div><div class="label">Sweets</div></div>
             </div>
+
+            <!-- Tab Navigation -->
+            <div class="admin-toolbar" style="border-bottom: 2px solid var(--gray-200); padding-bottom: 16px; margin-bottom: 20px; flex-wrap: nowrap;">
+                <div class="admin-tabs">
+                    <button class="admin-tab active" onclick="switchTab('products')" id="tabProducts"><i class="fas fa-box"></i> Products</button>
+                    <button class="admin-tab" onclick="switchTab('categories')" id="tabCategories"><i class="fas fa-tags"></i> Categories</button>
+                </div>
+            </div>
+
+            <!-- Products Tab -->
+            <div id="productsTab" class="admin-tab-content active">
             <div class="admin-toolbar">
                 <div class="admin-search-box"><i class="fas fa-search"></i><input type="text" id="adminSearch" placeholder="Search products..." onkeyup="filterAdminProducts()"></div>
                 <select class="admin-filter-select" id="adminCategoryFilter" onchange="filterAdminProducts()">
@@ -150,6 +186,31 @@
                 </table>
             </div>
             <div class="admin-mobile-cards" id="adminMobileCards"></div>
+            </div>
+
+            <!-- Categories Tab -->
+            <div id="categoriesTab" class="admin-tab-content">
+                <div class="admin-toolbar">
+                    <div class="admin-search-box" style="flex: 0 0 auto; min-width: 0;">
+                        <span style="font-family: Playfair Display, serif; font-size: 1.2rem; color: var(--deep-brown); font-weight: 700;">
+                            Category Management
+                        </span>
+                    </div>
+                    <button class="admin-btn-primary" onclick="openCategoryModal()" style="background: var(--dark-gold);"><i class="fas fa-plus"></i> Add Category</button>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead><tr><th style="width: 80px;">Order</th><th>Category Name</th><th>ID</th><th>Icon</th><th>Products</th><th>Actions</th></tr></thead>
+                        <tbody id="categoryTableBody"></tbody>
+                    </table>
+                </div>
+                <div class="admin-mobile-cards" id="categoryMobileCards"></div>
+                <div class="admin-empty" id="categoryEmpty" style="display: none; padding: 60px 20px;">
+                    <i class="fas fa-tags" style="font-size: 3rem; color: var(--gray-300); margin-bottom: 16px;"></i>
+                    <p>No categories found</p>
+                </div>
+            </div>
+
         </div>
     </div>
     <div class="admin-modal-overlay" id="productModal">
@@ -179,33 +240,273 @@
             </div>
         </div>
     </div>
+
+    <!-- Category Modal -->
+    <div class="admin-modal-overlay" id="categoryModal">
+        <div class="admin-modal" style="max-width: 480px;">
+            <div class="admin-modal-header">
+                <h3 id="categoryModalTitle">Add Category</h3>
+                <button class="admin-modal-close" onclick="closeCategoryModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="admin-modal-body">
+                <form id="categoryForm" onsubmit="handleSaveCategory(event)">
+                    <input type="hidden" id="editCategoryId">
+                    <div class="admin-form-row">
+                        <div class="admin-form-group full">
+                            <label>Category Name <span class="required">*</span></label>
+                            <input type="text" id="catName" required placeholder="e.g. Masala & Karam">
+                        </div>
+                    </div>
+                    <div class="admin-form-row">
+                        <div class="admin-form-group full">
+                            <label>Category ID <span class="required">*</span></label>
+                            <input type="text" id="catId" required placeholder="e.g. masala-karam" 
+                                pattern="[a-z0-9-]+" 
+                                title="Lowercase letters, numbers, and hyphens only"
+                                oninput="this.value = this.value.toLowerCase().replace(/[^a-z0-9-]/g, '')">
+                            <div class="hint">Unique identifier. Lowercase letters, numbers, hyphens only.</div>
+                        </div>
+                    </div>
+                    <div class="admin-form-row">
+                        <div class="admin-form-group full">
+                            <label>Font Awesome Icon Class <span style="color:var(--gray-400);font-weight:400">(optional)</span></label>
+                            <input type="text" id="catIcon" placeholder="e.g. fa-mortar-pestle" value="fa-tag">
+                            <div class="hint">e.g. fa-carrot, fa-drumstick-bite, fa-cookie. Default: fa-tag</div>
+                        </div>
+                    </div>
+                    <div class="admin-modal-footer">
+                        <button type="button" class="admin-btn-secondary" onclick="closeCategoryModal()">Cancel</button>
+                        <button type="submit" class="admin-btn-save"><i class="fas fa-save"></i> Save Category</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="admin-toast-container" id="adminToastContainer"></div>
     <script>
     const ADMIN_CREDENTIALS={username:'padmaja',password:'homefoods2026'};
     let unsavedChanges=false;
     const SESSION_KEY='padmaja_admin_session';
-    let productsData=[],editingProductId=null;
-    const CAT_NAMES={'masala':'Masala & Karam','vegpickles':'Veg Pickles','nonvegpickles':'Non-Veg Pickles','sweets':'Sweets'};
+    let productsData=[], categoriesData=[], editingProductId=null, editingCategoryId=null;
+    let CAT_NAMES={'masala':'Masala & Karam','vegpickles':'Veg Pickles','nonvegpickles':'Non-Veg Pickles','sweets':'Sweets'};
     const CAT_WEIGHTS={'masala':['100g','250g','500g','1Kg'],'vegpickles':['250g','500g','1Kg'],'nonvegpickles':['250g','500g','1Kg'],'sweets':['250g','500g','1Kg']};
+
     function markUnsaved(){unsavedChanges=true;document.getElementById('unsavedIndicator').style.display='inline-block';document.getElementById('exportBtn').style.background='var(--spice-red)';}
     function markSaved(){unsavedChanges=false;document.getElementById('unsavedIndicator').style.display='none';document.getElementById('exportBtn').style.background='var(--dark-gold)';}
     function checkSession(){if(localStorage.getItem(SESSION_KEY)==='active')showDashboard()}
     function handleLogin(e){e.preventDefault();const u=document.getElementById('adminUser').value.trim(),p=document.getElementById('adminPass').value,err=document.getElementById('loginError');if(u===ADMIN_CREDENTIALS.username&&p===ADMIN_CREDENTIALS.password){localStorage.setItem(SESSION_KEY,'active');err.classList.remove('active');showDashboard()}else{err.classList.add('active');document.getElementById('adminPass').value=''}}
     function handleLogout(){localStorage.removeItem(SESSION_KEY);location.reload()}
     function showDashboard(){document.getElementById('loginScreen').classList.add('hidden');document.getElementById('dashboard').classList.add('active');loadAdminProducts()}
-    async function loadAdminProducts(){try{const r=await fetch('products.json?v='+Date.now());if(!r.ok)throw new Error('Failed');productsData=await r.json();renderAdminProducts();updateStats()}catch(e){showAdminToast('Failed to load products','error')}}
-    function renderAdminProducts(){const s=document.getElementById('adminSearch').value.trim().toLowerCase(),c=document.getElementById('adminCategoryFilter').value;let f=productsData;if(s)f=f.filter(p=>p.name.toLowerCase().includes(s)||p.desc.toLowerCase().includes(s));if(c!=='all')f=f.filter(p=>p.catId===c);const tb=document.getElementById('adminTableBody');if(f.length===0){tb.innerHTML='<tr><td colspan="7"><div class="admin-empty"><i class="fas fa-box-open"></i><p>No products found</p></div></td></tr>'}else{tb.innerHTML=f.map(p=>`<tr><td class="product-name-cell">${p.name}</td><td>${CAT_NAMES[p.catId]||p.catId}</td><td>${p.price100g?"Rs"+p.price100g:"-"}</td><td>Rs${p.price250||'-'}</td><td>Rs${p.price500||'-'}</td><td>Rs${p.price1000||'-'}</td><td><span class="badge-${p.available!==false?'instock':'outstock'}">${p.available!==false?'In Stock':'Out of Stock'}</span></td><td><div class="admin-table-actions"><button class="edit" onclick='openEditModal("${p.id}")' title="Edit"><i class="fas fa-pen"></i></button><button class="delete" onclick='deleteProduct("${p.id}")' title="Delete"><i class="fas fa-trash"></i></button></div></td></tr>`).join('')}const mc=document.getElementById('adminMobileCards');if(f.length===0){mc.innerHTML='<div class="admin-empty"><i class="fas fa-box-open"></i><p>No products found</p></div>'}else{mc.innerHTML=f.map(p=>`<div class="admin-mobile-card"><div class="admin-mobile-card-header"><h4>${p.name}</h4><span class="badge-${p.available!==false?'instock':'outstock'}">${p.available!==false?'In Stock':'Out'}</span></div><div class="admin-mobile-card-body"><div><span class="label">Category</span><span>${CAT_NAMES[p.catId]||p.catId}</span></div><div><span class="label">100g</span><span>${p.price100g?"Rs"+p.price100g:"-"}</span></div><div><span class="label">250g</span><span>Rs${p.price250||'-'}</span></div><div><span class="label">500g</span><span>Rs${p.price500||'-'}</span></div><div><span class="label">1Kg</span><span>Rs${p.price1000||'-'}</span></div></div><div class="admin-mobile-card-actions"><button class="edit-btn" onclick='openEditModal("${p.id}")'><i class="fas fa-pen"></i> Edit</button><button class="delete-btn" onclick='deleteProduct("${p.id}")'><i class="fas fa-trash"></i> Delete</button></div></div>`).join('')}}
-    function updateStats(){document.getElementById('statTotal').textContent=productsData.length;document.getElementById('statMasala').textContent=productsData.filter(p=>p.catId==='masala').length;document.getElementById('statPickles').textContent=productsData.filter(p=>p.catId==='vegpickles'||p.catId==='nonvegpickles').length;document.getElementById('statSweets').textContent=productsData.filter(p=>p.catId==='sweets').length}
+
+    async function loadAdminProducts(){
+        try{
+            const r=await fetch('products.json?v='+Date.now());
+            if(!r.ok)throw new Error('Failed');
+            const data = await r.json();
+            // Handle Version 2 format: { version, categories, products }
+            if(data && typeof data==='object' && !Array.isArray(data) && data.products){
+                productsData = data.products;
+                categoriesData = data.categories || [];
+            }else if(Array.isArray(data)){
+                productsData = data;
+                categoriesData = [
+                    {id:'masala',name:'Masala & Karam',icon:'fa-mortar-pestle',order:1},
+                    {id:'vegpickles',name:'Veg Pickles',icon:'fa-carrot',order:2},
+                    {id:'nonvegpickles',name:'Non-Veg Pickles',icon:'fa-drumstick-bite',order:3},
+                    {id:'sweets',name:'Sweets',icon:'fa-cookie',order:4}
+                ];
+            }else{
+                productsData = [];
+                categoriesData = [];
+            }
+            categoriesData.sort((a,b)=>(a.order||0)-(b.order||0));
+            CAT_NAMES = {};
+            categoriesData.forEach(c => CAT_NAMES[c.id] = c.name);
+            renderAdminProducts();
+            updateStats();
+            updateCategoryDropdowns();
+        }catch(e){
+            showAdminToast('Failed to load products','error');
+            console.error(e);
+        }
+    }
+
+    function renderAdminProducts(){
+        const s=document.getElementById('adminSearch').value.trim().toLowerCase();
+        const c=document.getElementById('adminCategoryFilter').value;
+        let f=productsData;
+        if(s)f=f.filter(p=>p.name.toLowerCase().includes(s)||p.desc.toLowerCase().includes(s));
+        if(c!=='all')f=f.filter(p=>p.catId===c);
+        const tb=document.getElementById('adminTableBody');
+        if(f.length===0){
+            tb.innerHTML='<tr><td colspan="8"><div class="admin-empty"><i class="fas fa-box-open"></i><p>No products found</p></div></td></tr>'
+        }else{
+            tb.innerHTML=f.map(p=>`<tr><td class="product-name-cell">${p.name}</td><td>${CAT_NAMES[p.catId]||p.catId}</td><td>${p.price100g?"Rs"+p.price100g:"-"}</td><td>Rs${p.price250||'-'}</td><td>Rs${p.price500||'-'}</td><td>Rs${p.price1000||'-'}</td><td><span class="badge-${p.available!==false?'instock':'outstock'}">${p.available!==false?'In Stock':'Out of Stock'}</span></td><td><div class="admin-table-actions"><button class="edit" onclick='openEditModal("${p.id}")' title="Edit"><i class="fas fa-pen"></i></button><button class="delete" onclick='deleteProduct("${p.id}")' title="Delete"><i class="fas fa-trash"></i></button></div></td></tr>`).join('')
+        }
+        const mc=document.getElementById('adminMobileCards');
+        if(f.length===0){
+            mc.innerHTML='<div class="admin-empty"><i class="fas fa-box-open"></i><p>No products found</p></div>'
+        }else{
+            mc.innerHTML=f.map(p=>`<div class="admin-mobile-card"><div class="admin-mobile-card-header"><h4>${p.name}</h4><span class="badge-${p.available!==false?'instock':'outstock'}">${p.available!==false?'In Stock':'Out'}</span></div><div class="admin-mobile-card-body"><div><span class="label">Category</span><span>${CAT_NAMES[p.catId]||p.catId}</span></div><div><span class="label">100g</span><span>${p.price100g?"Rs"+p.price100g:"-"}</span></div><div><span class="label">250g</span><span>Rs${p.price250||'-'}</span></div><div><span class="label">500g</span><span>Rs${p.price500||'-'}</span></div><div><span class="label">1Kg</span><span>Rs${p.price1000||'-'}</span></div></div><div class="admin-mobile-card-actions"><button class="edit-btn" onclick='openEditModal("${p.id}")'><i class="fas fa-pen"></i> Edit</button><button class="delete-btn" onclick='deleteProduct("${p.id}")'><i class="fas fa-trash"></i> Delete</button></div></div>`).join('')
+        }
+    }
+
+    function updateStats(){
+        document.getElementById('statTotal').textContent=productsData.length;
+        document.getElementById('statMasala').textContent=productsData.filter(p=>p.catId==='masala').length;
+        document.getElementById('statPickles').textContent=productsData.filter(p=>p.catId==='vegpickles'||p.catId==='nonvegpickles').length;
+        document.getElementById('statSweets').textContent=productsData.filter(p=>p.catId==='sweets').length;
+    }
+
     function filterAdminProducts(){renderAdminProducts()}
+
     function openAddModal(){editingProductId=null;document.getElementById('modalTitle').textContent='Add Product';document.getElementById('productForm').reset();document.getElementById('editProductId').value='';document.getElementById('productModal').classList.add('active')}
     function openEditModal(pid){const p=productsData.find(x=>x.id===pid);if(!p)return;editingProductId=pid;document.getElementById('modalTitle').textContent='Edit Product';document.getElementById('editProductId').value=pid;document.getElementById('prodName').value=p.name;document.getElementById('prodCategory').value=p.catId;document.getElementById('prodAvailable').value=String(p.available!==false);document.getElementById('prodPrice100g').value=p.price100g||'';document.getElementById('prodPrice250').value=p.price250||'';document.getElementById('prodPrice500').value=p.price500||'';document.getElementById('prodPrice1000').value=p.price1000||'';document.getElementById('prodImage').value=p.image?p.image.replace('images/',''):'';document.getElementById('prodDesc').value=p.desc||'';document.getElementById('prodBadge').value=p.badge||'';document.getElementById('productModal').classList.add('active')}
     function closeModal(){document.getElementById('productModal').classList.remove('active');editingProductId=null}
-    async function handleSaveProduct(e){e.preventDefault();const name=document.getElementById('prodName').value.trim(),catId=document.getElementById('prodCategory').value,available=document.getElementById('prodAvailable').value==='true',price100g=parseInt(document.getElementById('prodPrice100g').value)||null,price250=parseInt(document.getElementById('prodPrice250').value)||0,price500=parseInt(document.getElementById('prodPrice500').value)||0,price1000=parseInt(document.getElementById('prodPrice1000').value)||0;let image=document.getElementById('prodImage').value.trim();const desc=document.getElementById('prodDesc').value.trim(),badge=document.getElementById('prodBadge').value;if(!image.startsWith('images/'))image='images/'+image;let id=editingProductId;if(!id){id=name.toLowerCase().replace(/[^a-z0-9\s]/g,'').replace(/\s+/g,'-').substring(0,50);let c=1,b=id;while(productsData.some(p=>p.id===id)){id=b+'-'+c;c++}}const product={id:id,name:name,category:CAT_NAMES[catId],catId:catId,desc:desc,image:image,badge:badge,available:available,weights:price100g?['100g','250g','500g','1Kg']:['250g','500g','1Kg'],price100g:price100g,price250:price250,price500:price500,price1000:price1000};if(editingProductId){const idx=productsData.findIndex(p=>p.id===editingProductId);if(idx!==-1)productsData[idx]=product}else{productsData.push(product)}const catOrder={'masala':1,'vegpickles':2,'nonvegpickles':3,'sweets':4};productsData.sort((a,b)=>{const d=(catOrder[a.catId]||99)-(catOrder[b.catId]||99);if(d!==0)return d;return a.name.localeCompare(b.name)});markUnsaved();closeModal();renderAdminProducts();updateStats();showAdminToast(editingProductId?'Product updated!':'Product added!','success')}
+
+    async function handleSaveProduct(e){
+        e.preventDefault();
+        const name=document.getElementById('prodName').value.trim(),catId=document.getElementById('prodCategory').value,available=document.getElementById('prodAvailable').value==='true',price100g=parseInt(document.getElementById('prodPrice100g').value)||null,price250=parseInt(document.getElementById('prodPrice250').value)||0,price500=parseInt(document.getElementById('prodPrice500').value)||0,price1000=parseInt(document.getElementById('prodPrice1000').value)||0;
+        let image=document.getElementById('prodImage').value.trim();
+        const desc=document.getElementById('prodDesc').value.trim(),badge=document.getElementById('prodBadge').value;
+        if(!image.startsWith('images/'))image='images/'+image;
+        let id=editingProductId;
+        if(!id){id=name.toLowerCase().replace(/[^a-z0-9\s]/g,'').replace(/\s+/g,'-').substring(0,50);let c=1,b=id;while(productsData.some(p=>p.id===id)){id=b+'-'+c;c++}}
+        const product={id:id,name:name,category:CAT_NAMES[catId]||catId,catId:catId,desc:desc,image:image,badge:badge,available:available,weights:price100g?['100g','250g','500g','1Kg']:['250g','500g','1Kg'],price100g:price100g,price250:price250,price500:price500,price1000:price1000};
+        if(editingProductId){const idx=productsData.findIndex(p=>p.id===editingProductId);if(idx!==-1)productsData[idx]=product}else{productsData.push(product)}
+        const catOrder={};categoriesData.forEach((c,i)=>catOrder[c.id]=i+1);
+        productsData.sort((a,b)=>{const d=(catOrder[a.catId]||99)-(catOrder[b.catId]||99);if(d!==0)return d;return a.name.localeCompare(b.name)});
+        markUnsaved();closeModal();renderAdminProducts();updateStats();showAdminToast(editingProductId?'Product updated!':'Product added!','success')
+    }
+
     async function deleteProduct(pid){const p=productsData.find(x=>x.id===pid);if(!p)return;if(!confirm(`Delete "${p.name}"?`))return;productsData=productsData.filter(x=>x.id!==pid);markUnsaved();renderAdminProducts();updateStats();showAdminToast('Product deleted','success')}
-    async function exportProducts(){if(!unsavedChanges){showAdminToast('No changes to export','info');return}const jsonStr=JSON.stringify(productsData,null,2);const blob=new Blob([jsonStr],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='products.json';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);markSaved();showAdminToast('products.json exported! Upload to GitHub.','success')}
+
+    async function exportProducts(){
+        if(!unsavedChanges){showAdminToast('No changes to export','info');return}
+        const exportData={version:2,categories:categoriesData,products:productsData};
+        const jsonStr=JSON.stringify(exportData,null,2);
+        const blob=new Blob([jsonStr],{type:'application/json'});
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a');
+        a.href=url;a.download='products.json';
+        document.body.appendChild(a);a.click();
+        document.body.removeChild(a);URL.revokeObjectURL(url);
+        markSaved();showAdminToast('products.json exported! Upload to GitHub.','success')
+    }
+
     function showAdminToast(msg,type='info'){const c=document.getElementById('adminToastContainer'),t=document.createElement('div');t.className=`admin-toast ${type}`;const i=type==='success'?'fa-check-circle':'fa-exclamation-circle';t.innerHTML=`<i class="fas ${i}"></i> <span>${msg}</span>`;c.appendChild(t);setTimeout(()=>t.remove(),3000)}
-    window.addEventListener('beforeunload',function(e){if(unsavedChanges){e.preventDefault();e.returnValue='You have unsaved changes. Export products.json before leaving.';return e.returnValue}});document.addEventListener('DOMContentLoaded',function(){checkSession()});
+
+    window.addEventListener('beforeunload',function(e){if(unsavedChanges){e.preventDefault();e.returnValue='You have unsaved changes. Export products.json before leaving.';return e.returnValue}});
+
+    // CATEGORY MANAGEMENT
+    function switchTab(tab){document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.admin-tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');document.getElementById(tab+'Tab').classList.add('active');if(tab==='categories')renderCategories()}
+
+    function renderCategories(){
+        const tbody=document.getElementById('categoryTableBody');
+        const mobileCards=document.getElementById('categoryMobileCards');
+        const empty=document.getElementById('categoryEmpty');
+        if(!categoriesData.length){if(tbody)tbody.innerHTML='';if(mobileCards)mobileCards.innerHTML='';if(empty)empty.style.display='block';return}
+        if(empty)empty.style.display='none';
+        if(tbody){
+            tbody.innerHTML=categoriesData.map((cat,index)=>{
+                const productCount=productsData.filter(p=>p.catId===cat.id).length;
+                const isFirst=index===0;
+                const isLast=index===categoriesData.length-1;
+                return `<tr><td><div style="display:flex;gap:4px;align-items:center;"><button class="reorder-btn" onclick="moveCategory('${cat.id}',-1)" ${isFirst?'disabled':''} title="Move up"><i class="fas fa-chevron-up"></i></button><span style="font-weight:700;color:var(--deep-brown);min-width:20px;text-align:center;">${cat.order||index+1}</span><button class="reorder-btn" onclick="moveCategory('${cat.id}',1)" ${isLast?'disabled':''} title="Move down"><i class="fas fa-chevron-down"></i></button></div></td><td class="product-name-cell"><i class="fas ${cat.icon||'fa-tag'}" style="color:var(--spice-red);margin-right:8px;"></i>${cat.name}</td><td><code style="background:var(--warm-cream);padding:2px 8px;border-radius:4px;font-size:0.8rem;color:var(--gray-600);">${cat.id}</code></td><td><div class="cat-icon-preview"><i class="fas ${cat.icon||'fa-tag'}"></i></div></td><td><span style="font-weight:600;color:var(--deep-brown);">${productCount}</span> <span style="font-size:0.8rem;color:var(--gray-400);">products</span></td><td><div class="admin-table-actions"><button class="edit" onclick='openEditCategoryModal("${cat.id}")' title="Edit"><i class="fas fa-pen"></i></button><button class="delete" onclick='deleteCategory("${cat.id}")' title="Delete" ${productCount>0?'disabled style="opacity:0.3;cursor:not-allowed;"':''}><i class="fas fa-trash"></i></button></div></td></tr>`;
+            }).join('');
+        }
+        if(mobileCards){
+            mobileCards.innerHTML=categoriesData.map((cat,index)=>{
+                const productCount=productsData.filter(p=>p.catId===cat.id).length;
+                const isFirst=index===0;
+                const isLast=index===categoriesData.length-1;
+                return `<div class="cat-mobile-card"><div class="cat-mobile-card-header"><h4><i class="fas ${cat.icon||'fa-tag'}" style="color:var(--spice-red);"></i> ${cat.name}</h4><span style="font-size:0.8rem;color:var(--gray-400);">#${cat.order||index+1}</span></div><div class="cat-mobile-card-body"><div><span class="label">ID</span><span>${cat.id}</span></div><div><span class="label">Products</span><span>${productCount}</span></div><div><span class="label">Icon</span><span><i class="fas ${cat.icon||'fa-tag'}"></i> ${cat.icon||'fa-tag'}</span></div></div><div class="cat-mobile-card-actions"><div class="reorder-btns"><button class="reorder-btn" onclick="moveCategory('${cat.id}',-1)" ${isFirst?'disabled':''}><i class="fas fa-chevron-up"></i></button><button class="reorder-btn" onclick="moveCategory('${cat.id}',1)" ${isLast?'disabled':''}><i class="fas fa-chevron-down"></i></button></div><button class="edit-btn" onclick='openEditCategoryModal("${cat.id}")'><i class="fas fa-pen"></i> Edit</button><button class="delete-btn" onclick='deleteCategory("${cat.id}")' ${productCount>0?'disabled style="opacity:0.3;"':''}><i class="fas fa-trash"></i> Delete</button></div></div>`;
+            }).join('');
+        }
+    }
+
+    function moveCategory(catId,direction){
+        const idx=categoriesData.findIndex(c=>c.id===catId);
+        if(idx===-1)return;
+        const newIdx=idx+direction;
+        if(newIdx<0||newIdx>=categoriesData.length)return;
+        const temp=categoriesData[idx];
+        categoriesData[idx]=categoriesData[newIdx];
+        categoriesData[newIdx]=temp;
+        categoriesData.forEach((cat,i)=>cat.order=i+1);
+        markUnsaved();
+        renderCategories();
+        showAdminToast('Category order updated','success');
+    }
+
+    function openCategoryModal(){editingCategoryId=null;document.getElementById('categoryModalTitle').textContent='Add Category';document.getElementById('categoryForm').reset();document.getElementById('editCategoryId').value='';document.getElementById('categoryModal').classList.add('active')}
+    function openEditCategoryModal(catId){const cat=categoriesData.find(c=>c.id===catId);if(!cat)return;editingCategoryId=catId;document.getElementById('categoryModalTitle').textContent='Edit Category';document.getElementById('editCategoryId').value=catId;document.getElementById('catName').value=cat.name;document.getElementById('catId').value=cat.id;document.getElementById('catIcon').value=cat.icon||'fa-tag';document.getElementById('categoryModal').classList.add('active')}
+    function closeCategoryModal(){document.getElementById('categoryModal').classList.remove('active');editingCategoryId=null}
+
+    function handleSaveCategory(e){
+        e.preventDefault();
+        const name=document.getElementById('catName').value.trim();
+        let id=document.getElementById('catId').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'').replace(/\s+/g,'-');
+        const icon=document.getElementById('catIcon').value.trim()||'fa-tag';
+        if(!name||!id){showAdminToast('Name and ID are required','error');return}
+        if(!/^[a-z0-9-]+$/.test(id)){showAdminToast('ID can only contain lowercase letters, numbers, and hyphens','error');return}
+        if(editingCategoryId){
+            if(id!==editingCategoryId&&categoriesData.some(c=>c.id===id)){showAdminToast('Category ID already exists','error');return}
+            const idx=categoriesData.findIndex(c=>c.id===editingCategoryId);
+            if(idx!==-1){
+                const oldId=categoriesData[idx].id;
+                categoriesData[idx]={...categoriesData[idx],id,name,icon};
+                if(oldId!==id){productsData.forEach(p=>{if(p.catId===oldId){p.catId=id;p.category=name}})}
+                else{productsData.forEach(p=>{if(p.catId===id)p.category=name})}
+            }
+            showAdminToast('Category updated!','success');
+        }else{
+            if(categoriesData.some(c=>c.id===id)){showAdminToast('Category ID already exists','error');return}
+            const maxOrder=categoriesData.length>0?Math.max(...categoriesData.map(c=>c.order||0)):0;
+            categoriesData.push({id,name,icon,order:maxOrder+1});
+            categoriesData.sort((a,b)=>(a.order||0)-(b.order||0));
+            showAdminToast('Category added!','success');
+        }
+        CAT_NAMES={};
+        categoriesData.forEach(c=>CAT_NAMES[c.id]=c.name);
+        markUnsaved();
+        closeCategoryModal();
+        renderCategories();
+        updateStats();
+        updateCategoryDropdowns();
+    }
+
+    function deleteCategory(catId){
+        const cat=categoriesData.find(c=>c.id===catId);
+        if(!cat)return;
+        const productCount=productsData.filter(p=>p.catId===catId).length;
+        if(productCount>0){showAdminToast('Cannot delete category with products. Move or delete products first.','error');return}
+        if(!confirm(`Delete category "${cat.name}"?`))return;
+        categoriesData=categoriesData.filter(c=>c.id!==catId);
+        categoriesData.forEach((cat,i)=>cat.order=i+1);
+        CAT_NAMES={};
+        categoriesData.forEach(c=>CAT_NAMES[c.id]=c.name);
+        markUnsaved();
+        renderCategories();
+        updateCategoryDropdowns();
+        showAdminToast('Category deleted','success');
+    }
+
+    function updateCategoryDropdowns(){
+        const prodCategory=document.getElementById('prodCategory');
+        if(prodCategory){prodCategory.innerHTML=categoriesData.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')}
+        const adminFilter=document.getElementById('adminCategoryFilter');
+        if(adminFilter){
+            const currentVal=adminFilter.value;
+            adminFilter.innerHTML='<option value="all">All Categories</option>'+categoriesData.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+            if(categoriesData.some(c=>c.id===currentVal))adminFilter.value=currentVal;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded',function(){checkSession()});
     document.getElementById('productModal').addEventListener('click',function(e){if(e.target===this)closeModal()});
+    document.getElementById('categoryModal').addEventListener('click',function(e){if(e.target===this)closeCategoryModal()});
     </script>
 </body>
 </html>

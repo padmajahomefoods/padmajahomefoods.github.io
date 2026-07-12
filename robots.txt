@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /admin.html
+Disallow: /billdesk/
 
 Sitemap: https://padmajahomefoods.github.io/sitemap.xml

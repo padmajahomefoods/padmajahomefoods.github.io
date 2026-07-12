@@ -18,13 +18,28 @@ let PRODUCTS = []; // Loaded dynamically from products.json
 // Kicks off fetch immediately, renders as soon as data arrives.
 // ============================================
 let productsPromise = null;
+let CATEGORIES = [];
 
 function startProductLoad() {
-    // Start fetching immediately; store the promise for later await
     if (!productsPromise) {
         productsPromise = fetch('products.json?v=' + Date.now())
             .then(r => { if (!r.ok) throw new Error('Failed'); return r.json(); })
-            .then(data => { PRODUCTS = data; return true; })
+            .then(data => {
+                // Handle Version 2 format: { version, categories, products }
+                if (data && typeof data === 'object' && !Array.isArray(data) && data.products) {
+                    PRODUCTS = data.products;
+                    CATEGORIES = data.categories || [];
+                } else if (Array.isArray(data)) {
+                    // Legacy format: plain array
+                    PRODUCTS = data;
+                    CATEGORIES = [];
+                } else {
+                    PRODUCTS = [];
+                    CATEGORIES = [];
+                }
+                CATEGORIES.sort((a, b) => (a.order || 0) - (b.order || 0));
+                return true;
+            })
             .catch(err => {
                 console.error('Error loading products:', err);
                 showToast('Failed to load products. Please refresh.', 'error');
@@ -412,17 +427,12 @@ function clearSearch() {
 
 function goToProduct(categoryId, productId) {
     clearSearch();
-
     document.querySelectorAll('.products-section').forEach(s => s.classList.add('active'));
-
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.remove('active');
-        const btnText = btn.textContent.toLowerCase();
-        if (categoryId === 'masala' && btnText.includes('masala')) btn.classList.add('active');
-        else if (categoryId === 'vegpickles' && btnText.includes('veg')) btn.classList.add('active');
-        else if (categoryId === 'nonvegpickles' && btnText.includes('non-veg')) btn.classList.add('active');
-        else if (categoryId === 'sweets' && btnText.includes('sweets')) btn.classList.add('active');
-        else if (btnText.includes('all')) btn.classList.add('active');
+        const btnCat = btn.getAttribute('data-category');
+        if (btnCat === categoryId) btn.classList.add('active');
+        else if (btnCat === 'all') btn.classList.add('active');
     });
 
     setTimeout(() => {
@@ -573,7 +583,8 @@ function initProductPage() {
     document.getElementById('pdpImage').src = product.image;
     document.getElementById('pdpImage').alt = product.name;
     document.getElementById('pdpBreadcrumbName').textContent = product.name;
-    document.getElementById('pdpBreadcrumbCategory').textContent = product.category;
+    const catInfo = CATEGORIES.find(c => c.id === product.catId);
+    document.getElementById('pdpBreadcrumbCategory').textContent = catInfo ? catInfo.name : product.category;
     document.getElementById('pdpBreadcrumbCategory').href = `index.html#${product.catId}`;
     document.getElementById('pdpDescription').textContent = product.desc;
 
@@ -706,7 +717,7 @@ function createProductCard(product, isPriority = false) {
     const imgPath = product.image;
 
     return `
-        <div class="product-card" id="${product.id}" data-product="${product.name}" data-base-price="${product.price}">
+        <div class="product-card" id="${product.id}" data-product="${product.name}" data-base-price="${product.price1000 || 0}">
             <a href="product.html?id=${product.id}" class="product-card-link">
                 <div class="product-image">
                     <img src="${imgPath}" alt="${product.name}" loading="${isPriority ? 'eager' : 'lazy'}" decoding="async" width="300" height="300"
@@ -727,10 +738,10 @@ function createProductCard(product, isPriority = false) {
                 </a>
                 <div class="weight-options">${weightButtons}</div>
                 <div class="product-actions">
-                    <button class="btn-whatsapp" onclick="quickOrder(this, '${product.name}', ${product.price})">
+                    <button class="btn-whatsapp" onclick="quickOrder(this, '${product.name}', ${product.price1000 || 0})">
                         <i class="fab fa-whatsapp"></i> Order on WhatsApp
                     </button>
-                    <button class="btn-cart" onclick="addToCart(this, '${product.name}', ${product.price})">
+                    <button class="btn-cart" onclick="addToCart(this, '${product.name}', ${product.price1000 || 0})">
                         <i class="fas fa-cart-plus"></i> Add to Cart
                     </button>
                 </div>
@@ -744,33 +755,48 @@ function createProductCard(product, isPriority = false) {
 // RENDER SHOP PAGE
 // ============================================
 function renderShopPage() {
-    const categories = ['masala', 'vegpickles', 'nonvegpickles', 'sweets'];
-    let renderedCount = 0;
+    // Render filter buttons from CATEGORIES
+    const filterContainer = document.querySelector('.category-filter');
+    if (filterContainer) {
+        const activeBtn = filterContainer.querySelector('.filter-btn.active');
+        const currentFilter = activeBtn ? (activeBtn.getAttribute('data-category') || 'all') : 'all';
 
-    categories.forEach(catId => {
-        const section = document.getElementById(catId);
-        if (!section) return;
+        let html = `<button class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" onclick="filterCategory('all')" data-category="all">All</button>`;
+        CATEGORIES.forEach(cat => {
+            html += `<button class="filter-btn ${currentFilter === cat.id ? 'active' : ''}" onclick="filterCategory('${cat.id}')" data-category="${cat.id}">${cat.name}</button>`;
+        });
+        filterContainer.innerHTML = html;
+    }
 
-        const catProducts = PRODUCTS.filter(p => p.catId === catId && p.available !== false);
-        const grid = section.querySelector('.products-grid');
-        const countEl = section.querySelector('.section-count');
+    // Render category sections from CATEGORIES
+    const shopContainer = document.querySelector('.shop-container');
+    if (shopContainer) {
+        shopContainer.innerHTML = '';
+        let renderedCount = 0;
 
-        if (grid) {
-            // First 4 product images across all categories get eager loading + preload link
-            grid.innerHTML = catProducts.map((p, i) => {
-                const isPriority = renderedCount < 4;
-                if (isPriority) renderedCount++;
-                return createProductCard(p, isPriority);
-            }).join('');
-        }
-        if (countEl) {
-            countEl.textContent = `${catProducts.length} items`;
-        }
-    });
+        CATEGORIES.forEach(cat => {
+            const catProducts = PRODUCTS.filter(p => p.catId === cat.id && p.available !== false);
+            if (catProducts.length === 0) return;
+
+            const section = document.createElement('section');
+            section.className = 'products-section active';
+            section.id = cat.id;
+            section.setAttribute('data-category', cat.id);
+            section.innerHTML = '<div class="section-header-row"><h3><i class="fas ' + (cat.icon || 'fa-tag') + '"></i> ' + cat.name + '</h3><span class="section-count">' + catProducts.length + ' items</span></div><div class="products-grid"></div>';
+            shopContainer.appendChild(section);
+
+            const grid = section.querySelector('.products-grid');
+            if (grid) {
+                grid.innerHTML = catProducts.map((p, i) => {
+                    const isPriority = renderedCount < 4;
+                    if (isPriority) renderedCount++;
+                    return createProductCard(p, isPriority);
+                }).join('');
+            }
+        });
+    }
 
     initScrollAnimations();
-
-    // Preload first 4 visible product images for instant perceived speed
     injectImagePreloads();
 }
 

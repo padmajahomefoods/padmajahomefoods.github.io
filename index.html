@@ -179,52 +179,14 @@
             <div class="search-results" id="searchResults"></div>
         </div>
         <div class="category-filter">
-            <button class="filter-btn active" onclick="filterCategory('all')">All</button>
-            <button class="filter-btn" onclick="filterCategory('masala')">Masala</button>
-            <button class="filter-btn" onclick="filterCategory('vegpickles')">Veg Pickles</button>
-            <button class="filter-btn" onclick="filterCategory('nonvegpickles')">Non-Veg</button>
-            <button class="filter-btn" onclick="filterCategory('sweets')">Sweets</button>
+            <!-- Filter buttons rendered dynamically by JS from categories in products.json -->
         </div>
     </section>
 
     <!-- Products Container -->
     <div class="shop-container">
 
-        <!-- Masala & Karam -->
-        <section class="products-section active" id="masala" data-category="masala">
-            <div class="section-header-row">
-                <h3><i class="fas fa-mortar-pestle"></i> Masala & Karam Powders</h3>
-                <span class="section-count">10 items</span>
-            </div>
-            <div class="products-grid"></div>
-        </section>
-
-        <!-- Veg Pickles -->
-        <section class="products-section active" id="vegpickles" data-category="vegpickles">
-            <div class="section-header-row">
-                <h3><i class="fas fa-carrot"></i> Veg Pickles</h3>
-                <span class="section-count">5 items</span>
-            </div>
-            <div class="products-grid"></div>
-        </section>
-
-        <!-- Non-Veg Pickles -->
-        <section class="products-section active" id="nonvegpickles" data-category="nonvegpickles">
-            <div class="section-header-row">
-                <h3><i class="fas fa-drumstick-bite"></i> Non-Veg Pickles</h3>
-                <span class="section-count">3 items</span>
-            </div>
-            <div class="products-grid"></div>
-        </section>
-
-        <!-- Sweets -->
-        <section class="products-section active" id="sweets" data-category="sweets">
-            <div class="section-header-row">
-                <h3><i class="fas fa-cookie"></i> Sweets</h3>
-                <span class="section-count">3 items</span>
-            </div>
-            <div class="products-grid"></div>
-        </section>
+        <!-- Category sections rendered dynamically by JS from products.json -->
 
     </div>
 
