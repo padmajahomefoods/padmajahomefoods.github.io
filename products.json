@@ -8,22 +8,28 @@
       "order": 1
     },
     {
+      "id": "health-wellness",
+      "name": "Health & Wellness",
+      "icon": "fa-leaf",
+      "order": 2
+    },
+    {
       "id": "vegpickles",
       "name": "Veg Pickles",
       "icon": "fa-carrot",
-      "order": 2
+      "order": 3
     },
     {
       "id": "nonvegpickles",
       "name": "Non-Veg Pickles",
       "icon": "fa-drumstick-bite",
-      "order": 3
+      "order": 4
     },
     {
       "id": "sweets",
       "name": "Sweets",
       "icon": "fa-cookie",
-      "order": 4
+      "order": 5
     }
   ],
   "products": [
@@ -226,6 +232,26 @@
       "price500": 250,
       "price1000": 499,
       "price100g": 50
+    },
+    {
+      "id": "moringa-powder",
+      "name": "Moringa Powder",
+      "category": "Health & Wellness",
+      "catId": "health-wellness",
+      "desc": "Premium quality Moringa Leaf Powder made from carefully selected moringa leaves. Rich in natural nutrients and ideal for daily wellness. No artificial colours or preservatives.",
+      "image": "images/moringa-powder.jpg",
+      "badge": "new",
+      "available": true,
+      "weights": [
+        "100g",
+        "250g",
+        "500g",
+        "1Kg"
+      ],
+      "price100g": 129,
+      "price250": 299,
+      "price500": 549,
+      "price1000": 999
     },
     {
       "id": "avakaya-pickle",
