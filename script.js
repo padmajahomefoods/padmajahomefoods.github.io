@@ -633,35 +633,6 @@ function initProductPage() {
 
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.content = `${product.desc} Order ${product.name} online from Padmaja Home Foods. Homemade, 100% natural, delivered across India.`;
-
-    // Update JSON-LD Product schema for SEO
-    const schemaScript = document.getElementById('productSchema');
-    if (schemaScript) {
-        const initialWeight = product.weights[0];
-        const initialPrice = getPriceForWeight(product, initialWeight);
-        const schema = {
-            "@context": "https://schema.org",
-            "@type": "Product",
-            "name": product.name,
-            "brand": {"@type": "Brand", "name": "Padmaja Home Foods"},
-            "image": window.location.origin + '/' + product.image,
-            "description": product.desc,
-            "sku": product.id,
-            "url": window.location.origin + '/product.html?id=' + product.id,
-            "offers": {
-                "@type": "Offer",
-                "price": String(initialPrice),
-                "priceCurrency": "INR",
-                "availability": product.available !== false ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-                "url": window.location.origin + '/product.html?id=' + product.id,
-                "itemOffered": {
-                    "@type": "Product",
-                    "name": product.name
-                }
-            }
-        };
-        schemaScript.textContent = JSON.stringify(schema, null, 2);
-    }
 }
 
 function selectPDPWeight(btn, weight, price) {
@@ -746,7 +717,7 @@ function createProductCard(product, isPriority = false) {
     const imgPath = product.image;
 
     return `
-        <div class="product-card" id="${product.id}" data-product="${product.name}" data-base-price="${product.price}">
+        <div class="product-card" id="${product.id}" data-product="${product.name}" data-base-price="${product.price1000 || 0}">
             <a href="product.html?id=${product.id}" class="product-card-link">
                 <div class="product-image">
                     <img src="${imgPath}" alt="${product.name}" loading="${isPriority ? 'eager' : 'lazy'}" decoding="async" width="300" height="300"
@@ -767,10 +738,10 @@ function createProductCard(product, isPriority = false) {
                 </a>
                 <div class="weight-options">${weightButtons}</div>
                 <div class="product-actions">
-                    <button class="btn-whatsapp" onclick="quickOrder(this, '${product.name}', ${product.price})">
+                    <button class="btn-whatsapp" onclick="quickOrder(this, '${product.name}', ${product.price1000 || 0})">
                         <i class="fab fa-whatsapp"></i> Order on WhatsApp
                     </button>
-                    <button class="btn-cart" onclick="addToCart(this, '${product.name}', ${product.price})">
+                    <button class="btn-cart" onclick="addToCart(this, '${product.name}', ${product.price1000 || 0})">
                         <i class="fas fa-cart-plus"></i> Add to Cart
                     </button>
                 </div>
@@ -790,9 +761,9 @@ function renderShopPage() {
         const activeBtn = filterContainer.querySelector('.filter-btn.active');
         const currentFilter = activeBtn ? (activeBtn.getAttribute('data-category') || 'all') : 'all';
 
-        let html = '<button class="filter-btn ' + (currentFilter === 'all' ? 'active' : '') + '" onclick="filterCategory('all')" data-category="all">All</button>';
+        let html = `<button class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" onclick="filterCategory('all')" data-category="all">All</button>`;
         CATEGORIES.forEach(cat => {
-            html += '<button class="filter-btn ' + (currentFilter === cat.id ? 'active' : '') + '" onclick="filterCategory('' + cat.id + '')" data-category="' + cat.id + '">' + cat.name + '</button>';
+            html += `<button class="filter-btn ${currentFilter === cat.id ? 'active' : ''}" onclick="filterCategory('${cat.id}')" data-category="${cat.id}">${cat.name}</button>`;
         });
         filterContainer.innerHTML = html;
     }
