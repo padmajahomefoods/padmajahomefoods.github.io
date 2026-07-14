@@ -449,6 +449,7 @@ nav.scrolled {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     padding-bottom: 4px;
+    padding-right: 20px;
     max-width: 700px;
     margin: 0 auto;
 }
@@ -3297,7 +3298,7 @@ html, body {
     -ms-overflow-style: none;
     padding-bottom: 8px;
     padding-left: 4px;
-    padding-right: 4px;
+    padding-right: 20px;
     margin-left: -4px;
     margin-right: -4px;
 }
